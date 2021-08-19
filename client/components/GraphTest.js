@@ -5,6 +5,7 @@ import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import {contributorData} from "../dummyData/candidateContributionDummyData";
+import SearchBar from "./SearchBar"
 
 
 let options = {
@@ -455,6 +456,8 @@ export default class VisReact extends Component {
   };
   render() {
     return (
+      <div>
+      <SearchBar/>
       <Fragment>
         <div className="vis-react-title">vis react</div>
         <Graph
@@ -468,6 +471,7 @@ export default class VisReact extends Component {
           vis={(vis) => (this.vis = vis)}
         />
       </Fragment>
+      </div>
     );
   }
 }
