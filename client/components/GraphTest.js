@@ -17,7 +17,7 @@ let options = {
       y: false,
     },
     shape: "dot",
-    size: 13,
+    size: 20,
     borderWidth: 1.5,
     borderWidthSelected: 2,
     font: {
@@ -266,7 +266,7 @@ export default class VisReact extends Component {
     newGraph.edges = edges;
     this.state = {
       graph: newGraph,
-      style: { width: "500px", height: "500px" },
+      style: { width: "750px", height: "750px" },
       network: null,
     };
     this.measure = this.measure.bind(this);

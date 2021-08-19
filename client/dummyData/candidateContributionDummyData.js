@@ -13,7 +13,7 @@ const contributorData = {
     contributor: [
       {
         attributes: {
-          org_name: "Pro-israel America PAC",
+          org_name: "Sarahjean",
           total: "144374",
           pacs: "7000",
           indivs: "137374",
