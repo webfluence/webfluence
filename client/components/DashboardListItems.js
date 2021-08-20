@@ -12,17 +12,18 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 
 export const mainListItems = (
   <div>
-    <ListItem button>
+    <ListItem button component="a" href="https://www.opensecrets.org" target="_blank"
+>
       <ListItemIcon>
         <DashboardIcon />
       </ListItemIcon>
-      <ListItemText primary="Dashboard" />
+      <ListItemText primary="Open Secrets" />
     </ListItem>
-    <ListItem button>
+    <ListItem button component="a" href="https://www.propublica.org" target="_blank">
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="ProPublica" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
