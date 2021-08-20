@@ -18,7 +18,7 @@ export default function SearchBar() {
   // const handleChange = (e) => {
   //   setSearchValue(e.target.value);
   // };
-  
+
   const handleSelect = (legislator) => {
     console.log("This is the legislator you selected>>>",legislator)
     setSelectedLegislator(legislator);
@@ -29,7 +29,7 @@ export default function SearchBar() {
       <Autocomplete
         id="combo-box-demo"
         options={legislators}
-        onChange={(event)=>handleSelect(event.target)}
+        onChange={(event, value)=>handleSelect(value)}
         getOptionLabel={(option) =>
           `${option.short_title} ${option.first_name} ${option.last_name} (${option.party}), ${option.state} District ${option.district}`
         }

@@ -267,7 +267,7 @@ export default class VisReact extends Component {
     newGraph.edges = edges;
     this.state = {
       graph: newGraph,
-      style: { width: "750px", height: "750px" },
+      style: { width: "300px", height: "300px" },
       network: null,
     };
     this.measure = this.measure.bind(this);
@@ -457,9 +457,8 @@ export default class VisReact extends Component {
   render() {
     return (
       <div>
-      <SearchBar/>
+      {/* <SearchBar/> */}
       <Fragment>
-        <div className="vis-react-title">vis react</div>
         <Graph
           graph={this.state.graph}
           style={this.state.style}
