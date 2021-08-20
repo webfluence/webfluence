@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 const dummyData = {
   id: "P000197",
+  crp_id: "N00007360",
   name: "Kyle Combs",
   party: "Whig",
   state: "MA",
@@ -22,7 +23,9 @@ export const CandidateInfo = () => {
    (
     <Box display="flex" direction="row">
        <img
-          src={`https://theunitedstates.io/images/congress/225x275/${legislator.id}.jpg`}
+          src={`https://cdn1.opensecrets.org/congress-members/photos/${legislator.crp_id}.jpg`}
+          // src={`https://theunitedstates.io/images/congress/225x275/${legislator.id}.jpg`}
+          style={{"height": "225px", "width": "225px", "objectFit": "cover", "borderRadius": "100%", "borderWidth": "1px"}}
         />
       <Grid>
         <Typography>{legislator.name}</Typography>

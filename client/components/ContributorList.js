@@ -26,12 +26,16 @@ const columns = [
   },
 ];
 
+function createData(contributor, total, individuals, PACs) {
+  return { contributor, total, individuals, PACs };
+}
+
 const rows = [
-  ['Baker, Donelson et al', '$13,300', '$8,300', '$5,000'],
-  ['Subject Matter', 12800, 12800, 0],
-  ['Brownstein, Hyatt et al', 13300, 8300, 5000],
-  ['Walt Disney Co', 13300, 8300, 5000],
-  ['DLA Piper', 13300, 8300, 5000]
+  createData('Baker, Donelson et al', '$13,300', '$8,300', '$5,000'),
+  createData('Subject Matter', '$12800', '$12800', '$0'),
+  createData('Brownstein, Hyatt et al', '$13300', '$8300', '$5000'),
+  createData('Walt Disney Co', '$13300', '$8300', '$5000'),
+  createData('DLA Piper', '$13300', '$8300', '$5000')
 ];
 
 const useStyles = makeStyles({
@@ -39,7 +43,7 @@ const useStyles = makeStyles({
     width: '100%',
   },
   container: {
-    maxHeight: 440,
+    maxHeight: 1000,
   },
 });
 
@@ -66,7 +70,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.contributor}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
