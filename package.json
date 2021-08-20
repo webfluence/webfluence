@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
@@ -30,6 +31,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "pg": "^8.5.1",
+    "recharts": "^2.1.0",
     "sequelize": "^6.3.5",
     "vis-react": "^0.5.1"
   },
