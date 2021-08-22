@@ -6,6 +6,7 @@ import Home from './components/Home';
 import GraphTest from './components/GraphTest'
 import {me} from './store'
 import Dashboard from './components/Dashboard';
+import SearchBar from './components/SearchBar';
 
 /**
  * COMPONENT
@@ -26,6 +27,8 @@ class Routes extends Component {
             {/* <Redirect to="/home" /> */}
             <Route path="/graphtest" component={GraphTest}/>
             <Route exact path="/dashboard" component={Dashboard} />
+            <Route path ='/searchbar' component={ SearchBar} />
+
           </Switch>
         ) : (
           <Switch>
@@ -34,6 +37,7 @@ class Routes extends Component {
             <Route path="/signup" component={Signup} />
             <Route path="/graphtest" component={GraphTest}/>
             <Route exact path="/dashboard" component={Dashboard} />
+            <Route path ='/searchbar' component={ SearchBar} />
         </Switch>
         )}
       </div>

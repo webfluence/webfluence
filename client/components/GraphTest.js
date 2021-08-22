@@ -77,9 +77,9 @@ let options = {
     stabilization: { iterations: 2500 },
   },
   interaction: {
-    hover: true,
-    hoverConnectedEdges: true,
-    hoverEdges: true,
+    hover: false,
+    hoverConnectedEdges: false,
+    hoverEdges: false,
     selectable: false,
     selectConnectedEdges: false,
     zoomView: false,
@@ -87,15 +87,73 @@ let options = {
   },
 };
 
+function createGraph(candcontrib) {
+  let jsonData = initialGraph;
+
+  let nodes = [];
+  let edges = [];
+
+  // const data = this.props.candcontrib;
+  // this.props.candcontrib === undefined
+  //   ? contributorData
+  //   : this.props.candcontrib;
+  // console.log(" THIS IS THE CONSOLE LOG PROPS", props);
+  const data = candcontrib;
+
+  // props.candcontrib === undefined ? props.candcontrib : null;
+  // console.log("contrib data---", contributorData);
+  console.log("124 data----", data);
+  // ROOT NODE
+  if (Object.keys(data).length) {
+    let newNode = {};
+
+    newNode.color = "green";
+    newNode.label = data.response.contributors.attributes.cand_name;
+    newNode.id = data.response.contributors.attributes.cid;
+    nodes.push(newNode);
+  }
+
+  //Leading from links
+
+  data.response.contributors.contributor.map((contributor) => {
+    let newNode = {};
+    newNode.color = "blue";
+    newNode.id = contributor.attributes.org_name;
+    newNode.label = contributor.attributes.org_name;
+    newNode.from = data.response.contributors.attributes.cid;
+    newNode.to = newNode.id;
+    nodes.push(newNode);
+  });
+
+  for (let i = 0; i < nodes.length; i++) {
+    if (nodes[i].target !== "" && nodes[i].to !== "") {
+      let edgeDir = {};
+      edgeDir.from = nodes[i].from;
+      edgeDir.to = nodes[i].to;
+      edgeDir.arrows = "none";
+      edges.push(edgeDir);
+    }
+  }
+
+  let newGraph = {};
+  newGraph.nodes = nodes;
+  newGraph.edges = edges;
+
+  return newGraph;
+}
+
 export class NetworkGraph extends Component {
   setState(stateObj) {
+    // console.error(stateObj);
     if (this.mounted) {
+      // console.error("HERE 2");
       super.setState(stateObj);
     }
   }
   componentWillMount() {
     this.mounted = true;
   }
+
   constructor(props) {
     super(props);
     this.events = {
@@ -112,61 +170,7 @@ export class NetworkGraph extends Component {
         this.redirectToLearn(event, this.props.searchData);
       },
     };
-    let jsonData = initialGraph;
-
-    let nodes = [];
-    let edges = [];
-
-    // const data = this.props.candcontrib;
-    // this.props.candcontrib === undefined
-    //   ? contributorData
-    //   : this.props.candcontrib;
-
-    const data = this.props.candcontrib;
-
-    // props.candcontrib === undefined ? props.candcontrib : null;
-    // console.log("contrib data---", contributorData);
-    console.log("124 data----", data);
-    // ROOT NODE
-    if (data) {
-      let newNode = {};
-
-      newNode.color = "green";
-      newNode.label = data.response.contributors.attributes.cand_name;
-      newNode.id = data.response.contributors.attributes.cid;
-      nodes.push(newNode);
-    }
-
-    //Leading from links
-
-    data.contributors.contributor.map((contributor) => {
-      let newNode = {};
-      newNode.color = "blue";
-      newNode.id = response.contributor.attributes.org_name;
-      newNode.label = response.contributor.attributes.org_name;
-      newNode.from = data.response.contributors.attributes.cid;
-      newNode.to = newNode.id;
-      nodes.push(newNode);
-    });
-
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].target !== "" && nodes[i].to !== "") {
-        let edgeDir = {};
-        edgeDir.from = nodes[i].from;
-        edgeDir.to = nodes[i].to;
-        edgeDir.arrows = "none";
-        edges.push(edgeDir);
-      }
-    }
-
-    let newGraph = {};
-    newGraph.nodes = nodes;
-    newGraph.edges = edges;
-    this.state = {
-      graph: newGraph,
-      style: { width: "300px", height: "300px" },
-      network: null,
-    };
+    this.state = { graph: {} };
     this.measure = this.measure.bind(this);
     this.events.hoverNode = this.events.hoverNode.bind(this);
     this.events.blurNode = this.events.blurNode.bind(this);
@@ -177,10 +181,33 @@ export class NetworkGraph extends Component {
       this.neighbourhoodHighlightHide.bind(this);
   }
 
+  componentDidUpdate(prevProps) {
+    console.log("hello", this.props.candcontrib);
+    if (this.props.candcontrib !== prevProps.candcontrib) {
+      console.log("<<<in conditional>>>>");
+      console.log(">>>>>>>>>>>>>>", this.state);
+      const newGraph = createGraph(this.props.candcontrib);
+
+      this.setState({
+        graph: newGraph,
+        style: { width: "300px", height: "300px" },
+        network: null,
+      });
+    }
+  }
+
   componentDidMount() {
     this.mounted = true;
     window.addEventListener("resize", this.measure);
     console.log(">>>>>>>>>>>>>>", this.state);
+
+    const newGraph = createGraph(this.props.candcontrib);
+
+    this.setState({
+      graph: newGraph,
+      style: { width: "300px", height: "300px" },
+      network: null,
+    });
   }
 
   componentWillUnmount() {
@@ -285,6 +312,7 @@ export class NetworkGraph extends Component {
       }
     }
     if (this.mounted) {
+      // console.error("HERE 1");
       this.setState({
         graph: {
           nodes: updateArray,
@@ -333,6 +361,7 @@ export class NetworkGraph extends Component {
       }
     }
     if (this.mounted) {
+      // console.error("set graph state");
       this.setState({
         graph: {
           nodes: updateArray,
@@ -352,25 +381,27 @@ export class NetworkGraph extends Component {
     console.log(data);
   };
   render() {
+    console.log("RENDER RENDER RENDER");
     console.log(this.props.candcontrib);
     return (
       <div>
+        {/* <SearchBar /> */}
 
-        <SearchBar />
         <Fragment>
-          <div className="vis-react-title">vis react</div>
-          {this.state.candcontrib && (
-            <Graph
-              graph={this.state.graph}
-              style={this.state.style}
-              options={options}
-              getNetwork={this.getNetwork}
-              getEdges={this.getEdges}
-              getNodes={this.getNodes}
-              events={this.events}
-              vis={(vis) => (this.vis = vis)}
-            />
-          )}
+          <div className="vis-react-title">Contributor Information:</div>
+          {Object.keys(this.props.candcontrib).length &&
+            Object.keys(this.state.graph).length && (
+              <Graph
+                graph={this.state.graph}
+                style={this.state.style}
+                options={options}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
+                events={this.events}
+                vis={(vis) => (this.vis = vis)}
+              />
+            )}
         </Fragment>
       </div>
     );

@@ -17,6 +17,7 @@ export default function SearchBar() {
 
   useEffect(() => {
     dispatch(getLegislatorsThunk());
+    // dispatch(setCandContributorsThunk("A000370"));
   }, []);
 
   // const handleChange = (e) => {
