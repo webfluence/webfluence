@@ -4,9 +4,10 @@ import Graph from "vis-react";
 import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
-import {contributorData} from "../dummyData/candidateContributionDummyData";
-import SearchBar from "./SearchBar"
-
+import { contributorData } from "../dummyData/candidateContributionDummyData";
+import SearchBar from "./SearchBar";
+import { connect } from "react-redux";
+import { setCandContributorsThunk } from "../store/candcontrib";
 
 let options = {
   layout: {
@@ -86,7 +87,7 @@ let options = {
   },
 };
 
-export default class VisReact extends Component {
+export class NetworkGraph extends Component {
   setState(stateObj) {
     if (this.mounted) {
       super.setState(stateObj);
@@ -100,10 +101,6 @@ export default class VisReact extends Component {
     this.events = {
       select: function (event) {
         var { nodes, edges } = event;
-        console.log("Selected nodes:");
-        console.log(nodes);
-        console.log("Selected edges:");
-        console.log(edges);
       },
       hoverNode: function (event) {
         this.neighbourhoodHighlight(event, this.props.searchData);
@@ -120,147 +117,47 @@ export default class VisReact extends Component {
     let nodes = [];
     let edges = [];
 
-    const data = contributorData
+    // const data = this.props.candcontrib;
+    // this.props.candcontrib === undefined
+    //   ? contributorData
+    //   : this.props.candcontrib;
 
-    // // ROOT NODE
-    // if (jsonData && jsonData.length > 0) {
+    const data = this.props.candcontrib;
 
-    //   for (let i = 0; i < jsonData[0].relation.root_kt_node.length; i++) {
+    // props.candcontrib === undefined ? props.candcontrib : null;
+    // console.log("contrib data---", contributorData);
+    console.log("124 data----", data);
+    // ROOT NODE
+    if (data) {
+      let newNode = {};
 
-    //     jsonData[0].relation.root_kt_node[i].color = undefined;
+      newNode.color = "green";
+      newNode.label = data.response.contributors.attributes.cand_name;
+      newNode.id = data.response.contributors.attributes.cid;
+      nodes.push(newNode);
+    }
 
-    //     jsonData[0].relation.root_kt_node[i].label = jsonData[0].relation.root_kt_node[i].source;
+    //Leading from links
 
-    //     jsonData[0].relation.root_kt_node[i].id =
-    //       jsonData[0].relation.root_kt_node[i].from;
+    data.contributors.contributor.map((contributor) => {
+      let newNode = {};
+      newNode.color = "blue";
+      newNode.id = response.contributor.attributes.org_name;
+      newNode.label = response.contributor.attributes.org_name;
+      newNode.from = data.response.contributors.attributes.cid;
+      newNode.to = newNode.id;
+      nodes.push(newNode);
+    });
 
-    //     nodes.push(jsonData[0].relation.root_kt_node[i]);
-    //   }
-
-    //   // LEADING TO LINKS
-    //   for (let j = 0; j < jsonData[0].relation.leading_to_links.length; j++) {
-    //     if (
-    //       jsonData[0].relation.leading_to_links[j].target.length > 20 &&
-    //       jsonData[0].relation.leading_to_links[j].target.indexOf("\n") === -1
-    //     ) {
-    //       jsonData[0].relation.leading_to_links[j].target =
-    //         jsonData[0].relation.leading_to_links[j].target
-    //           .split(" ")
-    //           .reduce((a, e, i) => a + e + (i % 20 === 3 ? "\n" : " "), " ");
-    //     }
-    //     jsonData[0].relation.leading_to_links[j].color = undefined;
-    //     jsonData[0].relation.leading_to_links[j].id =
-    //       jsonData[0].relation.leading_to_links[j].to;
-    //     nodes.push(jsonData[0].relation.leading_to_links[j]);
-    //   }
-
-
-    //   //Leading from links
-    //   for (let k = 0; k < jsonData[0].relation.derived_from_links.length; k++) {
-    //     if (
-    //       jsonData[0].relation.derived_from_links[k].source.length > 20 &&
-    //       jsonData[0].relation.derived_from_links[k].source.indexOf("\n") === -1
-    //     ) {
-    //       jsonData[0].relation.derived_from_links[k].source =
-    //         jsonData[0].relation.derived_from_links[k].source
-    //           .split(" ")
-    //           .reduce((a, e, i) => a + e + (i % 20 === 3 ? "\n" : " "), " ");
-    //     }
-    //     jsonData[0].relation.derived_from_links[k].color = undefined;
-    //     jsonData[0].relation.derived_from_links[k].id =
-    //       jsonData[0].relation.derived_from_links[k].from;
-    //     nodes.push(jsonData[0].relation.derived_from_links[k]);
-    //   }
-    //   for (let i = 0; i < nodes.length; i++) {
-    //     if (nodes[i].target !== "" && nodes[i].to !== "") {
-    //       let edgeDir = {};
-    //       edgeDir.from = nodes[i].from;
-    //       edgeDir.to = nodes[i].to;
-    //       edgeDir.arrows = "none";
-    //       edges.push(edgeDir);
-    //     }
-    //   }
-    // }
-
-        // ROOT NODE
-        if (data) {
-          let newNode = {}
-
-          newNode.color = "green";
-          newNode.label = data.contributors.attributes.cand_name;
-          newNode.id = data.contributors.attributes.cid
-          nodes.push(newNode)
-        }
-
-          // for (let i = 0; i < data[0].relation.root_kt_node.length; i++) {
-
-          //   data[0].relation.root_kt_node[i].color = undefined;
-
-          //   data[0].relation.root_kt_node[i].label = jsonData[0].relation.root_kt_node[i].source;
-
-          //   jsonData[0].relation.root_kt_node[i].id =
-          //     jsonData[0].relation.root_kt_node[i].from;
-
-          //   nodes.push(jsonData[0].relation.root_kt_node[i]);
-
-
-          // // LEADING TO LINKS
-          // for (let j = 0; j < jsonData[0].relation.leading_to_links.length; j++) {
-          //   if (
-          //     jsonData[0].relation.leading_to_links[j].target.length > 20 &&
-          //     jsonData[0].relation.leading_to_links[j].target.indexOf("\n") === -1
-          //   ) {
-          //     jsonData[0].relation.leading_to_links[j].target =
-          //       jsonData[0].relation.leading_to_links[j].target
-          //         .split(" ")
-          //         .reduce((a, e, i) => a + e + (i % 20 === 3 ? "\n" : " "), " ");
-          //   }
-          //   jsonData[0].relation.leading_to_links[j].color = undefined;
-          //   jsonData[0].relation.leading_to_links[j].id =
-          //     jsonData[0].relation.leading_to_links[j].to;
-          //   nodes.push(jsonData[0].relation.leading_to_links[j]);
-          // }
-
-
-          //Leading from links
-
-          data.contributors.contributor.map((contributor) => {
-            let newNode = {}
-            newNode.color = "blue";
-            newNode.id = contributor.attributes.org_name;
-            newNode.label = contributor.attributes.org_name;
-            newNode.from = data.contributors.attributes.cid
-            newNode.to = newNode.id
-            nodes.push(newNode)
-          })
-
-          // for (let k = 0; k < jsonData[0].relation.derived_from_links.length; k++) {
-          //   if (
-          //     jsonData[0].relation.derived_from_links[k].source.length > 20 &&
-          //     jsonData[0].relation.derived_from_links[k].source.indexOf("\n") === -1
-          //   ) {
-          //     jsonData[0].relation.derived_from_links[k].source =
-          //       jsonData[0].relation.derived_from_links[k].source
-          //         .split(" ")
-          //         .reduce((a, e, i) => a + e + (i % 20 === 3 ? "\n" : " "), " ");
-          //   }
-          //   jsonData[0].relation.derived_from_links[k].color = undefined;
-          //   jsonData[0].relation.derived_from_links[k].id =
-          //     jsonData[0].relation.derived_from_links[k].from;
-          //   nodes.push(jsonData[0].relation.derived_from_links[k]);
-          // }
-          for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].target !== "" && nodes[i].to !== "") {
-              let edgeDir = {};
-              edgeDir.from = nodes[i].from;
-              edgeDir.to = nodes[i].to;
-              edgeDir.arrows = "none";
-              edges.push(edgeDir);
-            }
-          }
-
-
-
+    for (let i = 0; i < nodes.length; i++) {
+      if (nodes[i].target !== "" && nodes[i].to !== "") {
+        let edgeDir = {};
+        edgeDir.from = nodes[i].from;
+        edgeDir.to = nodes[i].to;
+        edgeDir.arrows = "none";
+        edges.push(edgeDir);
+      }
+    }
 
     let newGraph = {};
     newGraph.nodes = nodes;
@@ -283,6 +180,7 @@ export default class VisReact extends Component {
   componentDidMount() {
     this.mounted = true;
     window.addEventListener("resize", this.measure);
+    console.log(">>>>>>>>>>>>>>", this.state);
   }
 
   componentWillUnmount() {
@@ -291,7 +189,6 @@ export default class VisReact extends Component {
   }
 
   measure(data) {
-    console.log("measure");
     this.state.network.redraw();
     this.state.network.fit();
   }
@@ -455,22 +352,41 @@ export default class VisReact extends Component {
     console.log(data);
   };
   render() {
+    console.log(this.props.candcontrib);
     return (
       <div>
-      {/* <SearchBar/> */}
-      <Fragment>
-        <Graph
-          graph={this.state.graph}
-          style={this.state.style}
-          options={options}
-          getNetwork={this.getNetwork}
-          getEdges={this.getEdges}
-          getNodes={this.getNodes}
-          events={this.events}
-          vis={(vis) => (this.vis = vis)}
-        />
-      </Fragment>
+
+        <SearchBar />
+        <Fragment>
+          <div className="vis-react-title">vis react</div>
+          {this.state.candcontrib && (
+            <Graph
+              graph={this.state.graph}
+              style={this.state.style}
+              options={options}
+              getNetwork={this.getNetwork}
+              getEdges={this.getEdges}
+              getNodes={this.getNodes}
+              events={this.events}
+              vis={(vis) => (this.vis = vis)}
+            />
+          )}
+        </Fragment>
       </div>
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    candcontrib: state.candcontrib,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NetworkGraph);

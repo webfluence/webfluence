@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Dosis&display=swap");
+
 body {
   font-family: sans-serif;
 }
@@ -18,4 +20,8 @@ nav a {
 form div {
   margin: 1em;
   display: inline-block;
+}
+
+.logo {
+  font-family: "Dosis", sans-serif;
 }
