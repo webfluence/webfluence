@@ -15,9 +15,9 @@ const dummyData = {
 
 export const CandidateInfo = () => {
 
-  // const legislator = useSelector((state) => state.legislator)
+  const legislator = useSelector((state) => state.legislator)
 
-  const legislator = dummyData
+  // const legislator = dummyData
 
   return (legislator !== undefined) ?
    (

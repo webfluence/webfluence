@@ -93,16 +93,8 @@ function createGraph(candcontrib) {
   let nodes = [];
   let edges = [];
 
-  // const data = this.props.candcontrib;
-  // this.props.candcontrib === undefined
-  //   ? contributorData
-  //   : this.props.candcontrib;
-  // console.log(" THIS IS THE CONSOLE LOG PROPS", props);
   const data = candcontrib;
 
-  // props.candcontrib === undefined ? props.candcontrib : null;
-  // console.log("contrib data---", contributorData);
-  console.log("124 data----", data);
   // ROOT NODE
   if (Object.keys(data).length) {
     let newNode = {};
@@ -144,9 +136,7 @@ function createGraph(candcontrib) {
 
 export class NetworkGraph extends Component {
   setState(stateObj) {
-    // console.error(stateObj);
     if (this.mounted) {
-      // console.error("HERE 2");
       super.setState(stateObj);
     }
   }
@@ -182,12 +172,8 @@ export class NetworkGraph extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("hello", this.props.candcontrib);
     if (this.props.candcontrib !== prevProps.candcontrib) {
-      console.log("<<<in conditional>>>>");
-      console.log(">>>>>>>>>>>>>>", this.state);
       const newGraph = createGraph(this.props.candcontrib);
-
       this.setState({
         graph: newGraph,
         style: { width: "300px", height: "300px" },
@@ -199,10 +185,7 @@ export class NetworkGraph extends Component {
   componentDidMount() {
     this.mounted = true;
     window.addEventListener("resize", this.measure);
-    console.log(">>>>>>>>>>>>>>", this.state);
-
     const newGraph = createGraph(this.props.candcontrib);
-
     this.setState({
       graph: newGraph,
       style: { width: "300px", height: "300px" },
@@ -312,7 +295,6 @@ export class NetworkGraph extends Component {
       }
     }
     if (this.mounted) {
-      // console.error("HERE 1");
       this.setState({
         graph: {
           nodes: updateArray,
@@ -361,7 +343,6 @@ export class NetworkGraph extends Component {
       }
     }
     if (this.mounted) {
-      // console.error("set graph state");
       this.setState({
         graph: {
           nodes: updateArray,
@@ -371,18 +352,16 @@ export class NetworkGraph extends Component {
     }
   }
 
-  getNetwork = (data) => {
-    this.setState({ network: data });
-  };
-  getEdges = (data) => {
-    console.log(data);
-  };
-  getNodes = (data) => {
-    console.log(data);
-  };
+  // getNetwork = (data) => {
+  //   this.setState({ network: data });
+  // };
+  // getEdges = (data) => {
+  //   console.log(data);
+  // };
+  // getNodes = (data) => {
+  //   console.log(data);
+  // };
   render() {
-    console.log("RENDER RENDER RENDER");
-    console.log(this.props.candcontrib);
     return (
       <div>
         {/* <SearchBar /> */}
@@ -395,9 +374,9 @@ export class NetworkGraph extends Component {
                 graph={this.state.graph}
                 style={this.state.style}
                 options={options}
-                getNetwork={this.getNetwork}
-                getEdges={this.getEdges}
-                getNodes={this.getNodes}
+                // getNetwork={this.getNetwork}
+                // getEdges={this.getEdges}
+                // getNodes={this.getNodes}
                 events={this.events}
                 vis={(vis) => (this.vis = vis)}
               />
