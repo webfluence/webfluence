@@ -135,6 +135,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
   },
   fixedHeight: {
-    height: 240,
+    height: 350,
   },
 }));
