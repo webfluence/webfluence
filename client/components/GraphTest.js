@@ -164,7 +164,7 @@ export class NetworkGraph extends Component {
     newGraph.edges = edges;
     this.state = {
       graph: newGraph,
-      style: { width: "750px", height: "750px" },
+      style: { width: "300px", height: "300px" },
       network: null,
     };
     this.measure = this.measure.bind(this);
@@ -355,6 +355,7 @@ export class NetworkGraph extends Component {
     console.log(this.props.candcontrib);
     return (
       <div>
+
         <SearchBar />
         <Fragment>
           <div className="vis-react-title">vis react</div>
