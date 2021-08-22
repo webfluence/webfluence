@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -19,20 +20,22 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems, secondaryListItems } from "./DashboardListItems";
-import GraphTest from "./GraphTest";
 // import Chart from './Chart';
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+
 import { CandidateInfo } from "./CandidateInfo";
 import ContributorList from "./ContributorList"
+
 import SearchBar from "./SearchBar";
+import GraphTest from "./GraphTest";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        Webfluence
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -44,6 +47,17 @@ function Copyright() {
 
 export default function Dashboard() {
   const classes = useStyles();
+  const candcontrib = useSelector(
+    (state) => state.candcontrib
+  );
+
+  let rendering = true
+
+  useEffect(() => {
+    console.log("USE EFFECT RAN!!!!");
+    rendering = false
+    rendering = true
+  }, [candcontrib])
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -56,30 +70,27 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3} direction="row">
             <Grid>
-              {/* Chart */}
               <Grid>
                 <Paper className={fixedHeightPaper}>
                   <CandidateInfo />
                 </Paper>
               </Grid>
-              {/* Recent Deposits */}
               <Grid>
                 <Paper className={fixedHeightPaper}>
                   <ContributorList />
                 </Paper>
               </Grid>
-              {/* Recent Orders */}
             </Grid>
             <Grid>
               <Paper className={classes.paper}>
-                {/* <Orders /> */}
-                <GraphTest />
+                {((Object.keys(candcontrib).length > 0) && rendering) ? <GraphTest /> : <Typography> You  need to make a selection to render the graph</Typography>}
               </Paper>
             </Grid>
           </Grid>
           <Box pt={4}>
             <Copyright />
           </Box>
+
         </Container>
       </main>
     </div>
