@@ -19,7 +19,7 @@ export const CandidateInfo = () => {
 
   // const legislator = dummyData
 
-  return (Object.keys(legislator).length) ?
+  return (legislator && Object.keys(legislator).length) ?
    (
     <Box display="flex" direction="row">
        <img

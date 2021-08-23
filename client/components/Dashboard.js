@@ -72,12 +72,12 @@ export default function Dashboard() {
             <Grid>
               <Grid>
                 <Paper className={fixedHeightPaper}>
-                  <CandidateInfo />
+                  {(Object.keys(candcontrib).length > 0) ? <CandidateInfo /> : <Typography> You  need to make a selection to render the info</Typography>}
                 </Paper>
               </Grid>
               <Grid>
                 <Paper className={fixedHeightPaper}>
-                  <ContributorList />
+                  {(Object.keys(candcontrib).length > 0) ? <ContributorList /> : <Typography> You  need to make a selection to render the table</Typography>}
                 </Paper>
               </Grid>
             </Grid>
@@ -90,7 +90,6 @@ export default function Dashboard() {
           <Box pt={4}>
             <Copyright />
           </Box>
-
         </Container>
       </main>
     </div>

@@ -29,11 +29,13 @@ export default function SearchBar() {
     console.log(legislator);
     // Pass the legislator into the selected legislator thunk
     dispatch(setLegislatorThunk(legislator));
-    const crp_id = legislator.id.opensecrets;
-    console.log(crp_id);
-    // find contributors via congressional crp_id
-    dispatch(setCandContributorsThunk(crp_id));
-    dispatch(setCandIndustriesThunk(crp_id));
+    if (legislator){
+      const crp_id = legislator.id.opensecrets;
+      console.log(crp_id);
+      // find contributors via congressional crp_id
+      dispatch(setCandContributorsThunk(crp_id));
+      dispatch(setCandIndustriesThunk(crp_id));
+    }
   };
 
   return (
@@ -45,13 +47,13 @@ export default function SearchBar() {
         // here we create the label that is rendered as the search bar options
         getOptionLabel={(option) => {
 
-          const title = option.terms[option.terms.length-1].type.charAt(0).toUpperCase()
+          const title = option.terms[option.terms.length-1].type.charAt(0).toUpperCase() + option.terms[option.terms.length-1].type.substring(1) + "."
 
           return (`${title} ${option.name.official_full} (${
             option.terms[option.terms.length-1].party[0]
           }), ${option.terms[option.terms.length-1].state} ${
             // renders the district if legislator is house memeber
-            title === "Rep" ? "District " + option.terms[option.terms.length-1].district : ""
+            title === "Rep." ? "District " + option.terms[option.terms.length-1].district : ""
           }`
           )}}
         style={{ width: 400 }}
