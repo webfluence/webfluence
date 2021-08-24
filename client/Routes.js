@@ -32,7 +32,7 @@ class Routes extends Component {
           </Switch>
         ) : (
           <Switch>
-            <Route path="/" exact component={SignIn} />
+            <Route path="/" exact component={Home} />
             <Route path="/login" component={SignIn} />
             <Route path="/signup" component={SignUp} />
             <Route path="/graphtest" component={GraphTest} />

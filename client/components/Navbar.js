@@ -5,7 +5,7 @@ import { logout } from "../store";
 import SignIn from "./SignIn";
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
-  <div>
+  <div className="navbar">
     <h1 className="logo">webfluence</h1>
     <nav>
       {isLoggedIn ? (
@@ -24,7 +24,6 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
         </div>
       )}
     </nav>
-    <hr />
   </div>
 );
 

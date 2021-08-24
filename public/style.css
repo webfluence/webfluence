@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Dosis&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body {
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
 }
 
 a {
@@ -24,4 +26,14 @@ form div {
 
 .logo {
   font-family: "Dosis", sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 20px 0 20px;
+  box-shadow: 0 5px 5px darkgray;
+  position: relative;
+  z-index: 1;
 }
