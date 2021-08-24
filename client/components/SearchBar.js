@@ -9,7 +9,7 @@ import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
 import { makeStyles } from "@material-ui/core/styles";
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const classes = useStyles();
   const [selectedLegislator, setSelectedLegislator] = useState({});
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export default function SearchBar() {
               : ""
           }`;
         }}
-        style={{ width: 400 }}
+        style={{ width: props.width }}
         renderInput={(params) => (
           <TextField {...params} label="Search Legislator" variant="outlined" />
         )}
@@ -75,5 +75,6 @@ export default function SearchBar() {
 const useStyles = makeStyles(() => ({
   searchBar: {
     backgroundColor: "white",
+    boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 20px 0px",
   },
 }));
