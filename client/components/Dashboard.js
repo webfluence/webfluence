@@ -66,7 +66,7 @@ export default function Dashboard() {
       <CssBaseline />
       <main className={classes.content}>
         {/* <div className={classes.appBarSpacer} /> */}
-        <SearchBar/>
+        <SearchBar width="400px"/>
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3} direction="row">
             <Grid>

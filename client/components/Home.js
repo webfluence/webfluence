@@ -1,7 +1,8 @@
-import { Typography, Button, Grid } from "@material-ui/core";
+import { Typography, Button, Grid, Paper, Divider } from "@material-ui/core";
 import React from "react";
 import { connect } from "react-redux";
 import SearchBar from "./SearchBar";
+import Footer from "./Footer";
 import { makeStyles } from "@material-ui/core/styles";
 import Lottie from "react-lottie";
 import networkAnimation from "../../public/networkAnimation";
@@ -25,25 +26,34 @@ export const Home = (props) => {
   const classes = useStyles();
   return (
     <Grid className={classes.body}>
-      <Grid className={classes.topSection} style={{display: 'flex'}}>
+      <Grid className={classes.topSection} style={{display: 'flex', height: '85vh'}}>
         {/* <h3>Welcome, {username}</h3> */}
-        <Grid style={{display: 'flex', flexDirection: 'column', flex: .5, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+        <Grid style={{display: 'flex', flexDirection: 'column', flex: .5, justifyContent: 'space-evenly'}}>
           <Typography className={classes.logo}>webfluence</Typography>
-
-          <SearchBar style={{marginBottom: "100px"}} />
+          <Grid>
+          <Paper className={classes.infoBox}>
+          <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"MONEY & POLITICS"}</Typography>
+          <hr style={{color: 'black', width: '70%'}}/>
+          <Typography style={{fontSize: '17px', marginTop: '10px', textAlign: 'center', color: 'gray'}}>Lobbyist, special interest groups and corporations wield great power over what laws are written, enacted, and enforced. Who are the major donors that are influencing your lawmakers?</Typography>
+          <Typography style={{fontSize: '17px', marginBottom: '20px', color: 'gray'}}><br />Search for a legislator below and find out!</Typography>
+          </Paper>
+          </Grid>
+          <SearchBar width="600px" />
         </Grid>
         {/* <Lottie options={animationOptions} width={'45vw'} style={{flex: 1}}/> */}
         <Grid style={{flex: 1}}></Grid>
       </Grid>
-      <Grid stlye={{backgroundColor: 'blue', zIndex: 3}}>
+      <Grid style={{position: "relative"}}>
         <Grid className={classes.buttonSection}>
-          <Typography>
+          <img className={classes.networkImage} src="/network.svg"/>
+          <Typography style={{fontSize: '25px', marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
             Create an account to save views about legislators who are
             <br /> most important or of interest to you.
           </Typography>
           <Button className={classes.button}>Create an Account</Button>
         </Grid>
       </Grid>
+      <Footer />
     </Grid>
   );
 };
@@ -61,6 +71,7 @@ const useStyles = makeStyles(() => ({
   topSection: {
     padding: 40,
     backgroundImage: `url('/background.png')`,
+    backgroundPosition: 'right top',
     backgroundSize: 'cover'
   },
   body: {
@@ -68,8 +79,7 @@ const useStyles = makeStyles(() => ({
   },
   logo: {
     fontFamily: "Dosis",
-marginTop: "50px",
-    marginBottom: "50px",
+    marginBottom: "20px",
     color: "white",
     fontSize: "10vw",
     textShadow: "2px 2px 2px darkgray",
@@ -87,16 +97,38 @@ marginTop: "50px",
     padding: "80px",
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
     flexDirection: "column",
-    backgroundColor: 'darkgray'
+    height: '70vh', 
   },
   button: {
     fontFamily: "Roboto",
-    backgroundColor: "#f44336",
+    backgroundColor: "#FF5A5A",
     color: "white",
-    width: "200px",
-    margin: 40,
+    width: "250px",
+    height: "70px",
+    margin: "40",
+    zIndex: "1",
   },
+  infoBox: {
+    display: "flex",
+    flexDirection:"column",
+    alignItems: "center",
+    padding: "30px",
+    width: "500px",
+    boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 20px 0px",
+    marginBottom: "20px"
+  },
+  networkImage: {
+    width: "40vw",
+    left: "50px",
+    position: "absolute",
+    filter: "invert(%100)",
+  },
+  typography: {
+    textAlign: "center",
+  }
+  
 }));
 
 export default connect(mapState)(Home);
