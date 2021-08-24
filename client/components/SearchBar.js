@@ -7,8 +7,10 @@ import { getLegislatorsThunk } from "../store/legislators";
 import { setLegislatorThunk } from "../store/legislator";
 import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
+import { makeStyles } from "@material-ui/core/styles";
 
 export default function SearchBar() {
+  const classes = useStyles();
   const [selectedLegislator, setSelectedLegislator] = useState({});
   const dispatch = useDispatch();
 
@@ -29,7 +31,7 @@ export default function SearchBar() {
     console.log(legislator);
     // Pass the legislator into the selected legislator thunk
     dispatch(setLegislatorThunk(legislator));
-    if (legislator){
+    if (legislator) {
       const crp_id = legislator.id.opensecrets;
       console.log(crp_id);
       // find contributors via congressional crp_id
@@ -41,21 +43,26 @@ export default function SearchBar() {
   return (
     <div>
       <Autocomplete
-        id="combo-box-demo"
+        id="search-box"
+        className={classes.searchBar}
         options={legislators}
         onChange={(event, value) => handleSelect(value)}
         // here we create the label that is rendered as the search bar options
         getOptionLabel={(option) => {
+          const title =
+            option.terms[option.terms.length - 1].type.charAt(0).toUpperCase() +
+            option.terms[option.terms.length - 1].type.substring(1) +
+            ".";
 
-          const title = option.terms[option.terms.length-1].type.charAt(0).toUpperCase() + option.terms[option.terms.length-1].type.substring(1) + "."
-
-          return (`${title} ${option.name.official_full} (${
-            option.terms[option.terms.length-1].party[0]
-          }), ${option.terms[option.terms.length-1].state} ${
+          return `${title} ${option.name.official_full} (${
+            option.terms[option.terms.length - 1].party[0]
+          }), ${option.terms[option.terms.length - 1].state} ${
             // renders the district if legislator is house memeber
-            title === "Rep." ? "District " + option.terms[option.terms.length-1].district : ""
-          }`
-          )}}
+            title === "Rep."
+              ? "District " + option.terms[option.terms.length - 1].district
+              : ""
+          }`;
+        }}
         style={{ width: 400 }}
         renderInput={(params) => (
           <TextField {...params} label="Search Legislator" variant="outlined" />
@@ -64,3 +71,9 @@ export default function SearchBar() {
     </div>
   );
 }
+
+const useStyles = makeStyles(() => ({
+  searchBar: {
+    backgroundColor: "white",
+  },
+}));
