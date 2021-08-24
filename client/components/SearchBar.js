@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { TextField, Button } from "@material-ui/core";
 
@@ -10,6 +11,8 @@ import { setCandIndustriesThunk } from "../store/candindustry";
 import { makeStyles } from "@material-ui/core/styles";
 
 export default function SearchBar(props) {
+  const history = useHistory()
+
   const classes = useStyles();
   const [selectedLegislator, setSelectedLegislator] = useState({});
   const dispatch = useDispatch();
@@ -38,6 +41,8 @@ export default function SearchBar(props) {
       dispatch(setCandContributorsThunk(crp_id));
       dispatch(setCandIndustriesThunk(crp_id));
     }
+
+    history.push('/dashboard')
   };
 
   return (
