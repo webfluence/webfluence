@@ -204,7 +204,7 @@ export class NetworkGraph extends Component {
   }
 
   redirectToLearn(params, searchData) {
-    console.log(this.state.network.getNodeAt(params.pointer.DOM));
+    console.log('get node at>>>>', this.state.network.getNodeAt(params.pointer.DOM));
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -352,15 +352,16 @@ export class NetworkGraph extends Component {
     }
   }
 
-  // getNetwork = (data) => {
-  //   this.setState({ network: data });
-  // };
-  // getEdges = (data) => {
-  //   console.log(data);
-  // };
-  // getNodes = (data) => {
-  //   console.log(data);
-  // };
+  getNetwork = (data) => {
+    this.setState({ network: data });
+  };
+  getEdges = (data) => {
+    console.log(data);
+  };
+  getNodes = (data) => {
+    console.log(data);
+  };
+
   render() {
     return (
       <div>
@@ -374,9 +375,9 @@ export class NetworkGraph extends Component {
                 graph={this.state.graph}
                 style={this.state.style}
                 options={options}
-                // getNetwork={this.getNetwork}
-                // getEdges={this.getEdges}
-                // getNodes={this.getNodes}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
                 events={this.events}
                 vis={(vis) => (this.vis = vis)}
               />
