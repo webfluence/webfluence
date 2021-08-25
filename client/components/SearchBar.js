@@ -81,6 +81,6 @@ const useStyles = makeStyles(() => ({
   searchBar: {
     backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 20px 0px",
-    zIndex: 1,
+    zIndex: "1",
   },
 }));

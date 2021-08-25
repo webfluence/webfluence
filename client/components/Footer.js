@@ -33,7 +33,8 @@ export default function Footer() {
         </Grid>
       </Grid>
 
-      <hr style={{color: 'black', width: '70%'}}/>
+      <hr style={{color: 'black', width: '70%', zIndex: 1}}/>
+
       <Grid style={{}}>
         <IconButton href="https://www.github.com/webfluence/webfluence" target="_blank">
           <GitHubIcon style={{margin: 10}} />
@@ -42,7 +43,7 @@ export default function Footer() {
           <TwitterIcon style={{margin: 10}} />
         </IconButton>
       </Grid>
-      <Typography style={{marginBottom: 15}}>© 2021 Webfluence</Typography>
+      <Typography style={{marginBottom: 15, zIndex: 1}}>© 2021 Webfluence</Typography>
     </Grid>
   )
 }
