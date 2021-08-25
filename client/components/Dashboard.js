@@ -25,7 +25,7 @@ import Deposits from "./Deposits";
 import Orders from "./Orders";
 
 import { CandidateInfo } from "./CandidateInfo";
-import ContributorList from "./ContributorList"
+import ContributorList from "./ContributorList";
 
 import SearchBar from "./SearchBar";
 import GraphTest from "./GraphTest";
@@ -47,43 +47,66 @@ function Copyright() {
 
 export default function Dashboard() {
   const classes = useStyles();
-  const candcontrib = useSelector(
-    (state) => state.candcontrib
-  );
+  const candcontrib = useSelector((state) => state.candcontrib);
 
-  let rendering = true
+  let rendering = true;
 
   useEffect(() => {
     console.log("USE EFFECT RAN!!!!");
-    rendering = false
-    rendering = true
-  }, [candcontrib])
+    rendering = false;
+    rendering = true;
+  }, [candcontrib]);
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <main className={classes.content}>
+
+
+      <Grid className={classes.content}><CssBaseline />
         {/* <div className={classes.appBarSpacer} /> */}
-        <SearchBar width="400px"/>
+        <SearchBar width="400px" />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3} direction="row">
+          <Grid container spacing={3} style={{ display: "flex", flexWrap: 'wrap'}}>
+
+            {/* // Legislator info */}
             <Grid>
-              <Grid>
-                <Paper className={fixedHeightPaper}>
-                  {(Object.keys(candcontrib).length > 0) ? <CandidateInfo /> : <Typography> You  need to make a selection to render the info</Typography>}
-                </Paper>
-              </Grid>
-              <Grid>
-                <Paper className={fixedHeightPaper}>
-                  {(Object.keys(candcontrib).length > 0) ? <ContributorList /> : <Typography> You  need to make a selection to render the table</Typography>}
-                </Paper>
-              </Grid>
+              <Paper className={fixedHeightPaper} style={{flexGrow: 1}}>
+                {Object.keys(candcontrib).length > 0 ? (
+                  <CandidateInfo />
+                ) : (
+                  <Typography>
+                    {" "}
+                    You need to make a selection to render the info
+                  </Typography>
+                )}
+              </Paper>
             </Grid>
+
+            {/* Contributor Info */}
             <Grid>
-              <Paper className={classes.paper}>
-                {((Object.keys(candcontrib).length > 0) && rendering) ? <GraphTest /> : <Typography> You  need to make a selection to render the graph</Typography>}
+              <Paper className={fixedHeightPaper} style={{flexGrow: 1}}>
+                {Object.keys(candcontrib).length > 0 ? (
+                  <ContributorList />
+                ) : (
+                  <Typography>
+                    {" "}
+                    You need to make a selection to render the table
+                  </Typography>
+                )}
+              </Paper>
+            </Grid>
+
+            {/* Graph */}
+            <Grid>
+              <Paper className={fixedHeightPaper} style={{flexGrow: 2}}>
+                {Object.keys(candcontrib).length > 0 && rendering ? (
+                  <GraphTest />
+                ) : (
+                  <Typography>
+                    {" "}
+                    You need to make a selection to render the graph
+                  </Typography>
+                )}
               </Paper>
             </Grid>
           </Grid>
@@ -91,8 +114,8 @@ export default function Dashboard() {
             <Copyright />
           </Box>
         </Container>
-      </main>
-    </div>
+      </Grid>
+
   );
 }
 
@@ -100,43 +123,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  // },
-  // toolbarIcon: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "flex-end",
-  //   padding: "0 8px",
-  //   ...theme.mixins.toolbar,
-  // },
-  // appBar: {
-  //   zIndex: theme.zIndex.drawer + 1,
-  //   transition: theme.transitions.create(["width", "margin"], {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.leavingScreen,
-  //   }),
-  // },
-  // menuButton: {
-  //   marginRight: 36,
-  // },
-  // menuButtonHidden: {
-  //   display: "none",
-  // },
-  // title: {
-  //   flexGrow: 1,
-  // },
-  // appBarSpacer: theme.mixins.toolbar,
-  // content: {
-  //   flexGrow: 1,
-  //   height: "100vh",
-  //   overflow: "auto",
-  // },
   container: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
   },
-
+  content: {
+    display : 'flex',
+    flexDirection: 'column',
+    padding: 20,
+    alignItems: 'center'
+  },
   // //These classes are used for the containers
   paper: {
     padding: theme.spacing(2),
