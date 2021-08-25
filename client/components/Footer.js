@@ -23,13 +23,13 @@ export default function Footer() {
           <Button href="#text-buttons" style={style.button}>Contact</Button>
         </Grid>
       </Grid>
-      
+
       <hr style={{color: 'black', width: '70%'}}/>
       <Grid style={{}}>
         <IconButton href="https://www.github.com/webfluence/webfluence" target="_blank">
           <GitHubIcon style={{margin: 10}} />
         </IconButton>
-        <IconButton href="https://www.twitter.com" target="_blank">
+        <IconButton href="https://www.twitter.com" target="https://twitter.com/OpenSecretsDC">
           <TwitterIcon style={{margin: 10}} />
         </IconButton>
       </Grid>
