@@ -40,7 +40,7 @@ export const Home = (props) => {
           <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
             Create an account to save views about legislators who are most important to you.
           </Typography>
-          <Button className={classes.button}>Create an Account</Button>
+          <Button className={classes.button} href='/signup'> Create an Account</Button>
         </Grid>
       </Grid>
       <Footer />
@@ -118,7 +118,7 @@ const useStyles = makeStyles(() => ({
   typography: {
     textAlign: "center",
   }
-  
+
 }));
 
 export default connect(mapState)(Home);

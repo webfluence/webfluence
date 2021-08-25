@@ -2,10 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../store";
+import SignIn from "./SignIn";
+import { useHistory } from "react-router-dom";
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
+
   <div className="navbar">
-    <h1 className="logo">webfluence</h1>
+    <Link to="/">
+    <h1 className="logo" style={{color: 'black'}}>webfluence</h1>
+    </Link>
     <nav>
       {isLoggedIn ? (
         <div>
@@ -18,7 +23,7 @@ const Navbar = ({ handleClick, isLoggedIn }) => (
       ) : (
         <div>
           {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
+          <Link to="/login">Sign In</Link>
           <Link to="/signup">Sign Up</Link>
         </div>
       )}
