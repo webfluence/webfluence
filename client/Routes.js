@@ -28,6 +28,12 @@ class Routes extends Component {
             {/* <Redirect to="/home" /> */}
             <Route path="/graphtest" component={GraphTest} />
             <Route exact path="/dashboard" component={Dashboard} />
+            <Route path="/sources" component={Sources} />
+            <Route path="/features" component={Features} />
+            <Route path="/donate" component={Donate} />
+            <Route path="/about" component={About} />
+            <Route path="/faq" component={Faq} />
+            <Route path="/contact" component={Contact} />
             <Route path="/searchbar" component={SearchBar} />
           </Switch>
         ) : (
@@ -37,6 +43,12 @@ class Routes extends Component {
             <Route path="/signup" component={SignUp} />
             <Route path="/graphtest" component={GraphTest} />
             <Route exact path="/dashboard" component={Dashboard} />
+            <Route path="/sources" component={Sources} />
+            <Route path="/features" component={Features} />
+            <Route path="/donate" component={Donate} />
+            <Route path="/about" component={About} />
+            <Route path="/faq" component={Faq} />
+            <Route path="/contact" component={Contact} />
             <Route path="/searchbar" component={SearchBar} />
           </Switch>
         )}
