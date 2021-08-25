@@ -17,7 +17,7 @@ export const Home = (props) => {
   
   return (
     <Grid className={classes.body}>
-      <Grid className={classes.topSection} style={breakpoint.isTabletFloor ? {padding: 0, justifyContent: "center"} : {padding: 40}}>
+      <Grid className={classes.topSection} style={breakpoint.isTabletFloor ? {padding: 0, justifyContent: "center"} : {padding: 40, backgroundImage: `url('/background.png')`,}}>
         {/* <h3>Welcome, {username}</h3> */}
         <Grid style={breakpoint.isTabletFloor ? {display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly', alignItems: 'center'} : {display: 'flex', flexDirection: 'column', flex: .5, justifyContent: 'space-evenly'}}>
           <Typography className={classes.logo} style={breakpoint.isTabletFloor ? {fontSize : '20vw'} : {fontSize : '10vw'}} >webfluence</Typography>
@@ -36,7 +36,7 @@ export const Home = (props) => {
       </Grid>
       <Grid style={{position: "relative"}}>
         <Grid className={classes.buttonSection} style={breakpoint.isTabletFloor ? {padding: "20px", height: "100%", } : {padding: "80px", height: '70vh'}}>
-          <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw"} : {width: "40vw"}}/>
+          <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw", top: "10px"} : {width: "80vw"}}/>
           <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '18px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
             Create an account to save views about legislators who are
             <br /> most important or of interest to you.
@@ -60,10 +60,10 @@ const mapState = (state) => {
 
 const useStyles = makeStyles(() => ({
   topSection: {
-    backgroundImage: `url('/background.png')`,
+    // backgroundImage: `url('/background.png')`,
     backgroundPosition: 'right top',
     backgroundSize: 'cover',
-    display: 'flex', 
+    display: 'flex',
     height: '85vh',
     justifyContent: "center",
     
