@@ -25,8 +25,8 @@ export const Home = (props) => {
           <Paper className={classes.infoBox} width={breakpoint.isTabletFloor ? "300px" : "600px"} >
           <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"MONEY & POLITICS"}</Typography>
           <hr style={{color: 'black', width: '70%'}}/>
-          <Typography style={{fontSize: '17px', marginTop: '10px', textAlign: 'center', color: 'gray'}}>Lobbyist, special interest groups and corporations wield great power over what laws are written, enacted, and enforced. Who are the major donors that are influencing your lawmakers?</Typography>
-          <Typography style={{fontSize: '17px', marginBottom: '20px', color: 'gray'}}><br />Search for a legislator below and find out!</Typography>
+          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>Lobbyist, special interest groups and corporations wield great power over what laws are written, enacted, and enforced. <br /> <br /> Who are the major donors that are influencing your lawmakers?</Typography>
+          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginBottom: '20px', textAlign: 'center', color: 'gray'}}><br />Search for a legislator below and find out!</Typography>
           </Paper>
           </Grid>
           <SearchBar width={breakpoint.isTabletFloor ? "300px" : "600px"}/>
@@ -36,10 +36,9 @@ export const Home = (props) => {
       </Grid>
       <Grid style={{position: "relative"}}>
         <Grid className={classes.buttonSection} style={breakpoint.isTabletFloor ? {padding: "20px", height: "100%", } : {padding: "80px", height: '70vh'}}>
-          <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw", top: "10px"} : {width: "80vw"}}/>
-          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '18px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
-            Create an account to save views about legislators who are
-            <br /> most important or of interest to you.
+          <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw", top: "10px"} : {width: "60vw", top: "9px"}}/>
+          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
+            Create an account to save views about legislators who are most important to you.
           </Typography>
           <Button className={classes.button}>Create an Account</Button>
         </Grid>

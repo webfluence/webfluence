@@ -55,6 +55,7 @@ const style = {
     alignItems: "baseline",
     marginBottom : "0px",
     fontSize: 32,
-    fontFamily: ["Dosis", "sans-serif"]
+    fontFamily: ["Dosis", "sans-serif"],
+    zIndex: 1,
   }
 }
