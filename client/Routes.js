@@ -8,6 +8,12 @@ import Dashboard from "./components/Dashboard";
 import SearchBar from "./components/SearchBar";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+import Sources from "./components/Sources"
+import Features from "./components/Features";
+import Donate from "./components/Donate";
+import About from "./components/About";
+import Faq from "./components/Faq";
+import Contact from "./components/Contact";
 
 /**
  * COMPONENT

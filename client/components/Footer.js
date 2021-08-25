@@ -12,15 +12,15 @@ export default function Footer() {
     <Grid style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
       <Grid style={{display: 'flex', justifyContent: 'space-between', width: '70%', alignItems: "baseline"}}>
         <Grid style={{display: 'flex', justifyContent: 'flex-start', alignItems: "baseline"}}>
-          <Button href="#text-buttons" style={style.button}> Sources </Button>
-          <Button href="#text-buttons" style={style.button}>Features</Button>
-          <Button href="#text-buttons" style={style.button}>Donate</Button>
+          <Button href="/sources" style={style.button}>Sources</Button>
+          <Button href="/features" style={style.button}>Features</Button>
+          <Button href="/donate" style={style.button}>Donate</Button>
         </Grid>
         <Typography style={style.logo}>webfluence</Typography>
         <Grid style={{display: 'flex', justifyContent: 'flex-end', alignItems: "baseline"}}>
-          <Button href="#text-buttons" style={style.button}>About</Button>
-          <Button href="#text-buttons" style={style.button}>FAQs</Button>
-          <Button href="#text-buttons" style={style.button}>Contact</Button>
+          <Button href="/about" style={style.button}>About</Button>
+          <Button href="/faq" style={style.button}>FAQs</Button>
+          <Button href="/contact" style={style.button}>Contact</Button>
         </Grid>
       </Grid>
 
