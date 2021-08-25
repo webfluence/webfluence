@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { makeStyles } from "@material-ui/core/styles";
 
 
-export const Sources = (props) => {
+export default function Sources(props){
   const classes = useStyles();
   return (
     <div className={classes.root}>
