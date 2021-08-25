@@ -41,7 +41,7 @@ export const Home = (props) => {
             Create an account to save views about legislators who are
             <br /> most important or of interest to you.
           </Typography>
-          <Button className={classes.button}>Create an Account</Button>
+          <Button className={classes.button} href='/signup'> Create an Account</Button>
         </Grid>
       </Grid>
       <Footer />
@@ -119,7 +119,7 @@ const useStyles = makeStyles(() => ({
   typography: {
     textAlign: "center",
   }
-  
+
 }));
 
 export default connect(mapState)(Home);
