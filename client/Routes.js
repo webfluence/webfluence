@@ -1,23 +1,30 @@
-import React, {Component, Fragment} from 'react'
-import {connect} from 'react-redux'
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
-import { Login, Signup } from './components/AuthForm';
-import Home from './components/Home';
-import GraphTest from './components/GraphTest'
-import {me} from './store'
-import Dashboard from './components/Dashboard';
-import SearchBar from './components/SearchBar';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import Home from "./components/Home";
+import GraphTest from "./components/GraphTest";
+import { me } from "./store";
+import Dashboard from "./components/Dashboard";
+import SearchBar from "./components/SearchBar";
+import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
+import Sources from "./components/Sources"
+import Features from "./components/Features";
+import Donate from "./components/Donate";
+import About from "./components/About";
+import Faq from "./components/Faq";
+import Contact from "./components/Contact";
 
 /**
  * COMPONENT
  */
 class Routes extends Component {
   componentDidMount() {
-    this.props.loadInitialData()
+    this.props.loadInitialData();
   }
 
   render() {
-    const {isLoggedIn} = this.props
+    const { isLoggedIn } = this.props;
 
     return (
       <div>
@@ -25,46 +32,56 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
-            <Route path="/graphtest" component={GraphTest}/>
+            <Route path="/graphtest" component={GraphTest} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route path ='/searchbar' component={ SearchBar} />
-
+            <Route path="/sources" component={Sources} />
+            <Route path="/features" component={Features} />
+            <Route path="/donate" component={Donate} />
+            <Route path="/about" component={About} />
+            <Route path="/faq" component={Faq} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/searchbar" component={SearchBar} />
           </Switch>
         ) : (
           <Switch>
-            <Route path='/' exact component={ Login } />
-            <Route path="/home" component={Home} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/graphtest" component={GraphTest}/>
+            <Route path="/" exact component={Home} />
+            <Route path="/login" component={SignIn} />
+            <Route path="/signup" component={SignUp} />
+            <Route path="/graphtest" component={GraphTest} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route path ='/searchbar' component={ SearchBar} />
-        </Switch>
+            <Route path="/sources" component={Sources} />
+            <Route path="/features" component={Features} />
+            <Route path="/donate" component={Donate} />
+            <Route path="/about" component={About} />
+            <Route path="/faq" component={Faq} />
+            <Route path="/contact" component={Contact} />
+            <Route path="/searchbar" component={SearchBar} />
+          </Switch>
         )}
       </div>
-    )
+    );
   }
 }
 
 /**
  * CONTAINER
  */
-const mapState = state => {
+const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
     // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
-    isLoggedIn: !!state.auth.id
-  }
-}
+    isLoggedIn: !!state.auth.id,
+  };
+};
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     loadInitialData() {
-      dispatch(me())
-    }
-  }
-}
+      dispatch(me());
+    },
+  };
+};
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(mapState, mapDispatch)(Routes))
+export default withRouter(connect(mapState, mapDispatch)(Routes));
