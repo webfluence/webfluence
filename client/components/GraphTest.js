@@ -10,6 +10,7 @@ import { setCandContributorsThunk } from "../store/candcontrib";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ReplayIcon from "@material-ui/icons/Replay";
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 import CloseIcon from '@material-ui/icons/Close';
 import SearchIcon from '@material-ui/icons/Search';
 import PanToolIcon from '@material-ui/icons/PanTool';
@@ -109,7 +110,7 @@ let options = {
     selectConnectedEdges: false,
     zoomView: false,
     dragView: false,
-  },
+  }
 };
 
 function createGraph(candcontrib) {
@@ -218,7 +219,8 @@ export class NetworkGraph extends Component {
       style: { width: "100%", height: "500px" },
       fullscreenStyle: { width: "100%", height: "100%"},
       network: null,
-      options: options
+      options: options,
+      branchingActive: false
     });
   }
 
@@ -405,8 +407,6 @@ export class NetworkGraph extends Component {
 
   render() {
 
-    this.state.options && console.log(`this.state.options.interaction.zoomView`, this.state.options.interaction.zoomView)
-    
     return (
       <div>
         <Modal
@@ -418,18 +418,15 @@ export class NetworkGraph extends Component {
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
-        <Grid style={{display: "flex", justifyContent: "space-between"}}>
-            <Grid>
-            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+        <Grid>
             { this.state.options &&
             <Fragment>
-            <CallSplitIcon fontSize="large" />
+            <FullscreenExitIcon fontSize="large" onClick={this.closeModal}/>
+            <CallSplitIcon fontSize="large" className={this.state.branchingActive ? "selectedIcon" : ""} onClick={() => this.setState({ branchingActive: !this.state.branchingActive})}/>
             <SearchIcon fontSize="large"  className={this.state.options.interaction.zoomView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, zoomView: !this.state.options.interaction.zoomView}}})}/>
             <PanToolIcon fontSize="large" className={this.state.options.interaction.dragView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, dragView: !this.state.options.interaction.dragView}}})}/>
             <ReplayIcon fontSize="large" />
-            </Fragment>}
-            </Grid>
-            <CloseIcon fontSize="large" onClick={this.closeModal}/>
+            </Fragment>}   
           </Grid>
         {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
@@ -450,7 +447,7 @@ export class NetworkGraph extends Component {
             <FullscreenIcon fontSize="large" onClick={this.openModal} />
             { this.state.options &&
             <Fragment>
-            <CallSplitIcon fontSize="large" />
+            <CallSplitIcon fontSize="large" className={this.state.branchingActive ? "selectedIcon" : ""} onClick={() => this.setState({ branchingActive: !this.state.branchingActive})}/>
             <SearchIcon fontSize="large"  className={this.state.options.interaction.zoomView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, zoomView: !this.state.options.interaction.zoomView}}})}/>
             <PanToolIcon fontSize="large" className={this.state.options.interaction.dragView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, dragView: !this.state.options.interaction.dragView}}})}/>
             <ReplayIcon fontSize="large" />
