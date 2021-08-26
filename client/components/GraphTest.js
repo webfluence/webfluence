@@ -11,6 +11,8 @@ import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ReplayIcon from "@material-ui/icons/Replay";
 import CloseIcon from '@material-ui/icons/Close';
+import SearchIcon from '@material-ui/icons/Search';
+import PanToolIcon from '@material-ui/icons/PanTool';
 import { Grid } from "@material-ui/core";
 import Modal from 'react-modal';
 
@@ -26,6 +28,7 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
     width: "90vw",
     height: "90vh",
+    overflow: "hidden"
   },
 };
 
@@ -213,8 +216,9 @@ export class NetworkGraph extends Component {
     this.setState({
       graph: newGraph,
       style: { width: "100%", height: "500px" },
-      fullscreenStyle: { width: "100%", height: "100%" },
+      fullscreenStyle: { width: "100%", height: "100%"},
       network: null,
+      options: options
     });
   }
 
@@ -400,6 +404,8 @@ export class NetworkGraph extends Component {
   }
 
   render() {
+
+    this.state.options && console.log(`this.state.options.interaction.zoomView`, this.state.options.interaction.zoomView)
     
     return (
       <div>
@@ -412,13 +418,25 @@ export class NetworkGraph extends Component {
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
-        <CloseIcon onClick={this.closeModal}/>
+        <Grid style={{display: "flex", justifyContent: "space-between"}}>
+            <Grid>
+            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            { this.state.options &&
+            <Fragment>
+            <CallSplitIcon fontSize="large" />
+            <SearchIcon fontSize="large"  className={this.state.options.interaction.zoomView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, zoomView: !this.state.options.interaction.zoomView}}})}/>
+            <PanToolIcon fontSize="large" className={this.state.options.interaction.dragView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, dragView: !this.state.options.interaction.dragView}}})}/>
+            <ReplayIcon fontSize="large" />
+            </Fragment>}
+            </Grid>
+            <CloseIcon fontSize="large" onClick={this.closeModal}/>
+          </Grid>
         {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
                 graph={this.state.graph}
                 style={this.state.fullscreenStyle}
-                options={options}
+                options={this.state.options}
                 getNetwork={this.getNetwork}
                 getEdges={this.getEdges}
                 getNodes={this.getNodes}
@@ -428,17 +446,22 @@ export class NetworkGraph extends Component {
             )}
       </Modal>
         <Fragment>
-          <Grid style={{ backgroundColor: "transparent" }}>
-            <FullscreenIcon fontSize="large" onClick={this.openModal}/>
+          <Grid>
+            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            { this.state.options &&
+            <Fragment>
             <CallSplitIcon fontSize="large" />
+            <SearchIcon fontSize="large"  className={this.state.options.interaction.zoomView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, zoomView: !this.state.options.interaction.zoomView}}})}/>
+            <PanToolIcon fontSize="large" className={this.state.options.interaction.dragView ? "selectedIcon" : ""} onClick={() => this.setState({ options: { ...this.state.options, interaction: { ...this.state.options.interaction, dragView: !this.state.options.interaction.dragView}}})}/>
             <ReplayIcon fontSize="large" />
+            </Fragment>}
           </Grid>
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
                 graph={this.state.graph}
                 style={this.state.style}
-                options={options}
+                options={this.state.options}
                 getNetwork={this.getNetwork}
                 getEdges={this.getEdges}
                 getNodes={this.getNodes}

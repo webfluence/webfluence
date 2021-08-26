@@ -70,7 +70,7 @@ export default function SearchBar(props) {
         }}
         style={{ width: props.width }}
         renderInput={(params) => (
-          <TextField {...params} label="Search Legislator" variant="outlined" />
+          <TextField {...params} label="Search Legislator" variant="outlined" style={{zIndex: 0}} />
         )}
       />
     </div>

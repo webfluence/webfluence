@@ -60,7 +60,7 @@ export default function Dashboard() {
           {/* <div className={classes.appBarSpacer} /> */}
           <SearchBar width={breakpoint.isTabletFloor ? "300px" : "600px"} />
           <Container maxWidth="lg" className={classes.container}>
-            <Grid
+          <Grid
               container
               spacing={3}
               style={{
