@@ -5,13 +5,35 @@ import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import { contributorData } from "../dummyData/candidateContributionDummyData";
-import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
+import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import CallSplitIcon from "@material-ui/icons/CallSplit";
+import ReplayIcon from "@material-ui/icons/Replay";
+import CloseIcon from '@material-ui/icons/Close';
+import { Grid } from "@material-ui/core";
+import Modal from 'react-modal';
 
+
+// modal styles
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: "90vw",
+    height: "90vh",
+  },
+};
+
+
+// graph options
 let options = {
   layout: {
-    randomSeed: 2,
+    randomSeed: 1,
   },
   nodes: {
     fixed: {
@@ -20,8 +42,8 @@ let options = {
     },
     shape: "dot",
     size: 20,
-    borderWidth: 1.5,
-    borderWidthSelected: 2,
+    borderWidth: 0,
+    borderWidthSelected: 1,
     font: {
       size: 15,
       align: "center",
@@ -34,7 +56,7 @@ let options = {
     },
   },
   edges: {
-    width: 1,
+    width: 5,
     color: {
       color: "#D3D3D3",
       highlight: "#797979",
@@ -51,36 +73,36 @@ let options = {
       roundness: 0,
     },
   },
-  groups: {
-    Biology: {
-      color: {
-        background: "#ffffff",
-        border: "#c89dc8",
-        highlight: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-        hover: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-      },
-    },
-    physics: {
-      barnesHut: {
-        gravitationalConstant: -30000,
-        centralGravity: 1,
-        springLength: 70,
-        avoidOverlap: 1,
-      },
-    },
-    stabilization: { iterations: 2500 },
-  },
+  // groups: {
+  //   Biology: {
+  //     color: {
+  //       background: "#ffffff",
+  //       border: "#c89dc8",
+  //       highlight: {
+  //         border: "#c89dc8",
+  //         background: "#ffffff",
+  //       },
+  //       hover: {
+  //         border: "#c89dc8",
+  //         background: "#ffffff",
+  //       },
+  //     },
+  //   },
+  //   // physics: {
+  //   //   barnesHut: {
+  //   //     gravitationalConstant: -30000,
+  //   //     centralGravity: 1,
+  //   //     springLength: 70,
+  //   //     avoidOverlap: 1,
+  //   //   },
+  //   // },
+  //   stabilization: { iterations: 2500 },
+  // },
   interaction: {
     hover: false,
     hoverConnectedEdges: false,
     hoverEdges: false,
-    selectable: false,
+    selectable: true,
     selectConnectedEdges: false,
     zoomView: false,
     dragView: false,
@@ -99,7 +121,7 @@ function createGraph(candcontrib) {
   if (Object.keys(data).length) {
     let newNode = {};
 
-    newNode.color = "green";
+    newNode.color = "#78E983";
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
     nodes.push(newNode);
@@ -109,7 +131,7 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = "blue";
+    newNode.color = "#FF5A5A";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
@@ -169,6 +191,8 @@ export class NetworkGraph extends Component {
     this.redirectToLearn = this.redirectToLearn.bind(this);
     this.neighbourhoodHighlightHide =
       this.neighbourhoodHighlightHide.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -189,6 +213,7 @@ export class NetworkGraph extends Component {
     this.setState({
       graph: newGraph,
       style: { width: "100%", height: "500px" },
+      fullscreenStyle: { width: "100%", height: "100%" },
       network: null,
     });
   }
@@ -204,7 +229,10 @@ export class NetworkGraph extends Component {
   }
 
   redirectToLearn(params, searchData) {
-    console.log('get node at>>>>', this.state.network.getNodeAt(params.pointer.DOM));
+    console.log(
+      "get node at>>>>",
+      this.state.network.getNodeAt(params.pointer.DOM)
+    );
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -362,13 +390,49 @@ export class NetworkGraph extends Component {
     console.log(data);
   };
 
+  // modal functions
+  openModal () {
+    this.setState({Modalopen: true});
+  }
+
+ closeModal() {
+  this.setState({Modalopen: false});
+  }
+
   render() {
+    
     return (
       <div>
-        {/* <SearchBar /> */}
-
+        <Modal
+        isOpen={this.state.Modalopen}
+        onAfterOpen={this.afterOpenModal}
+        onRequestClose={this.closeModal}
+        style={customStyles}
+        zIndex="9999"
+        contentLabel="Example Modal"
+        ariaHideApp={false}
+      >
+        <CloseIcon onClick={this.closeModal}/>
+        {Object.keys(this.props.candcontrib).length &&
+            Object.keys(this.state.graph).length && (
+              <Graph
+                graph={this.state.graph}
+                style={this.state.fullscreenStyle}
+                options={options}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
+                events={this.events}
+                vis={(vis) => (this.vis = vis)}
+              />
+            )}
+      </Modal>
         <Fragment>
-          {/* <div className="vis-react-title">Contributor Information:</div> */}
+          <Grid style={{ backgroundColor: "transparent" }}>
+            <FullscreenIcon fontSize="large" onClick={this.openModal}/>
+            <CallSplitIcon fontSize="large" />
+            <ReplayIcon fontSize="large" />
+          </Grid>
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
