@@ -5,13 +5,17 @@ import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import { contributorData } from "../dummyData/candidateContributionDummyData";
-import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import CallSplitIcon from '@material-ui/icons/CallSplit'
+import ReplayIcon from '@material-ui/icons/Replay'
+import { Grid } from '@material-ui/core'
+
 
 let options = {
   layout: {
-    randomSeed: 2,
+    randomSeed: 1,
   },
   nodes: {
     fixed: {
@@ -20,8 +24,8 @@ let options = {
     },
     shape: "dot",
     size: 20,
-    borderWidth: 1.5,
-    borderWidthSelected: 2,
+    borderWidth: 0,
+    borderWidthSelected: 1,
     font: {
       size: 15,
       align: "center",
@@ -51,31 +55,31 @@ let options = {
       roundness: 0,
     },
   },
-  groups: {
-    Biology: {
-      color: {
-        background: "#ffffff",
-        border: "#c89dc8",
-        highlight: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-        hover: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-      },
-    },
-    // physics: {
-    //   barnesHut: {
-    //     gravitationalConstant: -30000,
-    //     centralGravity: 1,
-    //     springLength: 70,
-    //     avoidOverlap: 1,
-    //   },
-    // },
-    stabilization: { iterations: 2500 },
-  },
+  // groups: {
+  //   Biology: {
+  //     color: {
+  //       background: "#ffffff",
+  //       border: "#c89dc8",
+  //       highlight: {
+  //         border: "#c89dc8",
+  //         background: "#ffffff",
+  //       },
+  //       hover: {
+  //         border: "#c89dc8",
+  //         background: "#ffffff",
+  //       },
+  //     },
+  //   },
+  //   // physics: {
+  //   //   barnesHut: {
+  //   //     gravitationalConstant: -30000,
+  //   //     centralGravity: 1,
+  //   //     springLength: 70,
+  //   //     avoidOverlap: 1,
+  //   //   },
+  //   // },
+  //   stabilization: { iterations: 2500 },
+  // },
   interaction: {
     hover: false,
     hoverConnectedEdges: false,
@@ -366,7 +370,11 @@ export class NetworkGraph extends Component {
     return (
       <div>
         <Fragment>
-          
+          <Grid style={{backgroundColor: "transparent"}}>
+          <FullscreenIcon fontSize="large"/>
+          <CallSplitIcon fontSize="large"/>
+          <ReplayIcon fontSize="large"/>
+          </Grid>
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
