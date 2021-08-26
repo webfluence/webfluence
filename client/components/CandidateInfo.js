@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
+import { useBreakpoints } from "./hooks/useBreakpoints";
 
 export const CandidateInfo = () => {
   const legislator = useSelector((state) => state.legislator);
@@ -23,13 +24,15 @@ export const CandidateInfo = () => {
   const district = legislator.terms[legislator.terms.length - 1].district;
   const phone = '(' + legislator.terms[legislator.terms.length - 1].phone.slice(0, 3) + ') ' + legislator.terms[legislator.terms.length - 1].phone.slice(4)
 
+  const breakpoint = useBreakpoints()
+
   return legislator && Object.keys(legislator).length ? (
-    <Box display="flex" direction="row" padding="40px" width="100%">
-      <Avatar
+    <Box display="flex" direction="row" padding={ breakpoint.isTabletFloor ? "5px" : "40px"} width="100%">
+      { !breakpoint.isTabletFloor && <Avatar
         src={`https://cdn1.opensecrets.org/congress-members/photos/${legislator.id.opensecrets}.jpg`}
         // src={`https://theunitedstates.io/images/congress/225x275/${legislator.id}.jpg`}
         style={{ height: "225px", width: "225px", marginRight: "50px" }}
-      />
+      />}
       <Grid
         style={{
           display: "flex",
@@ -39,23 +42,23 @@ export const CandidateInfo = () => {
         }}
       >
         <Grid>
-          <Typography style={{ fontSize: "36px", marginBottom: "20px" }}>{name}</Typography>
-          <Typography style={{ fontSize: "20px" }}>
+          <Typography style={breakpoint.isTabletFloor ? { fontSize: "18px", marginBottom: "5px" } : { fontSize: "36px", marginBottom: "20px" }}>{name}</Typography>
+          <Typography style={breakpoint.isTabletFloor ? { fontSize: "16px"} : { fontSize: "20px" }}>
             {repOrSen} ({party} - {state})
           </Typography>
           <Typography style={{ fontStyle: "italic", fontSize: "20px" }}>
             {leadershipPosition}
           </Typography>
-          {district && <Typography style={{ fontSize: "20px" }}>District {district}</Typography>}
+          {district && <Typography style={breakpoint.isTabletFloor ? { fontSize: "16px"} : { fontSize: "20px" }}>District {district}</Typography>}
           {/* <Typography>contact: <Link to={contact} > contact form </Link></Typography> */}
-          <Typography style={{ fontSize: "20px" }}>
+          <Typography style={breakpoint.isTabletFloor ? { fontSize: "16px"} : { fontSize: "20px" }}>
             office phone #:{" "}
             {phone}
           </Typography>
         </Grid>
-        <Typography style={{ fontSize: "20px" }}>
+        { !breakpoint.isTabletFloor && <Typography style={{ fontSize: "20px" }}>
           first elected: {firstElection} <br /> next election: {nextElection}{" "}
-        </Typography>
+        </Typography> }
       </Grid>
     </Box>
   ) : (

@@ -7,12 +7,30 @@ import data from "../dummyData/legislatorDummyData";
 import { contributorData } from "../dummyData/candidateContributionDummyData";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import CallSplitIcon from '@material-ui/icons/CallSplit'
-import ReplayIcon from '@material-ui/icons/Replay'
-import { Grid } from '@material-ui/core'
+import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import CallSplitIcon from "@material-ui/icons/CallSplit";
+import ReplayIcon from "@material-ui/icons/Replay";
+import CloseIcon from '@material-ui/icons/Close';
+import { Grid } from "@material-ui/core";
+import Modal from 'react-modal';
 
 
+// modal styles
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    width: "90vw",
+    height: "90vh",
+  },
+};
+
+
+// graph options
 let options = {
   layout: {
     randomSeed: 1,
@@ -173,6 +191,8 @@ export class NetworkGraph extends Component {
     this.redirectToLearn = this.redirectToLearn.bind(this);
     this.neighbourhoodHighlightHide =
       this.neighbourhoodHighlightHide.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -193,6 +213,7 @@ export class NetworkGraph extends Component {
     this.setState({
       graph: newGraph,
       style: { width: "100%", height: "500px" },
+      fullscreenStyle: { width: "100%", height: "100%" },
       network: null,
     });
   }
@@ -208,7 +229,10 @@ export class NetworkGraph extends Component {
   }
 
   redirectToLearn(params, searchData) {
-    console.log('get node at>>>>', this.state.network.getNodeAt(params.pointer.DOM));
+    console.log(
+      "get node at>>>>",
+      this.state.network.getNodeAt(params.pointer.DOM)
+    );
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -366,14 +390,48 @@ export class NetworkGraph extends Component {
     console.log(data);
   };
 
+  // modal functions
+  openModal () {
+    this.setState({Modalopen: true});
+  }
+
+ closeModal() {
+  this.setState({Modalopen: false});
+  }
+
   render() {
+    
     return (
       <div>
+        <Modal
+        isOpen={this.state.Modalopen}
+        onAfterOpen={this.afterOpenModal}
+        onRequestClose={this.closeModal}
+        style={customStyles}
+        zIndex="9999"
+        contentLabel="Example Modal"
+        ariaHideApp={false}
+      >
+        <CloseIcon onClick={this.closeModal}/>
+        {Object.keys(this.props.candcontrib).length &&
+            Object.keys(this.state.graph).length && (
+              <Graph
+                graph={this.state.graph}
+                style={this.state.fullscreenStyle}
+                options={options}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
+                events={this.events}
+                vis={(vis) => (this.vis = vis)}
+              />
+            )}
+      </Modal>
         <Fragment>
-          <Grid style={{backgroundColor: "transparent"}}>
-          <FullscreenIcon fontSize="large"/>
-          <CallSplitIcon fontSize="large"/>
-          <ReplayIcon fontSize="large"/>
+          <Grid style={{ backgroundColor: "transparent" }}>
+            <FullscreenIcon fontSize="large" onClick={this.openModal}/>
+            <CallSplitIcon fontSize="large" />
+            <ReplayIcon fontSize="large" />
           </Grid>
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (

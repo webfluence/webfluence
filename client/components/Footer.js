@@ -33,7 +33,7 @@ export default function Footer() {
         </Grid>
       </Grid>
 
-      <hr style={{color: 'black', width: '70%', zIndex: 1}}/>
+      <hr style={{color: 'black', width: '70%'}}/>
 
       <Grid style={{}}>
         <IconButton href="https://www.github.com/webfluence/webfluence" target="_blank">
@@ -56,7 +56,6 @@ const style = {
     alignItems: "baseline",
     marginBottom : "0px",
     fontSize: 32,
-    fontFamily: ["Dosis", "sans-serif"],
-    zIndex: 1,
+    fontFamily: ["Dosis", "sans-serif"]
   }
 }
