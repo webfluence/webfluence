@@ -176,7 +176,7 @@ export class NetworkGraph extends Component {
       const newGraph = createGraph(this.props.candcontrib);
       this.setState({
         graph: newGraph,
-        style: { width: "300px", height: "300px" },
+        style: { width: "100%", height: "500px" },
         network: null,
       });
     }
@@ -188,7 +188,7 @@ export class NetworkGraph extends Component {
     const newGraph = createGraph(this.props.candcontrib);
     this.setState({
       graph: newGraph,
-      style: { width: "300px", height: "300px" },
+      style: { width: "100%", height: "500px" },
       network: null,
     });
   }
@@ -368,7 +368,7 @@ export class NetworkGraph extends Component {
         {/* <SearchBar /> */}
 
         <Fragment>
-          <div className="vis-react-title">Contributor Information:</div>
+          {/* <div className="vis-react-title">Contributor Information:</div> */}
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
