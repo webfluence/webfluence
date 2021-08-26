@@ -3,23 +3,18 @@ import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+
 import { mainListItems, secondaryListItems } from "./DashboardListItems";
+
 // import Chart from './Chart';
 import Deposits from "./Deposits";
 import Orders from "./Orders";
@@ -52,25 +47,30 @@ export default function Dashboard() {
   let rendering = true;
 
   useEffect(() => {
-    console.log("USE EFFECT RAN!!!!");
     rendering = false;
     rendering = true;
   }, [candcontrib]);
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const fixedWidthPaper = clsx(classes.paper, classes.fixedWidth);
+
+  const candInfoClass = clsx(classes.paper, classes.fixedWidth, classes.marginBottom)
+
+  const graphClass = clsx(classes.paper, classes.fixedWidth, classes.marginBottom)
+
+
 
   return (
 
 
       <Grid className={classes.content}><CssBaseline />
         {/* <div className={classes.appBarSpacer} /> */}
-        <SearchBar width="400px" />
+        <SearchBar width="600px" />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3} style={{ display: "flex", flexWrap: 'wrap'}}>
+          <Grid container spacing={3} style={{ display: "flex", flexWrap: 'wrap', justifyContent: 'space-around', flexDirection: "column"}}>
 
             {/* // Legislator info */}
             <Grid>
-              <Paper className={fixedHeightPaper} style={{flexGrow: 1}}>
+              <Paper className={candInfoClass} >
                 {Object.keys(candcontrib).length > 0 ? (
                   <CandidateInfo />
                 ) : (
@@ -81,24 +81,8 @@ export default function Dashboard() {
                 )}
               </Paper>
             </Grid>
-
-            {/* Contributor Info */}
             <Grid>
-              <Paper className={fixedHeightPaper} style={{flexGrow: 1}}>
-                {Object.keys(candcontrib).length > 0 ? (
-                  <ContributorList />
-                ) : (
-                  <Typography>
-                    {" "}
-                    You need to make a selection to render the table
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
-
-            {/* Graph */}
-            <Grid>
-              <Paper className={fixedHeightPaper} style={{flexGrow: 2}}>
+              <Paper className={graphClass}>
                 {Object.keys(candcontrib).length > 0 && rendering ? (
                   <GraphTest />
                 ) : (
@@ -109,11 +93,24 @@ export default function Dashboard() {
                 )}
               </Paper>
             </Grid>
+            {/* Contributor Info */}
+            <Grid>
+              <Paper className={fixedWidthPaper}>
+                {Object.keys(candcontrib).length > 0 ? (
+                  <ContributorList />
+                ) : (
+                  <Typography>
+                    {" "}
+                    You need to make a selection to render the table
+                  </Typography>
+                )}
+              </Paper>
+            </Grid>
           </Grid>
+        </Container>
           <Box pt={4}>
             <Copyright />
           </Box>
-        </Container>
       </Grid>
 
   );
@@ -121,17 +118,19 @@ export default function Dashboard() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    display: "flex"
   },
   container: {
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
+    paddingTop: 50,
+    paddingBottom: 70,
   },
   content: {
     display : 'flex',
     flexDirection: 'column',
     padding: 20,
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#d9d9d9',
+    height: "220vh"
   },
   // //These classes are used for the containers
   paper: {
@@ -140,7 +139,10 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
     flexDirection: "row",
   },
-  fixedHeight: {
-    height: 350,
+  fixedWidth: {
+    width: "90vw",
+  },
+  marginBottom: {
+    marginBottom: "40px"
   },
 }));
