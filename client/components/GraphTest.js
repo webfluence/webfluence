@@ -34,7 +34,7 @@ let options = {
     },
   },
   edges: {
-    width: 1,
+    width: 5,
     color: {
       color: "#D3D3D3",
       highlight: "#797979",
@@ -66,21 +66,21 @@ let options = {
         },
       },
     },
-    physics: {
-      barnesHut: {
-        gravitationalConstant: -30000,
-        centralGravity: 1,
-        springLength: 70,
-        avoidOverlap: 1,
-      },
-    },
+    // physics: {
+    //   barnesHut: {
+    //     gravitationalConstant: -30000,
+    //     centralGravity: 1,
+    //     springLength: 70,
+    //     avoidOverlap: 1,
+    //   },
+    // },
     stabilization: { iterations: 2500 },
   },
   interaction: {
     hover: false,
     hoverConnectedEdges: false,
     hoverEdges: false,
-    selectable: false,
+    selectable: true,
     selectConnectedEdges: false,
     zoomView: false,
     dragView: false,
@@ -99,7 +99,7 @@ function createGraph(candcontrib) {
   if (Object.keys(data).length) {
     let newNode = {};
 
-    newNode.color = "green";
+    newNode.color = "#78E983";
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
     nodes.push(newNode);
@@ -109,7 +109,7 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = "blue";
+    newNode.color = "#FF5A5A";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
@@ -365,10 +365,8 @@ export class NetworkGraph extends Component {
   render() {
     return (
       <div>
-        {/* <SearchBar /> */}
-
         <Fragment>
-          {/* <div className="vis-react-title">Contributor Information:</div> */}
+          
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph

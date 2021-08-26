@@ -13,7 +13,6 @@ const getLegislators = (legislators) => ({
 
 export const getLegislatorsThunk = () => {
   return dispatch => {
-  console.log("GETLEGISLATORSTHUNK IS RUNNING!!!!")
   // Here, we should use the JSON data
   // const legislators = []
   // data.map(object => object.results[0].members.map(member => legislators.push(member)))

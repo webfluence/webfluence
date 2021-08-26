@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
@@ -21,6 +21,7 @@ import Orders from "./Orders";
 
 import { CandidateInfo } from "./CandidateInfo";
 import ContributorList from "./ContributorList";
+import Footer from "./Footer"
 
 import SearchBar from "./SearchBar";
 import GraphTest from "./GraphTest";
@@ -51,17 +52,15 @@ export default function Dashboard() {
     rendering = true;
   }, [candcontrib]);
 
-  const fixedWidthPaper = clsx(classes.paper, classes.fixedWidth);
+  const candInfoClass = clsx(classes.paper, classes.marginBottom)
 
-  const candInfoClass = clsx(classes.paper, classes.fixedWidth, classes.marginBottom)
-
-  const graphClass = clsx(classes.paper, classes.fixedWidth, classes.marginBottom)
+  const graphClass = clsx(classes.paper, classes.marginBottom)
 
 
 
   return (
 
-
+    <Grid style={{backgroundColor: '#e3e3e3'}}>
       <Grid className={classes.content}><CssBaseline />
         {/* <div className={classes.appBarSpacer} /> */}
         <SearchBar width="600px" />
@@ -95,7 +94,7 @@ export default function Dashboard() {
             </Grid>
             {/* Contributor Info */}
             <Grid>
-              <Paper className={fixedWidthPaper}>
+              <Paper className={classes.paper}>
                 {Object.keys(candcontrib).length > 0 ? (
                   <ContributorList />
                 ) : (
@@ -108,10 +107,9 @@ export default function Dashboard() {
             </Grid>
           </Grid>
         </Container>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
       </Grid>
+      <Footer/>
+    </Grid>
 
   );
 }
@@ -129,8 +127,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     padding: 20,
     alignItems: 'center',
-    backgroundColor: '#d9d9d9',
-    height: "220vh"
+    // height: "220vh"
   },
   // //These classes are used for the containers
   paper: {
@@ -138,9 +135,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "row",
-  },
-  fixedWidth: {
-    width: "90vw",
   },
   marginBottom: {
     marginBottom: "40px"

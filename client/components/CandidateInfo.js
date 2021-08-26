@@ -21,6 +21,7 @@ export const CandidateInfo = () => {
   const firstElection = legislator.terms[0].start.slice(0, 4);
   const nextElection = parseInt(legislator.terms[legislator.terms.length - 1].end.slice(0, 4)) - 1;
   const district = legislator.terms[legislator.terms.length - 1].district;
+  const phone = '(' + legislator.terms[legislator.terms.length - 1].phone.slice(0, 3) + ') ' + legislator.terms[legislator.terms.length - 1].phone.slice(4)
 
   return legislator && Object.keys(legislator).length ? (
     <Box display="flex" direction="row" padding="40px" width="100%">
@@ -49,7 +50,7 @@ export const CandidateInfo = () => {
           {/* <Typography>contact: <Link to={contact} > contact form </Link></Typography> */}
           <Typography style={{ fontSize: "20px" }}>
             office phone #:{" "}
-            {legislator.terms[legislator.terms.length - 1].phone}
+            {phone}
           </Typography>
         </Grid>
         <Typography style={{ fontSize: "20px" }}>
