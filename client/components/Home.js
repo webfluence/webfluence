@@ -23,9 +23,9 @@ export const Home = (props) => {
           <Typography className={classes.logo} style={breakpoint.isTabletFloor ? {fontSize : '20vw'} : {fontSize : '10vw'}} >webfluence</Typography>
           <Grid>
           <Paper className={classes.infoBox} width={breakpoint.isTabletFloor ? "300px" : "600px"} >
-          <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"MONEY & POLITICS"}</Typography>
+          <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"A VERY BRIEF HISTORY OF MODERN CAMPAIGN FINANCE"}</Typography>
           <hr style={{color: 'black', width: '70%'}}/>
-          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>Lobbyist, special interest groups and corporations wield great power over what laws are written, enacted, and enforced. <br /> <br /> Who are the major donors that are influencing your lawmakers?</Typography>
+          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>In 1972, Richard Nixon paid five men to break into the Watergate complex using some of the $2 million that the dairy lobby had given him in secret cash in exchange for a promise to increase milk subsidies. Thus began Congress's decades-long series of laws meant to put an end to those kinds of arrangements and bring campaign financing into the daylight. And while explicit quid pro quos like that are now illegal, it remains true that politicians tend to align with their donors ideologically. So even as the Supreme Court has routinely limited Congress's ability to regulate money in politics, the public disclosure of campaign donations is an irreplaceable resource. <br /> <br /> Who are the major donors tied to your lawmakers?</Typography>
           <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginBottom: '20px', textAlign: 'center', color: 'gray'}}><br />Search for a legislator below and find out!</Typography>
           </Paper>
           </Grid>
