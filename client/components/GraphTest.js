@@ -10,30 +10,32 @@ import { setCandContributorsThunk } from "../store/candcontrib";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ReplayIcon from "@material-ui/icons/Replay";
-import CloseIcon from '@material-ui/icons/Close';
+import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
+import CloseIcon from "@material-ui/icons/Close";
+import SearchIcon from "@material-ui/icons/Search";
+import PanToolIcon from "@material-ui/icons/PanTool";
 import { Grid } from "@material-ui/core";
-import Modal from 'react-modal';
-
+import Modal from "react-modal";
 
 // modal styles
 const customStyles = {
   content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
     width: "90vw",
     height: "90vh",
+    overflow: "hidden",
   },
 };
-
 
 // graph options
 let options = {
   layout: {
-    randomSeed: 1,
+    randomSeed: 2,
   },
   nodes: {
     fixed: {
@@ -88,15 +90,15 @@ let options = {
   //       },
   //     },
   //   },
-  //   // physics: {
-  //   //   barnesHut: {
-  //   //     gravitationalConstant: -30000,
-  //   //     centralGravity: 1,
-  //   //     springLength: 70,
-  //   //     avoidOverlap: 1,
-  //   //   },
-  //   // },
-  //   stabilization: { iterations: 2500 },
+  physics: {
+    barnesHut: {
+      gravitationalConstant: -15000,
+      centralGravity: 0,
+      springLength: 70,
+      avoidOverlap: 1,
+    },
+  },
+  // stabilization: { iterations: 2500 },
   // },
   interaction: {
     hover: false,
@@ -197,24 +199,31 @@ export class NetworkGraph extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.candcontrib !== prevProps.candcontrib) {
+      loading()
+      this.setState({ rendering: false })
       const newGraph = createGraph(this.props.candcontrib);
       this.setState({
         graph: newGraph,
-        style: { width: "100%", height: "500px" },
+        style: { width: "100%", height: "600px" },
         network: null,
       });
     }
   }
 
   componentDidMount() {
+    // const loading = setInterval(() => this.setState({rendering: true}), 500)
+      this.setState({rendering: true})
     this.mounted = true;
     window.addEventListener("resize", this.measure);
     const newGraph = createGraph(this.props.candcontrib);
     this.setState({
       graph: newGraph,
-      style: { width: "100%", height: "500px" },
+      style: { width: "100%", height: "600px" },
       fullscreenStyle: { width: "100%", height: "100%" },
       network: null,
+      options: options,
+      branchingActive: false,
+      rendering: false
     });
   }
 
@@ -229,10 +238,11 @@ export class NetworkGraph extends Component {
   }
 
   redirectToLearn(params, searchData) {
-    console.log(
-      "get node at>>>>",
-      this.state.network.getNodeAt(params.pointer.DOM)
-    );
+    console.log(`params`, params.nodes[0]);
+    // console.log(
+    //   "get node at>>>>",
+    //   this.state.network.getNodeAt(params.pointer.DOM)
+    // );
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -391,34 +401,102 @@ export class NetworkGraph extends Component {
   };
 
   // modal functions
-  openModal () {
-    this.setState({Modalopen: true});
+  openModal() {
+    this.setState({ Modalopen: true });
   }
 
- closeModal() {
-  this.setState({Modalopen: false});
+  closeModal() {
+    this.setState({ Modalopen: false });
+  }
+
+  contribOpenModal() {
+    this.setState({ ContribModalOpen: true });
+  }
+
+  contribCloseModal() {
+    this.setState({ ContribModalOpen: true });
   }
 
   render() {
-    
+
+    console.log(`this.state.rendering`, this.state.rendering)
+
     return (
       <div>
+        {/* fullscreen graph modal */}
         <Modal
-        isOpen={this.state.Modalopen}
-        onAfterOpen={this.afterOpenModal}
-        onRequestClose={this.closeModal}
-        style={customStyles}
-        zIndex="9999"
-        contentLabel="Example Modal"
-        ariaHideApp={false}
-      >
-        <CloseIcon onClick={this.closeModal}/>
-        {Object.keys(this.props.candcontrib).length &&
+          isOpen={this.state.Modalopen}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          zIndex="9999"
+          contentLabel="Example Modal"
+          ariaHideApp={false}
+        >
+          {/* fullscreen graph */}
+          <Grid>
+            {this.state.options && (
+              <Fragment>
+                <FullscreenExitIcon
+                  fontSize="large"
+                  onClick={this.closeModal}
+                />
+                <CallSplitIcon
+                  fontSize="large"
+                  className={this.state.branchingActive ? "selectedIcon" : ""}
+                  onClick={() =>
+                    this.setState({
+                      branchingActive: !this.state.branchingActive,
+                    })
+                  }
+                />
+                <SearchIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.zoomView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          zoomView: !this.state.options.interaction.zoomView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <PanToolIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.dragView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          dragView: !this.state.options.interaction.dragView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <ReplayIcon fontSize="large" />
+              </Fragment>
+            )}
+          </Grid>
+          {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
                 graph={this.state.graph}
                 style={this.state.fullscreenStyle}
-                options={options}
+                options={this.state.options}
                 getNetwork={this.getNetwork}
                 getEdges={this.getEdges}
                 getNodes={this.getNodes}
@@ -426,19 +504,83 @@ export class NetworkGraph extends Component {
                 vis={(vis) => (this.vis = vis)}
               />
             )}
-      </Modal>
+        </Modal>
+
+        {/* contrib modal */}
+        <Modal
+          isOpen={this.state.contribModalOpen}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          zIndex="9999"
+          contentLabel="Example Modal"
+          ariaHideApp={false}
+        >
+          <h1>Hello</h1>
+        </Modal>
+
         <Fragment>
-          <Grid style={{ backgroundColor: "transparent" }}>
-            <FullscreenIcon fontSize="large" onClick={this.openModal}/>
-            <CallSplitIcon fontSize="large" />
-            <ReplayIcon fontSize="large" />
+          {/* dashboard graph */}
+          <Grid>
+            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            {this.state.options && (
+              <Fragment>
+                <CallSplitIcon
+                  fontSize="large"
+                  className={this.state.branchingActive ? "selectedIcon" : ""}
+                  onClick={() =>
+                    this.setState({
+                      branchingActive: !this.state.branchingActive,
+                    })
+                  }
+                />
+                <SearchIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.zoomView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          zoomView: !this.state.options.interaction.zoomView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <PanToolIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.dragView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          dragView: !this.state.options.interaction.dragView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <ReplayIcon fontSize="large" />
+              </Fragment>
+            )}
           </Grid>
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
                 graph={this.state.graph}
                 style={this.state.style}
-                options={options}
+                options={this.state.options}
                 getNetwork={this.getNetwork}
                 getEdges={this.getEdges}
                 getNodes={this.getNodes}
