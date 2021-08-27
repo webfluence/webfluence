@@ -7,7 +7,7 @@ const db = require("../db");
 const Individuals = db.define("individual", {
   // Last year (even year) of the federal 2-year election cycle
   cycle: {
-    //This could be INT, but it is marked
+  //This could be INT, but it is marked
     type: Sequelize.STRING,
   },
   // A unique record identifier within a given cycle.
