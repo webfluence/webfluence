@@ -11,9 +11,9 @@ const Pacs = db.define("pac", {
     type: Sequelize.STRING,
   },
   // A unique record identifier within a given cycle given by the FEC
-  // fecrecno: {
-  //   type: Sequelize.STRING,
-  // },
+  fecrecno: {
+    type: Sequelize.STRING,
+  },
   // The committee id number for the PAC making the contribution.
   pacid: {
     type: Sequelize.STRING,
@@ -28,7 +28,7 @@ const Pacs = db.define("pac", {
   },
   // The reported date of the contribution.
   date: {
-    type: Sequelize.DATE,
+    type: Sequelize.STRING,
   },
   // The standard five character code identifying the donor's industry or ideology. Usually based on Primcode. Sometimes a PAC sponsor will have secondary interests which may replace the main realcode depending on recipient. For example, Boeing is primarily Air Transport but has Air Defense interests. Thus Boeing contributions to members of the Armed Services committee would have a realcode of Air Defense.
   realcode: {
