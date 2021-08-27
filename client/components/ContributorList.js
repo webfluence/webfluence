@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -13,6 +13,8 @@ import Grid from '@material-ui/core/Grid'
 import TableRow from '@material-ui/core/TableRow';
 import { Typography } from '@material-ui/core';
 import Modal from 'react-modal'
+import  { org }  from '../store/orgs';
+import { getOrgThunk } from '../store/orgs';
 
 const columns = [
   { id: 'contributor', label: 'Contributor', minWidth: 170 },
@@ -84,12 +86,16 @@ const customStyles = {
 
 export default function StickyHeadTable() {
   const classes = useStyles();
+  
+  const dispatch = useDispatch();
 
  const [isModalOpen, setIsModalOpen] = useState(false);
 
  const [selectedContrib, setSelectedContrib] = useState('')
 
   const candcontrib = useSelector((state = []) => state.candcontrib);
+
+  const org = useSelector((state = []) => state.org)
 
   const rows = candcontrib.response.contributors.contributor.map((contributor) => createData(contributor.attributes.org_name, contributor.attributes.total, contributor.attributes.indivs, contributor.attributes.pacs))
 
@@ -102,6 +108,8 @@ export default function StickyHeadTable() {
   }
 
   const handleSelect= (contrib) => {
+    const searchName = contrib.replace(' ', '+')
+    dispatch(getOrgThunk(searchName))
     setSelectedContrib(contrib)
     contribOpenModal()
   }
@@ -125,6 +133,7 @@ export default function StickyHeadTable() {
     <Grid style={{display: "flex"}}>
     <Avatar variant="square" style={{ height: "150px", width: "150px", marginRight: "20px" }} src={`//logo.clearbit.com/${imgSrcFormat(selectedContrib)}.com`}/>
     <h1>{selectedContrib}</h1>
+    {/* <h1>{org.data ? org.data.response.organization.attributes.orgid : ''}</h1> */}
     </Grid>
   </Modal>
     <Paper className={classes.root}>

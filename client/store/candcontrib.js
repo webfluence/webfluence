@@ -17,7 +17,7 @@ const setCandContributors = (contributors) => ({
 export const setCandContributorsThunk = (crp_id) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `http://localhost:8080/api/contrib/${crp_id}`
+      `/api/contrib/${crp_id}`
     );
     // const { data } = await axios.get(
     //   `http://webfluence.herokuapp.com/api/contrib/${crp_id}`
