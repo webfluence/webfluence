@@ -1,0 +1,1 @@
+COPY individuals (cycle, fectransid, contribid, contrib, recipid, orgname, ultorg, realcode, date, amount, street, city, state, zip, recipcode, "type", cmteid, otherid, gender, microfilm, occupation, employer, source) FROM '/Volumes/Black External Drive 1/Webfluence Files/CampaignFin20/indivs20.txt' WITH (FORMAT CSV, QUOTE('|'), DELIMITER(','))

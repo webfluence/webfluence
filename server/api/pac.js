@@ -3,6 +3,7 @@ const Sequelize = require("sequelize");
 const {
   models: { PAC },
 } = require("../db");
+const Committees = require("../db/models/Committee");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -25,7 +26,25 @@ router.get("/", async (req, res, next) => {
           [Sequelize.fn("sum", Sequelize.col("amount")), "total_amount"],
         ],
         group: ["pacid", "cid"],
-      });
+      }, );
+
+
+      //Trying to add the pac name before we return the data!
+      // let returnArray = []
+
+      // const returnArray = pacs.map(async (element) => {
+      //   // console.log(element)
+      //   const pacData = await Committees.findOne({
+      //     where: {
+      //       cmte_id: element.dataValues.pacid
+      //     }
+      //   })
+      //   // console.log("pacdata>>>>",pacData)
+      //   element.name = pacData
+
+      //   // returnArray.push(element)
+
+      // })
 
       let newArray = pacs.sort((a, b) => {
         if (a.dataValues.total_amount > b.dataValues.total_amount) {
