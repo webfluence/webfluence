@@ -211,7 +211,7 @@ export class NetworkGraph extends Component {
   }
 
   componentDidMount() {
-    const loading = setInterval(() => this.setState({rendering: true}), 500)
+    // const loading = setInterval(() => this.setState({rendering: true}), 500)
       this.setState({rendering: true})
     this.mounted = true;
     window.addEventListener("resize", this.measure);
