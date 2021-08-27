@@ -69,8 +69,6 @@ export default function StickyHeadTable() {
 
   const candcontrib = useSelector((state = []) => state.candcontrib);
 
-  console.log(`candcontrib`, candcontrib)
-
   const rows = candcontrib.response.contributors.contributor.map((contributor) => createData(contributor.attributes.org_name, contributor.attributes.total, contributor.attributes.indivs, contributor.attributes.pacs))
 
   return (

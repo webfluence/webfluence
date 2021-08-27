@@ -199,8 +199,6 @@ export class NetworkGraph extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.candcontrib !== prevProps.candcontrib) {
-      loading()
-      this.setState({ rendering: false })
       const newGraph = createGraph(this.props.candcontrib);
       this.setState({
         graph: newGraph,
@@ -211,8 +209,6 @@ export class NetworkGraph extends Component {
   }
 
   componentDidMount() {
-    // const loading = setInterval(() => this.setState({rendering: true}), 500)
-      this.setState({rendering: true})
     this.mounted = true;
     window.addEventListener("resize", this.measure);
     const newGraph = createGraph(this.props.candcontrib);
@@ -223,7 +219,6 @@ export class NetworkGraph extends Component {
       network: null,
       options: options,
       branchingActive: false,
-      rendering: false
     });
   }
 
@@ -418,9 +413,6 @@ export class NetworkGraph extends Component {
   }
 
   render() {
-
-    console.log(`this.state.rendering`, this.state.rendering)
-
     return (
       <div>
         {/* fullscreen graph modal */}
@@ -575,6 +567,7 @@ export class NetworkGraph extends Component {
               </Fragment>
             )}
           </Grid>
+
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
@@ -597,6 +590,7 @@ export class NetworkGraph extends Component {
 const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
+    loading: state.loading
   };
 };
 

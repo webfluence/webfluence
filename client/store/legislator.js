@@ -12,7 +12,6 @@ const setLegislator = (legislator) => ({
 
 export const setLegislatorThunk = (legislator) => {
   return (dispatch) => {
-    console.log("Adding the selected legislator to the store");
     dispatch(setLegislator(legislator));
   };
 };
