@@ -16,12 +16,9 @@ const setCandIndustries = (industries) => ({
 
 export const setCandIndustriesThunk = (crp_id) => async (dispatch) => {
   try {
-    console.log("Set cand industry thunk running!!!");
-    console.log(crp_id);
     const { data } = await axios.get(
       `https://www.opensecrets.org/api/?method=candIndustry&cid=${crp_id}&cycle=2020&apikey=d2345f30fa2dc3b73bfcdb43da40eef3&output=json`
     );
-    console.log("industries-----", data);
     dispatch(setCandIndustries(data));
   } catch (error) {
     Error(error);

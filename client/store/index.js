@@ -5,6 +5,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import auth from "./auth";
 import legislators from "./legislators";
 import legislator from "./legislator";
+import loading from "./loading";
 import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
 
@@ -14,6 +15,7 @@ const reducer = combineReducers({
   legislator,
   candcontrib,
   candindustry,
+  loading
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))

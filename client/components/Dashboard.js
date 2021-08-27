@@ -1,5 +1,5 @@
-import React, { Fragment, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { Fragment, useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,6 +22,10 @@ import Footer from "./Footer";
 import SearchBar from "./SearchBar";
 import GraphTest from "./GraphTest";
 
+import { isLoading } from "../store/loading";
+import { ClipLoader } from "react-spinners";
+import { minHeight } from "@material-ui/system";
+
 // function Copyright() {
 //   return (
 //     <Typography variant="body2" color="textSecondary" align="center">
@@ -38,12 +42,11 @@ import GraphTest from "./GraphTest";
 export default function Dashboard() {
   const classes = useStyles();
   const candcontrib = useSelector((state) => state.candcontrib);
-
-  let rendering = true;
+  const loading = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    rendering = false;
-    rendering = true;
+    dispatch(isLoading(false))
   }, [candcontrib]);
 
   const paperClass = clsx(classes.paper, classes.margins);
@@ -91,14 +94,12 @@ export default function Dashboard() {
                   className={
                     breakpoint.isTabletFloor ? mobileClass : paperClass
                   }
+                  style={{minHeight: "400px"}}
                 >
-                  {Object.keys(candcontrib).length > 0 && rendering ? (
-                    <GraphTest />
+                  {Object.keys(candcontrib).length > 0 && !loading ? (
+                    <GraphTest/>
                   ) : (
-                    <Typography>
-                      {" "}
-                      You need to make a selection to render the graph
-                    </Typography>
+                    <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}
                 </Paper>
               </Grid>
@@ -149,6 +150,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     overflow: "auto",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   margins: {
     marginBottom: "40px",

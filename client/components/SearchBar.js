@@ -8,6 +8,7 @@ import { getLegislatorsThunk } from "../store/legislators";
 import { setLegislatorThunk } from "../store/legislator";
 import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
+import { isLoading } from "../store/loading";
 import { makeStyles } from "@material-ui/core/styles";
 
 export default function SearchBar(props) {
@@ -30,13 +31,11 @@ export default function SearchBar(props) {
   // };
 
   const handleSelect = (legislator) => {
-    console.log("Handling select!");
-    console.log(legislator);
     // Pass the legislator into the selected legislator thunk
+    dispatch(isLoading(true))
     dispatch(setLegislatorThunk(legislator));
     if (legislator) {
       const crp_id = legislator.id.opensecrets;
-      console.log(crp_id);
       // find contributors via congressional crp_id
       dispatch(setCandContributorsThunk(crp_id));
       dispatch(setCandIndustriesThunk(crp_id));
