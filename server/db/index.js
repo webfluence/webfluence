@@ -6,6 +6,7 @@ const User = require('./models/User')
 const Candidate = require('./models/Candidate')
 const Committee = require('./models/Committee')
 const PAC = require('./models/PAC')
+const Individuals = require('./models/Individuals')
 
 //associations could go here!
 
@@ -16,5 +17,6 @@ module.exports = {
     Candidate,
     Committee,
     PAC,
+    Individuals
   },
 }
