@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Sequelize = require("sequelize");
 const {
-  models: { PAC, Committee },
+  models: { PAC, Committee, Candidate },
 } = require("../db");
 
 router.get("/", async (req, res, next) => {
@@ -12,69 +12,54 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 }),
-  // Find all PACs who donated to candidate by CID
-  router.get("/crpid/:cid", async (req, res, next) => {
-    try {
-      const pacs = await PAC.findAll({
-        where: {
-          cid: req.params.cid,
-        },
-        attributes: [
-          "pacid",
-          "cid",
-          [Sequelize.fn("sum", Sequelize.col("amount")), "total_amount"],
-        ],
-        group: ["pacid", "cid"],
-      });
 
-      //Trying to add the pac name before we return the data!
-      // let returnArray = [];
+// Find all PACs who donated to candidate by CID
+router.get("/crpid/:cid", async (req, res, next) => {
+  try {
+    const pacs = await PAC.findAll({
+      where: {
+        cid: req.params.cid,
+      },
+      attributes: [
+        "pacid",
+        "cid",
+        [Sequelize.fn("sum", Sequelize.col("amount")), "total_amount"],
+      ],
+      group: ["pacid", "cid"],
+    });
 
-      // const findCommittee = (obj) => {
-      //   const find = async (obj) => {
-      //     // console.log(obj)
-      //     // const pacData = await Committee.findOne({
-      //     //   where: {
-      //     //     cmte_id: obj.dataValues.pacid,
-      //     //   },
-      //     });
-      //   };
+    const returnArray = await Promise.all(
+      pacs.map(async (obj) => {
+        console.log(obj);
+        const pacData = await Committee.findOne({
+          where: {
+            cmte_id: obj.dataValues.pacid,
+          },
+        });
+        obj.dataValues.pacname = pacData
+          ? pacData.pacshort
+          : "No data available";
 
-      //   const pacData = find(obj);
-      //   // console.log(pacData)
-      //   return pacData;
-      // };
+        return obj;
+      })
+    );
 
-      const returnArray = await Promise.all(
-        pacs.map(async (obj) => {
-          console.log(obj);
-          const pacData = await Committee.findOne({
-            where: {
-              cmte_id: obj.dataValues.pacid,
-            },
-          });
-          obj.dataValues.pacname = pacData ? pacData.pacshort : "No data available"
-            // ? pacData.dataValues.cmte_name
-            // : "PAC not found";
-          return obj;
-        })
-      );
-      console.log(returnArray);
+    let newArray = returnArray.sort((a, b) => {
+      if (a.dataValues.total_amount > b.dataValues.total_amount) {
+        return -1;
+      } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    res.json(newArray);
+  } catch (err) {
+    next(err);
+  }
+});
 
-      let newArray = returnArray.sort((a, b) => {
-        if (a.dataValues.total_amount > b.dataValues.total_amount) {
-          return -1;
-        } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
-      res.json(newArray);
-    } catch (err) {
-      next(err);
-    }
-  });
+// Find all Candidates who received money from pac by pacid
 
 router.get("/pacid/:pacid", async (req, res, next) => {
   try {
@@ -89,6 +74,21 @@ router.get("/pacid/:pacid", async (req, res, next) => {
       ],
       group: ["pacid", "cid"],
     });
+
+    const returnArray = await Promise.all(
+      candidates.map(async (obj) => {
+        console.log(obj);
+        const candidateData = await Candidate.findOne({
+          where: {
+            cid: obj.dataValues.cid,
+          },
+        });
+        obj.dataValues.candname = candidateData
+          ? candidateData.firstlastp
+          : "No data available";
+        return obj;
+      })
+    );
 
     let newArray = candidates.sort((a, b) => {
       if (a.dataValues.total_amount > b.dataValues.total_amount) {
