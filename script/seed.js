@@ -2,7 +2,7 @@
 
 const {
   db,
-  models: { User },
+  models: { User, PAC, Committee, Candidate },
 } = require("../server/db");
 
 /**
