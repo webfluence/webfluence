@@ -8,6 +8,7 @@ import legislator from "./legislator";
 import loading from "./loading";
 import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
+import org from "./orgs"
 
 const reducer = combineReducers({
   auth,
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   legislator,
   candcontrib,
   candindustry,
-  loading
+  loading,
+  org,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))

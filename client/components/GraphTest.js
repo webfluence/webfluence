@@ -107,6 +107,8 @@ let options = {
     selectConnectedEdges: false,
     zoomView: false,
     dragView: false,
+    navigationButtons: true,
+    keyboard: true
   },
 };
 
@@ -403,14 +405,6 @@ export class NetworkGraph extends Component {
     this.setState({ Modalopen: false });
   }
 
-  contribOpenModal() {
-    this.setState({ ContribModalOpen: true });
-  }
-
-  contribCloseModal() {
-    this.setState({ ContribModalOpen: true });
-  }
-
   render() {
     return (
       <div>
@@ -495,18 +489,6 @@ export class NetworkGraph extends Component {
                 vis={(vis) => (this.vis = vis)}
               />
             )}
-        </Modal>
-
-        {/* contrib modal */}
-        <Modal
-          isOpen={this.state.contribModalOpen}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          zIndex="9999"
-          contentLabel="Example Modal"
-          ariaHideApp={false}
-        >
-          <h1>Hello</h1>
         </Modal>
 
         <Fragment>

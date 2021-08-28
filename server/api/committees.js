@@ -31,33 +31,4 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const committee = await Committee.create(req.body)
-//     res.json(committee)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
-// router.put('/:id', async (req, res, next) => {
-//   try {
-//     const committee = await Committee.findByPk(req.params.id)
-//     await committee.update(req.body)
-//     res.json(committee)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
-// router.delete('/:id', async (req, res, next) => {
-//   try {
-//     const committee = await Committee.findByPk(req.params.id)
-//     await committee.destroy()
-//     res.json(committee)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
 module.exports = router
