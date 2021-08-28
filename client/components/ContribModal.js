@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -14,12 +14,13 @@ import { ClipLoader } from "react-spinners";
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
-  },
+    border: "solid 1px #828282"
+  }
 });
 
 export default function ContribModal(props) {
   const imgSrcFormat = (contribName) => {
-    const companyAbbrevs = ["Co", "Inc", "LLC"];
+    const companyAbbrevs = ["Co", "Inc", "LLC", "Corp"];
     return contribName
       .replace("&", "and")
       .split(" ")
@@ -85,17 +86,17 @@ export default function ContribModal(props) {
           <TableBody>
             {rows.map((row) => (
               <TableRow key={row.title}>
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" className={classes.tableCell}>
                   {row.title}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" className={classes.tableCell}>
                   {row.amount}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </TableContainer> : <ClipLoader color={"darkgray"} loading={true} size={200} /> }
+      </TableContainer> : <Grid style={{ width: "100%", height: "60%", display: "flex", alignItems: "center", justifyContent: "center" }}> <ClipLoader color={"darkgray"} loading={true} size={200} /> </Grid>}
     </Fragment>
   );
 }
