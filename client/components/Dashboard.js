@@ -88,8 +88,8 @@ export default function Dashboard() {
                   ) : (
                     <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}
-                  <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 </Paper>
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
               </Grid>
               {/* Contributor Info */}
               <Grid>
