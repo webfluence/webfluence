@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import Graph from "vis-react";
-import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import { connect } from "react-redux";
@@ -97,7 +96,7 @@ let options = {
 };
 
 function createGraph(candcontrib) {
-  let jsonData = initialGraph;
+  // let jsonData = initialGraph;
 
   let nodes = [];
   let edges = [];
