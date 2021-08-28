@@ -19,9 +19,6 @@ export const setCandContributorsThunk = (crp_id) => async (dispatch) => {
     const { data } = await axios.get(
       `/api/contrib/${crp_id}`
     );
-    // const { data } = await axios.get(
-    //   `http://webfluence.herokuapp.com/api/contrib/${crp_id}`
-    // );
     const dataString = JSON.stringify(data);
     const newString = dataString.replaceAll("@attributes", "attributes");
     const newData = JSON.parse(newString);

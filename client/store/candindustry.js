@@ -17,9 +17,12 @@ const setCandIndustries = (industries) => ({
 export const setCandIndustriesThunk = (crp_id) => async (dispatch) => {
   try {
     const { data } = await axios.get(
-      `https://www.opensecrets.org/api/?method=candIndustry&cid=${crp_id}&cycle=2020&apikey=d2345f30fa2dc3b73bfcdb43da40eef3&output=json`
+      `/api/candindustry/${crp_id}`
     );
-    dispatch(setCandIndustries(data));
+    const dataString = JSON.stringify(data);
+    const newString = dataString.replaceAll("@attributes", "attributes");
+    const newData = JSON.parse(newString);
+    dispatch(setCandIndustries(newData));
   } catch (error) {
     Error(error);
   }

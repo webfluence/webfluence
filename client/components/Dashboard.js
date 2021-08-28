@@ -26,19 +26,6 @@ import { isLoading } from "../store/loading";
 import { ClipLoader } from "react-spinners";
 import { minHeight } from "@material-ui/system";
 
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         Webfluence
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
-
 export default function Dashboard() {
   const classes = useStyles();
   const candcontrib = useSelector((state) => state.candcontrib);
@@ -101,6 +88,7 @@ export default function Dashboard() {
                   ) : (
                     <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}
+                  <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 </Paper>
               </Grid>
               {/* Contributor Info */}

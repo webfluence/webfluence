@@ -23,12 +23,7 @@ export default function SearchBar(props) {
 
   useEffect(() => {
     dispatch(getLegislatorsThunk());
-    // dispatch(setCandContributorsThunk("A000370"));
   }, []);
-
-  // const handleChange = (e) => {
-  //   setSearchValue(e.target.value);
-  // };
 
   const handleSelect = (legislator) => {
     // Pass the legislator into the selected legislator thunk

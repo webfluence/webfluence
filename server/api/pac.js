@@ -30,7 +30,6 @@ router.get("/crpid/:cid", async (req, res, next) => {
 
     const returnArray = await Promise.all(
       pacs.map(async (obj) => {
-        console.log(obj);
         const pacData = await Committee.findOne({
           where: {
             cmte_id: obj.dataValues.pacid,
@@ -77,7 +76,6 @@ router.get("/pacid/:pacid", async (req, res, next) => {
 
     const returnArray = await Promise.all(
       candidates.map(async (obj) => {
-        console.log(obj);
         const candidateData = await Candidate.findOne({
           where: {
             cid: obj.dataValues.cid,
@@ -104,42 +102,5 @@ router.get("/pacid/:pacid", async (req, res, next) => {
     next(err);
   }
 });
-// router.post('/', async (req, res, next) => {
-//   try {
-//     const pac = await PAC.create(req.body)
-//     res.status(201).json(pac)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// router.get('/:id', async (req, res, next) => {
-//   try {
-//     const pac = await PAC.findByPk(req.params.id)
-//     res.json(pac)
-//   } catch (err) {
-//     next(err)
-//   }
-// }),
-
-// router.put('/:id', async (req, res, next) => {
-//   try {
-//     const pac = await PAC.findByPk(req.params.id)
-//     await pac.update(req.body)
-//     res.json(pac)
-//   } catch (err) {
-//     next(err)
-//   }
-// }),
-
-// router.delete('/:id', async (req, res, next) => {
-//   try {
-//     const pac = await PAC.findByPk(req.params.id)
-//     await pac.destroy()
-//     res.status(204).end()
-//   } catch (err) {
-//     next(err)
-//   }
-// }),
 
 module.exports = router;

@@ -13,8 +13,6 @@ export const Home = (props) => {
 
   const classes = useStyles();
 
-  console.log(classes.infoBox)
-  
   return (
     <Grid className={classes.body}>
       <Grid className={classes.topSection} style={breakpoint.isTabletFloor ? {padding: 0, justifyContent: "center"} : {padding: 40, backgroundImage: `url('/background.png')`,}}>
@@ -65,7 +63,7 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     height: '85vh',
     justifyContent: "center",
-    
+
   },
   body: {
     backgroundColor: "#F2F2F2",
