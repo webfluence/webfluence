@@ -4,7 +4,6 @@ import Graph from "vis-react";
 import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
-import { contributorData } from "../dummyData/candidateContributionDummyData";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
