@@ -20,7 +20,7 @@ import ContributorList from "./ContributorList";
 import Footer from "./Footer";
 
 import SearchBar from "./SearchBar";
-import GraphTest from "./GraphTest";
+import Graph from "./Graph";
 
 import { isLoading } from "../store/loading";
 import { ClipLoader } from "react-spinners";

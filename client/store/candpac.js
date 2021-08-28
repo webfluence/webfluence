@@ -3,7 +3,6 @@ import history from '../history';
 
 
 // ACTION TYPES
-
 const SET_CANDPACS = 'SET_CANDPACS';
 
 // ACTION CREATORS

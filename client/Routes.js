@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import Home from "./components/Home";
-import GraphTest from "./components/GraphTest";
+import Graph from "./components/Graph";
 import { me } from "./store";
 import Dashboard from "./components/Dashboard";
 import SearchBar from "./components/SearchBar";
