@@ -23,7 +23,7 @@ export const Home = (props) => {
           <Paper className={classes.infoBox} width={breakpoint.isTabletFloor ? "300px" : "600px"} >
           <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"A VERY BRIEF HISTORY OF MODERN CAMPAIGN FINANCE"}</Typography>
           <hr style={{color: 'black', width: '70%'}}/>
-          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>In 1972, Richard Nixon paid five men to break into the Watergate complex using some of the $2 million that the dairy lobby had given him in secret cash in exchange for a promise to increase milk subsidies. Thus began Congress's decades-long series of laws meant to put an end to those kinds of arrangements and bring campaign financing into the daylight. And while explicit quid pro quos like that are now illegal, it remains true that politicians tend to align with their donors ideologically. So even as the Supreme Court has routinely limited Congress's ability to regulate money in politics, the public disclosure of campaign donations is an irreplaceable resource. <br /> <br /> Who are the major donors tied to your lawmakers?</Typography>
+          {/* <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>In 1972, Richard Nixon paid five men to break into the Watergate complex using some of the $2 million that the dairy lobby had given him in secret cash in exchange for a promise to increase milk subsidies. Thus began Congress's decades-long series of laws meant to put an end to those kinds of arrangements and bring campaign financing into the daylight. And while explicit quid pro quos like that are now illegal, it remains true that politicians tend to align with their donors ideologically. So even as the Supreme Court has routinely limited Congress's ability to regulate money in politics, the public disclosure of campaign donations is an irreplaceable resource. <br /> <br /> Who are the major donors tied to your lawmakers?</Typography> */}
           <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginBottom: '20px', textAlign: 'center', color: 'gray'}}><br />Search for a legislator below and find out!</Typography>
           </Paper>
           </Grid>
@@ -34,11 +34,20 @@ export const Home = (props) => {
       </Grid>
       <Grid style={{position: "relative"}}>
         <Grid className={classes.buttonSection} style={breakpoint.isTabletFloor ? {padding: "20px", height: "100%", } : {padding: "80px", height: '70vh'}}>
-          <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw", top: "10px"} : {width: "60vw", top: "9px"}}/>
-          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
+          {/* <img className={classes.networkImage} src="/network.svg" style={breakpoint.isTabletFloor ? {width: "90vw", top: "10px"} : {width: "60vw", top: "9px"}}/> */}
+          <Grid>
+            {/* <img src='/capitol building.jpeg' style={{width: "100%"}}/> */}
+          <Paper className={classes.infoBox} width={breakpoint.isTabletFloor ? "300px" : "600px"}>
+          <Typography style={{fontSize: '16px', fontFamily: 'Oswald'}}>{"A VERY BRIEF HISTORY OF MODERN CAMPAIGN FINANCE"}</Typography>
+          <hr style={{color: 'black', width: '70%'}}/>
+          <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', color: 'gray'}}>In 1972, Richard Nixon paid five men to break into the Watergate complex using some of the $2 million that the dairy lobby had given him in secret cash in exchange for a promise to increase milk subsidies. Thus began Congress's decades-long series of laws meant to put an end to those kinds of arrangements and bring campaign financing into the daylight. And while explicit quid pro quos like that are now illegal, it remains true that politicians tend to align with their donors ideologically. So even as the Supreme Court has routinely limited Congress's ability to regulate money in politics, the public disclosure of campaign donations is an irreplaceable resource. <br /> <br /> Who are the major donors tied to your lawmakers?</Typography>
+          {/* <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginBottom: '20px', textAlign: 'center', color: 'gray'}}><br />Search for a legislator below and find out!</Typography> */}
+          </Paper>
+          </Grid>
+          {/* <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px' : '25px'}`, marginBottom: '50px', textAlign: "center", zIndex: "1", color: "gray"}}>
             Create an account to save views about legislators who are most important to you.
           </Typography>
-          <Button className={classes.button} href='/signup'> Create an Account</Button>
+          <Button className={classes.button} href='/signup'> Create an Account</Button> */}
         </Grid>
       </Grid>
       <Footer />
@@ -105,7 +114,8 @@ const useStyles = makeStyles(() => ({
     alignItems: "center",
     padding: "30px",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 20px 0px",
-    marginBottom: "20px"
+    marginBottom: "20px",
+    zIndex: 9999,
   },
   networkImage: {
     zIndex: 0,
