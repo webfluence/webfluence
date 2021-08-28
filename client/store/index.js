@@ -9,6 +9,7 @@ import loading from "./loading";
 import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
 import org from "./orgs"
+import candpac from "./candpac";
 
 const reducer = combineReducers({
   auth,
@@ -18,6 +19,7 @@ const reducer = combineReducers({
   candindustry,
   loading,
   org,
+  candpac,
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
