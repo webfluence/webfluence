@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import Graph from "vis-react";
-// import { getObjects } from '../../../Utils';
 import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
@@ -74,21 +73,6 @@ let options = {
       roundness: 0,
     },
   },
-  // groups: {
-  //   Biology: {
-  //     color: {
-  //       background: "#ffffff",
-  //       border: "#c89dc8",
-  //       highlight: {
-  //         border: "#c89dc8",
-  //         background: "#ffffff",
-  //       },
-  //       hover: {
-  //         border: "#c89dc8",
-  //         background: "#ffffff",
-  //       },
-  //     },
-  //   },
   physics: {
     barnesHut: {
       gravitationalConstant: -15000,
@@ -234,11 +218,6 @@ export class NetworkGraph extends Component {
   }
 
   redirectToLearn(params, searchData) {
-    console.log(`params`, params.nodes[0]);
-    // console.log(
-    //   "get node at>>>>",
-    //   this.state.network.getNodeAt(params.pointer.DOM)
-    // );
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -390,10 +369,8 @@ export class NetworkGraph extends Component {
     this.setState({ network: data });
   };
   getEdges = (data) => {
-    console.log(data);
   };
   getNodes = (data) => {
-    console.log(data);
   };
 
   // modal functions
