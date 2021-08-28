@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid'
 // import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import ContribModal from './ContribModal';
 import { Typography } from '@material-ui/core';
 import Modal from 'react-modal'
 import  { org }  from '../store/orgs';
@@ -114,11 +115,6 @@ export default function StickyHeadTable() {
     contribOpenModal()
   }
 
-  const imgSrcFormat = (contribName) => {
-    const companyAbbrevs = ["Co", "Inc", "LLC"]
-    return contribName.replace('&', 'and').split(' ').filter((word) => !companyAbbrevs.includes(word)).join('').toLowerCase()
-  }
-
   return (
     <Fragment>
     {/* contrib modal */}
@@ -130,11 +126,7 @@ export default function StickyHeadTable() {
     contentLabel="Example Modal"
     ariaHideApp={false}
   >
-    <Grid style={{display: "flex"}}>
-    <Avatar variant="square" style={{ height: "150px", width: "150px", marginRight: "20px" }} src={`//logo.clearbit.com/${imgSrcFormat(selectedContrib)}.com`}/>
-    <h1>{selectedContrib}</h1>
-    {/* <h1>{org.data ? org.data.response.organization.attributes.orgid : ''}</h1> */}
-    </Grid>
+    <ContribModal selectedContrib={selectedContrib} org={org} />
   </Modal>
     <Paper className={classes.root}>
       {/* <Typography>These tables list the top donors to candidates in the 2021 - 2022 election cycle. The organizations themselves did not donate, rather the money came from the organizations' PACs, their individual members or employees or owners, and those individuals' immediate families. Organization totals include subsidiaries and affiliates.</Typography> */}
