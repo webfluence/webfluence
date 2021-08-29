@@ -8,6 +8,7 @@ import { getLegislatorsThunk } from "../store/legislators";
 import { setLegislatorThunk } from "../store/legislator";
 import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
+import { isLoading } from "../store/loading";
 import { makeStyles } from "@material-ui/core/styles";
 
 export default function SearchBar(props) {
@@ -22,24 +23,17 @@ export default function SearchBar(props) {
 
   useEffect(() => {
     dispatch(getLegislatorsThunk());
-    // dispatch(setCandContributorsThunk("A000370"));
   }, []);
 
-  // const handleChange = (e) => {
-  //   setSearchValue(e.target.value);
-  // };
-
   const handleSelect = (legislator) => {
-    console.log("Handling select!");
-    console.log(legislator);
     // Pass the legislator into the selected legislator thunk
+    dispatch(isLoading(true))
     dispatch(setLegislatorThunk(legislator));
     if (legislator) {
       const crp_id = legislator.id.opensecrets;
-      console.log(crp_id);
       // find contributors via congressional crp_id
       dispatch(setCandContributorsThunk(crp_id));
-      dispatch(setCandIndustriesThunk(crp_id));
+      // dispatch(setCandIndustriesThunk(crp_id));
     }
 
     history.push('/dashboard')
@@ -70,7 +64,7 @@ export default function SearchBar(props) {
         }}
         style={{ width: props.width }}
         renderInput={(params) => (
-          <TextField {...params} label="Search Legislator" variant="outlined" />
+          <TextField {...params} label="Search Legislator" variant="outlined" style={{zIndex: 0}} />
         )}
       />
     </div>
@@ -81,5 +75,6 @@ const useStyles = makeStyles(() => ({
   searchBar: {
     backgroundColor: "white",
     boxShadow: "rgba(0, 0, 0, 0.3) 0px 10px 20px 0px",
+    zIndex: "1",
   },
 }));

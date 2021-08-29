@@ -1,98 +1,119 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { Fragment, useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "./DashboardListItems";
-// import Chart from './Chart';
-import Deposits from "./Deposits";
-import Orders from "./Orders";
+import Avatar from "@material-ui/core/Avatar";
+import { useBreakpoints } from "./hooks/useBreakpoints";
 
 import { CandidateInfo } from "./CandidateInfo";
-import ContributorList from "./ContributorList"
+import ContributorList from "./ContributorList";
+import Footer from "./Footer";
 
 import SearchBar from "./SearchBar";
-import GraphTest from "./GraphTest";
+import Graph from "./Graph";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Webfluence
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-// const drawerWidth = 240;
+import { isLoading } from "../store/loading";
+import { ClipLoader } from "react-spinners";
+import { minHeight } from "@material-ui/system";
 
 export default function Dashboard() {
   const classes = useStyles();
-  const candcontrib = useSelector(
-    (state) => state.candcontrib
-  );
-
-  let rendering = true
+  const candcontrib = useSelector((state) => state.candcontrib);
+  const loading = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("USE EFFECT RAN!!!!");
-    rendering = false
-    rendering = true
-  }, [candcontrib])
+    dispatch(isLoading(false))
+  }, [candcontrib]);
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const paperClass = clsx(classes.paper, classes.margins);
+
+  const mobileClass = clsx(classes.paper, classes.margins, classes.mobileWidth);
+
+  const breakpoint = useBreakpoints();
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <main className={classes.content}>
-        {/* <div className={classes.appBarSpacer} /> */}
-        <SearchBar width="400px"/>
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3} direction="row">
-            <Grid>
-              <Grid>
-                <Paper className={fixedHeightPaper}>
-                  {(Object.keys(candcontrib).length > 0) ? <CandidateInfo /> : <Typography> You  need to make a selection to render the info</Typography>}
+    <Fragment>
+      <Grid style={{ backgroundColor: "#e3e3e3" }}>
+        <Grid className={classes.content}>
+          <CssBaseline />
+          {/* <div className={classes.appBarSpacer} /> */}
+          <SearchBar width={breakpoint.isTabletFloor ? "300px" : "600px"} />
+          <Container maxWidth="lg" className={classes.container}>
+          <Grid
+              container
+              spacing={3}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "space-around",
+                flexDirection: "column",
+              }}
+            >
+              {/* // Legislator info */}
+              <Grid style={{ alignItems: "center" }}>
+                <Paper
+                  className={
+                    breakpoint.isTabletFloor ? mobileClass : paperClass
+                  }
+                >
+                  {Object.keys(candcontrib).length > 0 ? (
+                    <CandidateInfo />
+                  ) : (
+                    <Typography>
+                      You need to make a selection to render the info
+                    </Typography>
+                  )}
                 </Paper>
               </Grid>
               <Grid>
-                <Paper className={fixedHeightPaper}>
-                  {(Object.keys(candcontrib).length > 0) ? <ContributorList /> : <Typography> You  need to make a selection to render the table</Typography>}
+                <Paper
+                  className={
+                    breakpoint.isTabletFloor ? mobileClass : paperClass
+                  }
+                  style={{minHeight: "400px"}}
+                >
+                  {Object.keys(candcontrib).length > 0 && !loading ? (
+                    <Graph/>
+                  ) : (
+                    <ClipLoader color={"darkgray"} loading={loading} size={200} />
+                  )}
+                </Paper>
+                {/* <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script> */}
+              </Grid>
+              {/* Contributor Info */}
+              <Grid>
+                <Paper
+                  className={
+                    breakpoint.isTabletFloor ? mobileClass : paperClass
+                  }
+                >
+                  {Object.keys(candcontrib).length > 0 ? (
+                    <ContributorList />
+                  ) : (
+                    <Typography>
+                      {" "}
+                      You need to make a selection to render the table
+                    </Typography>
+                  )}
                 </Paper>
               </Grid>
             </Grid>
-            <Grid>
-              <Paper className={classes.paper}>
-                {((Object.keys(candcontrib).length > 0) && rendering) ? <GraphTest /> : <Typography> You  need to make a selection to render the graph</Typography>}
-              </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
-    </div>
+          </Container>
+        </Grid>
+        <Footer />
+      </Grid>
+    </Fragment>
   );
 }
 
@@ -100,51 +121,41 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  // toolbar: {
-  //   paddingRight: 24, // keep right padding when drawer closed
-  // },
-  // toolbarIcon: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "flex-end",
-  //   padding: "0 8px",
-  //   ...theme.mixins.toolbar,
-  // },
-  // appBar: {
-  //   zIndex: theme.zIndex.drawer + 1,
-  //   transition: theme.transitions.create(["width", "margin"], {
-  //     easing: theme.transitions.easing.sharp,
-  //     duration: theme.transitions.duration.leavingScreen,
-  //   }),
-  // },
-  // menuButton: {
-  //   marginRight: 36,
-  // },
-  // menuButtonHidden: {
-  //   display: "none",
-  // },
-  // title: {
-  //   flexGrow: 1,
-  // },
-  // appBarSpacer: theme.mixins.toolbar,
-  // content: {
-  //   flexGrow: 1,
-  //   height: "100vh",
-  //   overflow: "auto",
-  // },
   container: {
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(10),
+    paddingTop: 50,
+    paddingBottom: 70,
   },
-
+  content: {
+    display: "flex",
+    flexDirection: "column",
+    padding: 20,
+    alignItems: "center",
+    // height: "220vh"
+  },
   // //These classes are used for the containers
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  fixedHeight: {
-    height: 350,
+  margins: {
+    marginBottom: "40px",
+  },
+  mobileWidth: {
+    width: "90vw",
   },
 }));
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};

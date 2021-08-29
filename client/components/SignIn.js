@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
+import { Redirect } from "react-router-dom";
 
 function Copyright() {
   return (

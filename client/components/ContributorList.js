@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { Fragment, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -7,9 +7,15 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid'
 // import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import ContribModal from './ContribModal';
 import { Typography } from '@material-ui/core';
+import Modal from 'react-modal'
+import  { org }  from '../store/orgs';
+import { getOrgThunk } from '../store/orgs';
 
 const columns = [
   { id: 'contributor', label: 'Contributor', minWidth: 170 },
@@ -64,27 +70,75 @@ const useStyles = makeStyles({
   },
 });
 
+// modal styles
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "90vw",
+    height: "90vh",
+    overflow: "hidden",
+  },
+};
+
 export default function StickyHeadTable() {
   const classes = useStyles();
+  
+  const dispatch = useDispatch();
+
+ const [isModalOpen, setIsModalOpen] = useState(false);
+
+ const [selectedContrib, setSelectedContrib] = useState('')
 
   const candcontrib = useSelector((state = []) => state.candcontrib);
 
-  console.log(`candcontrib`, candcontrib)
+  const org = useSelector((state = []) => state.org)
 
   const rows = candcontrib.response.contributors.contributor.map((contributor) => createData(contributor.attributes.org_name, contributor.attributes.total, contributor.attributes.indivs, contributor.attributes.pacs))
 
+  const contribOpenModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const contribCloseModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleSelect= (contrib) => {
+    const searchName = contrib.replace(' ', '+')
+    dispatch(getOrgThunk(searchName))
+    setSelectedContrib(contrib)
+    contribOpenModal()
+  }
+
   return (
+    <Fragment>
+    {/* contrib modal */}
+    <Modal
+    isOpen={isModalOpen}
+    onRequestClose={contribCloseModal}
+    style={customStyles}
+    zIndex="9999"
+    contentLabel="Example Modal"
+    ariaHideApp={false}
+  >
+    <ContribModal selectedContrib={selectedContrib} org={org} />
+  </Modal>
     <Paper className={classes.root}>
       {/* <Typography>These tables list the top donors to candidates in the 2021 - 2022 election cycle. The organizations themselves did not donate, rather the money came from the organizations' PACs, their individual members or employees or owners, and those individuals' immediate families. Organization totals include subsidiaries and affiliates.</Typography> */}
       <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader aria-label="sticky table" >
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  style={{ minWidth: column.minWidth, fontSize: "18px", zIndex: "0" }}
                 >
                   {column.label}
                 </TableCell>
@@ -94,7 +148,7 @@ export default function StickyHeadTable() {
           <TableBody>
             {rows.map((row) => {
               return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.contributor}>
+                <TableRow hover role="checkbox" tabIndex={-1} key={row.contributor} onClick={() => handleSelect(row.contributor)}>
                   {columns.map((column) => {
                     const value = row[column.id];
                     return (
@@ -110,5 +164,6 @@ export default function StickyHeadTable() {
         </Table>
       </TableContainer>
     </Paper>
+    </Fragment>
   );
 }

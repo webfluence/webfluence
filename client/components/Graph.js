@@ -1,14 +1,38 @@
 import React, { Component, Fragment } from "react";
 import Graph from "vis-react";
-// import { getObjects } from '../../../Utils';
-import initialGraph from "../dummyData/data.json";
 var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
-import { contributorData } from "../dummyData/candidateContributionDummyData";
-import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
+import { setPacIDThunk } from "../store/paccommittee";
+import FullscreenIcon from "@material-ui/icons/Fullscreen";
+import CallSplitIcon from "@material-ui/icons/CallSplit";
+import ReplayIcon from "@material-ui/icons/Replay";
+import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
+import CloseIcon from "@material-ui/icons/Close";
+import SearchIcon from "@material-ui/icons/Search";
+import PanToolIcon from "@material-ui/icons/PanTool";
+import { Grid } from "@material-ui/core";
+import Modal from "react-modal";
+import {setCandPacThunk} from "../store/candpac";
+import {setPacCandThunk} from "../store/paccand";
 
+// modal styles
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    width: "90vw",
+    height: "90vh",
+    overflow: "hidden",
+  },
+};
+
+// graph options
 let options = {
   layout: {
     randomSeed: 2,
@@ -20,8 +44,8 @@ let options = {
     },
     shape: "dot",
     size: 20,
-    borderWidth: 1.5,
-    borderWidthSelected: 2,
+    borderWidth: 0,
+    borderWidthSelected: 1,
     font: {
       size: 15,
       align: "center",
@@ -29,12 +53,11 @@ let options = {
         color: "#bbbdc0",
         size: 15,
         vadjust: 0,
-        mod: "bold",
       },
     },
   },
   edges: {
-    width: 1,
+    width: 5,
     color: {
       color: "#D3D3D3",
       highlight: "#797979",
@@ -51,44 +74,31 @@ let options = {
       roundness: 0,
     },
   },
-  groups: {
-    Biology: {
-      color: {
-        background: "#ffffff",
-        border: "#c89dc8",
-        highlight: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-        hover: {
-          border: "#c89dc8",
-          background: "#ffffff",
-        },
-      },
+  physics: {
+    barnesHut: {
+      gravitationalConstant: -15000,
+      centralGravity: 0,
+      springLength: 70,
+      avoidOverlap: 1,
     },
-    physics: {
-      barnesHut: {
-        gravitationalConstant: -30000,
-        centralGravity: 1,
-        springLength: 70,
-        avoidOverlap: 1,
-      },
-    },
-    stabilization: { iterations: 2500 },
   },
+  // stabilization: { iterations: 2500 },
+  // },
   interaction: {
     hover: false,
     hoverConnectedEdges: false,
     hoverEdges: false,
-    selectable: false,
+    selectable: true,
     selectConnectedEdges: false,
     zoomView: false,
     dragView: false,
+    navigationButtons: true,
+    keyboard: true
   },
 };
 
 function createGraph(candcontrib) {
-  let jsonData = initialGraph;
+  // let jsonData = initialGraph;
 
   let nodes = [];
   let edges = [];
@@ -99,7 +109,7 @@ function createGraph(candcontrib) {
   if (Object.keys(data).length) {
     let newNode = {};
 
-    newNode.color = "green";
+    newNode.color = "#78E983";
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
     nodes.push(newNode);
@@ -109,7 +119,7 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = "blue";
+    newNode.color = contributor.attributes.pacs > 0 ? "blue" : "#FF5A5A";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
@@ -169,6 +179,8 @@ export class NetworkGraph extends Component {
     this.redirectToLearn = this.redirectToLearn.bind(this);
     this.neighbourhoodHighlightHide =
       this.neighbourhoodHighlightHide.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.openModal = this.openModal.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -176,7 +188,7 @@ export class NetworkGraph extends Component {
       const newGraph = createGraph(this.props.candcontrib);
       this.setState({
         graph: newGraph,
-        style: { width: "300px", height: "300px" },
+        style: { width: "100%", height: "600px" },
         network: null,
       });
     }
@@ -188,8 +200,11 @@ export class NetworkGraph extends Component {
     const newGraph = createGraph(this.props.candcontrib);
     this.setState({
       graph: newGraph,
-      style: { width: "300px", height: "300px" },
+      style: { width: "100%", height: "600px" },
+      fullscreenStyle: { width: "100%", height: "100%" },
       network: null,
+      options: options,
+      branchingActive: false,
     });
   }
 
@@ -203,8 +218,12 @@ export class NetworkGraph extends Component {
     this.state.network.fit();
   }
 
-  redirectToLearn(params, searchData) {
-    console.log(this.state.network.getNodeAt(params.pointer.DOM));
+  // here is where we get the info from a node onClick
+  redirectToLearn(params) {
+    if (this.state.branchingActive) { 
+      console.log('params.nodes[0]', params.nodes[0])
+      this.props.setPacIDThunk(params.nodes[0])
+    }
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -352,31 +371,177 @@ export class NetworkGraph extends Component {
     }
   }
 
-  // getNetwork = (data) => {
-  //   this.setState({ network: data });
-  // };
-  // getEdges = (data) => {
-  //   console.log(data);
-  // };
-  // getNodes = (data) => {
-  //   console.log(data);
-  // };
+  getNetwork = (data) => {
+    this.setState({ network: data });
+  };
+  getEdges = (data) => {
+  };
+  getNodes = (data) => {
+  };
+
+  // modal functions
+  openModal() {
+    this.setState({ Modalopen: true });
+  }
+
+  closeModal() {
+    this.setState({ Modalopen: false });
+  }
+
   render() {
+    console.log('this.props.pacid', this.props.pacid)
     return (
       <div>
-        {/* <SearchBar /> */}
+        {/* fullscreen graph modal */}
+        <Modal
+          isOpen={this.state.Modalopen}
+          onRequestClose={this.closeModal}
+          style={customStyles}
+          zIndex="9999"
+          contentLabel="Example Modal"
+          ariaHideApp={false}
+        >
+          {/* fullscreen graph */}
+          <Grid>
+            {this.state.options && (
+              <Fragment>
+                <FullscreenExitIcon
+                  fontSize="large"
+                  onClick={this.closeModal}
+                />
+                <CallSplitIcon
+                  fontSize="large"
+                  className={this.state.branchingActive ? "selectedIcon" : ""}
+                  onClick={() =>
+                    this.setState({
+                      branchingActive: !this.state.branchingActive,
+                    })
+                  }
+                />
+                <SearchIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.zoomView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          zoomView: !this.state.options.interaction.zoomView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <PanToolIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.dragView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          dragView: !this.state.options.interaction.dragView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <ReplayIcon fontSize="large" />
+              </Fragment>
+            )}
+          </Grid>
+          {Object.keys(this.props.candcontrib).length &&
+            Object.keys(this.state.graph).length && (
+              <Graph
+                graph={this.state.graph}
+                style={this.state.fullscreenStyle}
+                options={this.state.options}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
+                events={this.events}
+                vis={(vis) => (this.vis = vis)}
+              />
+            )}
+        </Modal>
 
         <Fragment>
-          <div className="vis-react-title">Contributor Information:</div>
+          {/* dashboard graph */}
+          <Grid>
+            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            {this.state.options && (
+              <Fragment>
+                <CallSplitIcon
+                  fontSize="large"
+                  className={this.state.branchingActive ? "selectedIcon" : ""}
+                  onClick={() =>
+                    this.setState({
+                      branchingActive: !this.state.branchingActive,
+                    })
+                  }
+                />
+                <SearchIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.zoomView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          zoomView: !this.state.options.interaction.zoomView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <PanToolIcon
+                  fontSize="large"
+                  className={
+                    this.state.options.interaction.dragView
+                      ? "selectedIcon"
+                      : ""
+                  }
+                  onClick={() =>
+                    this.setState({
+                      options: {
+                        ...this.state.options,
+                        interaction: {
+                          ...this.state.options.interaction,
+                          dragView: !this.state.options.interaction.dragView,
+                        },
+                      },
+                    })
+                  }
+                />
+                <ReplayIcon fontSize="large" />
+              </Fragment>
+            )}
+          </Grid>
+
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
                 graph={this.state.graph}
                 style={this.state.style}
-                options={options}
-                // getNetwork={this.getNetwork}
-                // getEdges={this.getEdges}
-                // getNodes={this.getNodes}
+                options={this.state.options}
+                getNetwork={this.getNetwork}
+                getEdges={this.getEdges}
+                getNodes={this.getNodes}
                 events={this.events}
                 vis={(vis) => (this.vis = vis)}
               />
@@ -390,12 +555,15 @@ export class NetworkGraph extends Component {
 const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
+    loading: state.loading,
+    pacid: state.pacid
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name))
   };
 };
 

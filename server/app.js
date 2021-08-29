@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const dotenv = require("dotenv").config();
 module.exports = app
 
 // logging middleware
@@ -29,6 +30,8 @@ app.use((req, res, next) => {
     next()
   }
 })
+
+
 
 // sends index.html
 app.use('*', (req, res) => {

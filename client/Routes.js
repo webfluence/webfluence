@@ -2,12 +2,18 @@ import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import Home from "./components/Home";
-import GraphTest from "./components/GraphTest";
+import Graph from "./components/Graph";
 import { me } from "./store";
 import Dashboard from "./components/Dashboard";
 import SearchBar from "./components/SearchBar";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
+// import Sources from "./components/Sources"
+// import Features from "./components/Features";
+// import Donate from "./components/Donate";
+// import About from "./components/About";
+// import Faq from "./components/Faq";
+// import Contact from "./components/Contact";
 
 /**
  * COMPONENT
@@ -26,14 +32,14 @@ class Routes extends Component {
           <Switch>
             <Route path="/home" component={Home} />
             {/* <Redirect to="/home" /> */}
-            <Route path="/graphtest" component={GraphTest} />
+            <Route path="/graph" component={Graph} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route path="/sources" component={Sources} />
+            {/* <Route path="/sources" component={Sources} />
             <Route path="/features" component={Features} />
             <Route path="/donate" component={Donate} />
             <Route path="/about" component={About} />
             <Route path="/faq" component={Faq} />
-            <Route path="/contact" component={Contact} />
+            <Route path="/contact" component={Contact} /> */}
             <Route path="/searchbar" component={SearchBar} />
           </Switch>
         ) : (
@@ -41,14 +47,14 @@ class Routes extends Component {
             <Route path="/" exact component={Home} />
             <Route path="/login" component={SignIn} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/graphtest" component={GraphTest} />
+            <Route path="/graph" component={Graph} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route path="/sources" component={Sources} />
+            {/* <Route path="/sources" component={Sources} />
             <Route path="/features" component={Features} />
             <Route path="/donate" component={Donate} />
             <Route path="/about" component={About} />
             <Route path="/faq" component={Faq} />
-            <Route path="/contact" component={Contact} />
+            <Route path="/contact" component={Contact} /> */}
             <Route path="/searchbar" component={SearchBar} />
           </Switch>
         )}

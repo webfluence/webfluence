@@ -37,5 +37,8 @@ form div {
   padding: 0 20px 0 20px;
   box-shadow: 0 5px 5px darkgray;
   position: relative;
-  z-index: 1;
+}
+
+.selectedIcon {
+  color: #FF5A5A
 }
