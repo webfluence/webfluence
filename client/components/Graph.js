@@ -43,7 +43,8 @@ let options = {
       y: false,
     },
     shape: "dot",
-    size: 20,
+    size: 15,
+    mass: 1,
     borderWidth: 0,
     borderWidthSelected: 1,
     font: {
@@ -52,7 +53,7 @@ let options = {
       bold: {
         color: "#bbbdc0",
         size: 15,
-        vadjust: 0,
+        vadjust: 0, 
       },
     },
   },
@@ -65,9 +66,9 @@ let options = {
       opacity: 1.0,
     },
     arrows: {
-      to: { enabled: true, scaleFactor: 1, type: "arrow" },
+      to: { enabled: false, scaleFactor: 1, type: "arrow" },
       middle: { enabled: false, scaleFactor: 1, type: "arrow" },
-      from: { enabled: true, scaleFactor: 1, type: "arrow" },
+      from: { enabled: false, scaleFactor: 1, type: "arrow" },
     },
     smooth: {
       type: "continuous",
@@ -77,9 +78,9 @@ let options = {
   physics: {
     barnesHut: {
       gravitationalConstant: -15000,
-      centralGravity: 0,
+      centralGravity: .5,
       springLength: 70,
-      avoidOverlap: 1,
+      avoidOverlap: 0.2,
     },
   },
   // stabilization: { iterations: 2500 },
@@ -105,6 +106,8 @@ function createGraph(candcontrib) {
 
   const data = candcontrib;
 
+  const totalFunds = data.response.contributors.contributor.reduce((accum, contributor) => accum + parseInt(contributor.attributes.total), 0)
+  
   // ROOT NODE
   if (Object.keys(data).length) {
     let newNode = {};
@@ -119,11 +122,12 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = contributor.attributes.pacs > 0 ? "blue" : "#FF5A5A";
+    newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
     newNode.to = newNode.id;
+    newNode.size = contributor.attributes.total/totalFunds * 100
     nodes.push(newNode);
   });
 
@@ -167,7 +171,7 @@ export class NetworkGraph extends Component {
         this.neighbourhoodHighlightHide(event);
       },
       click: function (event) {
-        this.redirectToLearn(event, this.props.searchData);
+        this.handleNodeClick(event);
       },
     };
     this.state = { graph: {} };
@@ -176,11 +180,13 @@ export class NetworkGraph extends Component {
     this.events.blurNode = this.events.blurNode.bind(this);
     this.events.click = this.events.click.bind(this);
     this.neighbourhoodHighlight = this.neighbourhoodHighlight.bind(this);
-    this.redirectToLearn = this.redirectToLearn.bind(this);
+    this.handleNodeClick = this.handleNodeClick.bind(this);
     this.neighbourhoodHighlightHide =
       this.neighbourhoodHighlightHide.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.openModal = this.openModal.bind(this);
+    this.createNode = this.createNode.bind(this);
+    this.createEdge = this.createEdge.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -195,6 +201,13 @@ export class NetworkGraph extends Component {
   }
 
   componentDidMount() {
+    // // loop over contributors array and add the pacId to each contributor's attributes list
+    // this.props.candcontrib.response.contributors.contributor.forEach((contrib) => {
+    //   this.props.setPacIDThunk(contrib.attributes.org_name)
+    //   contrib.attributes.pacid = this.props.pacid
+    // })
+    // console.log(`this.props.candcontrib`, this.props.candcontrib.response.contributors.contributor)
+
     this.mounted = true;
     window.addEventListener("resize", this.measure);
     const newGraph = createGraph(this.props.candcontrib);
@@ -206,6 +219,7 @@ export class NetworkGraph extends Component {
       options: options,
       branchingActive: false,
     });
+    
   }
 
   componentWillUnmount() {
@@ -218,11 +232,28 @@ export class NetworkGraph extends Component {
     this.state.network.fit();
   }
 
+  createEdge(fromId, toId) {
+    this.state.network.body.data.edges.add([{from: fromId, to: toId}])
+  }
+
+  createNode(id, label) {
+    let existingNodes = Object.keys(this.state.network.body.data.nodes._data)
+    console.log(`existingNodes`, existingNodes)
+    if (existingNodes.indexOf(id) === -1) this.state.network.body.data.nodes.add({ id, label, color: "#78E983" })
+  }
+
   // here is where we get the info from a node onClick
-  redirectToLearn(params) {
+  async handleNodeClick(params) {
     if (this.state.branchingActive) { 
       console.log('params.nodes[0]', params.nodes[0])
-      this.props.setPacIDThunk(params.nodes[0])
+      await this.props.setPacIDThunk(params.nodes[0])
+      await this.props.setPacCandThunk(this.props.pacid.cmte_id)
+      console.log(`this.props.paccand`, this.props.paccand)
+      const topTenCands = this.props.paccand.slice(0,10)
+      topTenCands.forEach((cand) => {
+        this.createNode(cand.cid, cand.candname)
+        this.createEdge(params.nodes[0], cand.cid)
+      })
     }
   }
 
@@ -556,14 +587,16 @@ const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
     loading: state.loading,
-    pacid: state.pacid
+    pacid: state.pacid,
+    paccand: state.paccand
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
-    setPacIDThunk: (name) => dispatch(setPacIDThunk(name))
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
+    setPacCandThunk: (id) => dispatch(setPacCandThunk(id))
   };
 };
 
