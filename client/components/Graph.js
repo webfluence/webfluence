@@ -4,6 +4,7 @@ var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
+import { setPacIDThunk } from "../store/paccommittee";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ReplayIcon from "@material-ui/icons/Replay";
@@ -13,6 +14,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import { Grid } from "@material-ui/core";
 import Modal from "react-modal";
+import {setCandPacThunk} from "../store/candpac";
+import {setPacCandThunk} from "../store/paccand";
 
 // modal styles
 const customStyles = {
@@ -50,7 +53,6 @@ let options = {
         color: "#bbbdc0",
         size: 15,
         vadjust: 0,
-        mod: "bold",
       },
     },
   },
@@ -117,7 +119,7 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = "#FF5A5A";
+    newNode.color = contributor.attributes.pacs > 0 ? "blue" : "#FF5A5A";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
@@ -216,7 +218,12 @@ export class NetworkGraph extends Component {
     this.state.network.fit();
   }
 
-  redirectToLearn(params, searchData) {
+  // here is where we get the info from a node onClick
+  redirectToLearn(params) {
+    if (this.state.branchingActive) { 
+      console.log('params.nodes[0]', params.nodes[0])
+      this.props.setPacIDThunk(params.nodes[0])
+    }
   }
 
   neighbourhoodHighlight(params, searchData) {
@@ -382,6 +389,7 @@ export class NetworkGraph extends Component {
   }
 
   render() {
+    console.log('this.props.pacid', this.props.pacid)
     return (
       <div>
         {/* fullscreen graph modal */}
@@ -547,13 +555,15 @@ export class NetworkGraph extends Component {
 const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
-    loading: state.loading
+    loading: state.loading,
+    pacid: state.pacid
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name))
   };
 };
 
