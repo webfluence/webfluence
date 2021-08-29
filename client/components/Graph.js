@@ -14,8 +14,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import { Grid } from "@material-ui/core";
 import Modal from "react-modal";
-import {setCandPacThunk} from "../store/candpac";
-import {setPacCandThunk} from "../store/paccand";
+import { setCandPacThunk } from "../store/candpac";
+import { setPacCandThunk } from "../store/paccand";
 
 // modal styles
 const customStyles = {
@@ -43,7 +43,8 @@ let options = {
       y: false,
     },
     shape: "dot",
-    size: 20,
+    size: 15,
+    mass: 1,
     borderWidth: 0,
     borderWidthSelected: 1,
     font: {
@@ -65,9 +66,9 @@ let options = {
       opacity: 1.0,
     },
     arrows: {
-      to: { enabled: true, scaleFactor: 1, type: "arrow" },
+      to: { enabled: false, scaleFactor: 1, type: "arrow" },
       middle: { enabled: false, scaleFactor: 1, type: "arrow" },
-      from: { enabled: true, scaleFactor: 1, type: "arrow" },
+      from: { enabled: false, scaleFactor: 1, type: "arrow" },
     },
     smooth: {
       type: "continuous",
@@ -77,9 +78,9 @@ let options = {
   physics: {
     barnesHut: {
       gravitationalConstant: -15000,
-      centralGravity: 0,
+      centralGravity: 0.5,
       springLength: 70,
-      avoidOverlap: 1,
+      avoidOverlap: 0.2,
     },
   },
   // stabilization: { iterations: 2500 },
@@ -93,23 +94,32 @@ let options = {
     zoomView: false,
     dragView: false,
     navigationButtons: true,
-    keyboard: true
+    keyboard: true,
   },
 };
 
 function createGraph(candcontrib) {
-  // let jsonData = initialGraph;
-
   let nodes = [];
   let edges = [];
 
   const data = candcontrib;
 
+  const totalFunds = data.response.contributors.contributor.reduce(
+    (accum, contributor) => accum + parseInt(contributor.attributes.total),
+    0
+  );
+
+  const demOrRepub =
+    data.response.contributors.attributes.cand_name[
+      data.response.contributors.attributes.cand_name.length - 2
+    ];
+  const blueOrRed = demOrRepub === "D" ? "#364aff" : "#ff3636";
+
   // ROOT NODE
   if (Object.keys(data).length) {
     let newNode = {};
-
-    newNode.color = "#78E983";
+    console.log(`data.response`, data.response);
+    newNode.color = blueOrRed;
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
     nodes.push(newNode);
@@ -119,11 +129,13 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = contributor.attributes.pacs > 0 ? "blue" : "#FF5A5A";
+    // newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
+    newNode.color = "#78E983";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
     newNode.to = newNode.id;
+    newNode.size = (contributor.attributes.total / totalFunds) * 100;
     nodes.push(newNode);
   });
 
@@ -167,7 +179,7 @@ export class NetworkGraph extends Component {
         this.neighbourhoodHighlightHide(event);
       },
       click: function (event) {
-        this.redirectToLearn(event, this.props.searchData);
+        this.handleNodeClick(event);
       },
     };
     this.state = { graph: {} };
@@ -176,11 +188,13 @@ export class NetworkGraph extends Component {
     this.events.blurNode = this.events.blurNode.bind(this);
     this.events.click = this.events.click.bind(this);
     this.neighbourhoodHighlight = this.neighbourhoodHighlight.bind(this);
-    this.redirectToLearn = this.redirectToLearn.bind(this);
+    this.handleNodeClick = this.handleNodeClick.bind(this);
     this.neighbourhoodHighlightHide =
       this.neighbourhoodHighlightHide.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.openModal = this.openModal.bind(this);
+    this.createNode = this.createNode.bind(this);
+    this.createEdge = this.createEdge.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -195,6 +209,13 @@ export class NetworkGraph extends Component {
   }
 
   componentDidMount() {
+    // // loop over contributors array and add the pacId to each contributor's attributes list
+    // this.props.candcontrib.response.contributors.contributor.forEach((contrib) => {
+    //   this.props.setPacIDThunk(contrib.attributes.org_name)
+    //   contrib.attributes.pacid = this.props.pacid
+    // })
+    // console.log(`this.props.candcontrib`, this.props.candcontrib.response.contributors.contributor)
+
     this.mounted = true;
     window.addEventListener("resize", this.measure);
     const newGraph = createGraph(this.props.candcontrib);
@@ -218,11 +239,33 @@ export class NetworkGraph extends Component {
     this.state.network.fit();
   }
 
+  createEdge(fromId, toId) {
+    this.state.network.body.data.edges.add([{ from: fromId, to: toId }]);
+  }
+
+  createNode(id, label) {
+    const demOrRepub = label[label.length - 2];
+    const blueOrRed = demOrRepub === "D" ? "#364aff" : "#ff3636";
+    let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
+    if (existingNodes.indexOf(id) === -1)
+      this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
+  }
+
   // here is where we get the info from a node onClick
-  redirectToLearn(params) {
-    if (this.state.branchingActive) { 
-      console.log('params.nodes[0]', params.nodes[0])
-      this.props.setPacIDThunk(params.nodes[0])
+  async handleNodeClick(params) {
+    if (this.state.branchingActive) {
+      await this.props.setPacIDThunk(params.nodes[0]);
+      if (this.props.pacid) {
+        await this.props.setPacCandThunk(this.props.pacid.cmte_id);
+        const topTenCands = this.props.paccand.slice(0, 10);
+        topTenCands.forEach((cand) => {
+          this.createNode(cand.cid, cand.candname);
+          this.createEdge(params.nodes[0], cand.cid);
+        });
+      } else {
+        // toasify notification
+        console.log("no pac id");
+      }
     }
   }
 
@@ -374,10 +417,8 @@ export class NetworkGraph extends Component {
   getNetwork = (data) => {
     this.setState({ network: data });
   };
-  getEdges = (data) => {
-  };
-  getNodes = (data) => {
-  };
+  getEdges = (data) => {};
+  getNodes = (data) => {};
 
   // modal functions
   openModal() {
@@ -389,7 +430,6 @@ export class NetworkGraph extends Component {
   }
 
   render() {
-    console.log('this.props.pacid', this.props.pacid)
     return (
       <div>
         {/* fullscreen graph modal */}
@@ -556,14 +596,16 @@ const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
     loading: state.loading,
-    pacid: state.pacid
+    pacid: state.pacid,
+    paccand: state.paccand,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
-    setPacIDThunk: (name) => dispatch(setPacIDThunk(name))
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
+    setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
   };
 };
 

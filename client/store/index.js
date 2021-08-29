@@ -10,6 +10,7 @@ import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
 import org from "./orgs"
 import candpac from "./candpac";
+import paccand from "./paccand"
 import pacid from "./paccommittee";
 
 const reducer = combineReducers({
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   loading,
   org,
   candpac,
+  paccand,
   pacid,
 });
 const middleware = composeWithDevTools(

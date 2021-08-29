@@ -23,14 +23,13 @@ router.get('/:id', async (req, res, next) => {
 })
 
 router.get('/pacshort/:pacshort', async (req, res, next) => {
-  console.log("hello")
-  let name = req.params.pacshort
-  if(name.includes('+')) {
-    name = name.split('+').join(' ')
-  }
+  let name = decodeURI(req.params.pacshort)
+  // if(name.includes('+')) {
+  //   name = name.split('+').join(' ')
+  // }
   try {
     const pacshort = await Committee.findOne({where: {
-      pacshort: name
+      ultorg: name
       }})
     res.json(pacshort)
     } catch (err) {
