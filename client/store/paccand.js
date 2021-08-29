@@ -5,21 +5,21 @@ import history from '../history';
 const SET_PACCAND = 'SET_PACCAND';
 
 // ACTION CREATORS
-const setPaccand (cands) => ({
+const setPaccand = (cands) => ({
   type: SET_PACCAND,
-  cands
+  cands,
 });
 
 // THUNK CREATORS
 
 export const setPacCandThunk = (pacid) => async (dispatch) => {
-  try {
-    const {data} = await axios.get(`/api/pac/${pacid}`);
-    dispatch(setPaccand(data));
-  } catch (err) {
-    console.error(err);
-  }
-};
+    try {
+      const { data } = await axios.get(`/api/pac/${pacid}`);
+      dispatch(setPaccand(data));
+    } catch (err) {
+      console.error(err);
+    }
+}
 
 
 // REDUCER

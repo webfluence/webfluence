@@ -84,12 +84,12 @@ export default function Dashboard() {
                   style={{minHeight: "400px"}}
                 >
                   {Object.keys(candcontrib).length > 0 && !loading ? (
-                    <GraphTest/>
+                    <Graph/>
                   ) : (
                     <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}
                 </Paper>
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                {/* <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script> */}
               </Grid>
               {/* Contributor Info */}
               <Grid>

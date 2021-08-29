@@ -33,7 +33,7 @@ export default function SearchBar(props) {
       const crp_id = legislator.id.opensecrets;
       // find contributors via congressional crp_id
       dispatch(setCandContributorsThunk(crp_id));
-      dispatch(setCandIndustriesThunk(crp_id));
+      // dispatch(setCandIndustriesThunk(crp_id));
     }
 
     history.push('/dashboard')

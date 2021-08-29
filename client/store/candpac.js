@@ -11,9 +11,7 @@ const setCandpacs = (pacs) => ({
   pacs,
 });
 
-
 // THUNK CREATORS
-
 export const setCandPacThunk = (crp_id) => async (dispatch) => {
   try {
     const { data } = await axios.get(`/api/pac/${crp_id}`);
