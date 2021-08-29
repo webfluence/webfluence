@@ -13,7 +13,8 @@ const setPacID = pacId => ({
 
 // THUNK CREATORS
 export const setPacIDThunk = (pacShort) => async (dispatch) => {
-    pacShort = pacShort.split(' ').join('+')
+    // pacShort = pacShort.split(' ').join('+')
+    pacShort = encodeURIComponent(pacShort)
    try{
     const {data} = await axios.get(`/api/committee/pacshort/${pacShort}`);
       dispatch(setPacID(data));

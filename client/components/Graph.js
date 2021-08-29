@@ -14,8 +14,8 @@ import SearchIcon from "@material-ui/icons/Search";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import { Grid } from "@material-ui/core";
 import Modal from "react-modal";
-import {setCandPacThunk} from "../store/candpac";
-import {setPacCandThunk} from "../store/paccand";
+import { setCandPacThunk } from "../store/candpac";
+import { setPacCandThunk } from "../store/paccand";
 
 // modal styles
 const customStyles = {
@@ -53,7 +53,7 @@ let options = {
       bold: {
         color: "#bbbdc0",
         size: 15,
-        vadjust: 0, 
+        vadjust: 0,
       },
     },
   },
@@ -78,7 +78,7 @@ let options = {
   physics: {
     barnesHut: {
       gravitationalConstant: -15000,
-      centralGravity: .5,
+      centralGravity: 0.5,
       springLength: 70,
       avoidOverlap: 0.2,
     },
@@ -94,25 +94,32 @@ let options = {
     zoomView: false,
     dragView: false,
     navigationButtons: true,
-    keyboard: true
+    keyboard: true,
   },
 };
 
 function createGraph(candcontrib) {
-  // let jsonData = initialGraph;
-
   let nodes = [];
   let edges = [];
 
   const data = candcontrib;
 
-  const totalFunds = data.response.contributors.contributor.reduce((accum, contributor) => accum + parseInt(contributor.attributes.total), 0)
-  
+  const totalFunds = data.response.contributors.contributor.reduce(
+    (accum, contributor) => accum + parseInt(contributor.attributes.total),
+    0
+  );
+
+  const demOrRepub =
+    data.response.contributors.attributes.cand_name[
+      data.response.contributors.attributes.cand_name.length - 2
+    ];
+  const blueOrRed = demOrRepub === "D" ? "#364aff" : "#ff3636";
+
   // ROOT NODE
   if (Object.keys(data).length) {
     let newNode = {};
-
-    newNode.color = "#78E983";
+    console.log(`data.response`, data.response);
+    newNode.color = blueOrRed;
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
     nodes.push(newNode);
@@ -122,12 +129,13 @@ function createGraph(candcontrib) {
 
   data.response.contributors.contributor.map((contributor) => {
     let newNode = {};
-    newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
+    // newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
+    newNode.color = "#78E983";
     newNode.id = contributor.attributes.org_name;
     newNode.label = contributor.attributes.org_name;
     newNode.from = data.response.contributors.attributes.cid;
     newNode.to = newNode.id;
-    newNode.size = contributor.attributes.total/totalFunds * 100
+    newNode.size = (contributor.attributes.total / totalFunds) * 100;
     nodes.push(newNode);
   });
 
@@ -219,7 +227,6 @@ export class NetworkGraph extends Component {
       options: options,
       branchingActive: false,
     });
-    
   }
 
   componentWillUnmount() {
@@ -233,27 +240,32 @@ export class NetworkGraph extends Component {
   }
 
   createEdge(fromId, toId) {
-    this.state.network.body.data.edges.add([{from: fromId, to: toId}])
+    this.state.network.body.data.edges.add([{ from: fromId, to: toId }]);
   }
 
   createNode(id, label) {
-    let existingNodes = Object.keys(this.state.network.body.data.nodes._data)
-    console.log(`existingNodes`, existingNodes)
-    if (existingNodes.indexOf(id) === -1) this.state.network.body.data.nodes.add({ id, label, color: "#78E983" })
+    const demOrRepub = label[label.length - 2];
+    const blueOrRed = demOrRepub === "D" ? "#364aff" : "#ff3636";
+    let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
+    if (existingNodes.indexOf(id) === -1)
+      this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
   }
 
   // here is where we get the info from a node onClick
   async handleNodeClick(params) {
-    if (this.state.branchingActive) { 
-      console.log('params.nodes[0]', params.nodes[0])
-      await this.props.setPacIDThunk(params.nodes[0])
-      await this.props.setPacCandThunk(this.props.pacid.cmte_id)
-      console.log(`this.props.paccand`, this.props.paccand)
-      const topTenCands = this.props.paccand.slice(0,10)
-      topTenCands.forEach((cand) => {
-        this.createNode(cand.cid, cand.candname)
-        this.createEdge(params.nodes[0], cand.cid)
-      })
+    if (this.state.branchingActive) {
+      await this.props.setPacIDThunk(params.nodes[0]);
+      if (this.props.pacid) {
+        await this.props.setPacCandThunk(this.props.pacid.cmte_id);
+        const topTenCands = this.props.paccand.slice(0, 10);
+        topTenCands.forEach((cand) => {
+          this.createNode(cand.cid, cand.candname);
+          this.createEdge(params.nodes[0], cand.cid);
+        });
+      } else {
+        // toasify notification
+        console.log("no pac id");
+      }
     }
   }
 
@@ -405,10 +417,8 @@ export class NetworkGraph extends Component {
   getNetwork = (data) => {
     this.setState({ network: data });
   };
-  getEdges = (data) => {
-  };
-  getNodes = (data) => {
-  };
+  getEdges = (data) => {};
+  getNodes = (data) => {};
 
   // modal functions
   openModal() {
@@ -420,7 +430,6 @@ export class NetworkGraph extends Component {
   }
 
   render() {
-    console.log('this.props.pacid', this.props.pacid)
     return (
       <div>
         {/* fullscreen graph modal */}
@@ -588,7 +597,7 @@ const mapStateToProps = (state) => {
     candcontrib: state.candcontrib,
     loading: state.loading,
     pacid: state.pacid,
-    paccand: state.paccand
+    paccand: state.paccand,
   };
 };
 
@@ -596,7 +605,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
     setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
-    setPacCandThunk: (id) => dispatch(setPacCandThunk(id))
+    setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
   };
 };
 
