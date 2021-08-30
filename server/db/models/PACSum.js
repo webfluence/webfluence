@@ -13,7 +13,7 @@ const PacsSum = db.define("pacs_sum", {
     type: Sequelize.STRING,
   },
   // The amount contributed. This will be negative for refunds.
-  amount: {
+  total_amount: {
     type: Sequelize.FLOAT,
   },
   createdAt: {
