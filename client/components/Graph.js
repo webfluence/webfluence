@@ -61,8 +61,8 @@ let options = {
     width: 5,
     color: {
       color: "#D3D3D3",
-      highlight: "#797979",
-      hover: "#797979",
+      highlight: "#eba9e8",
+      hover: "#eba9e8",
       opacity: 1.0,
     },
     arrows: {
@@ -88,9 +88,9 @@ let options = {
   interaction: {
     hover: false,
     hoverConnectedEdges: false,
-    hoverEdges: false,
+    hoverEdges: true,
     selectable: true,
-    selectConnectedEdges: false,
+    selectConnectedEdges: true,
     zoomView: false,
     dragView: false,
     navigationButtons: true,
