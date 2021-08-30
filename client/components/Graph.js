@@ -204,6 +204,8 @@ export class NetworkGraph extends Component {
     this.openModal = this.openModal.bind(this);
     this.createNode = this.createNode.bind(this);
     this.createEdge = this.createEdge.bind(this);
+    this.handleCandNodeClick = this.handleCandNodeClick.bind(this);
+    this.handleContribNodeClick = this.handleContribNodeClick.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -260,47 +262,52 @@ export class NetworkGraph extends Component {
       this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
   }
 
-  // here is where we get the info from a node onClick
   async handleNodeClick(params) {
     if (this.state.branchingActive && params.nodes.length) {
       console.log(params.nodes[0]);
       if (params.nodes[0][0] === "N" && !isNaN(params.nodes[0][1])) {
-        await this.props.setCandContributorsThunk(params.nodes[0]);
-        //ignore that specific node
+        await this.handleCandNodeClick(params);
+        console.log("handleCand");
       } else {
-        await this.props.setPacIDThunk(params.nodes[0]);
-      }
-      if (this.props.pacid) {
-        await this.props.setPacCandThunk(this.props.pacid.cmte_id);
-        const topTenCands = this.props.paccand.slice(0, 10);
-        topTenCands.forEach((cand) => {
-          this.createNode(cand.cid, cand.candname);
-          this.createEdge(params.nodes[0], cand.cid);
-        });
-        // console.log("this.graph", this.state.graph);
-        // console.log("this.network", this.state.network);
-        // this.state.network.redraw();
-      } else {
-        // toasify notification
-        notify();
+        console.log("handeContrib");
+        await this.handleContribNodeClick(params);
       }
     }
   }
 
+  // here is where we get the info from a node onClick
+  async handleContribNodeClick(params) {
+    await this.props.setPacIDThunk(params.nodes[0]);
+    if (this.props.pacid) {
+      await this.props.setPacCandThunk(this.props.pacid.cmte_id);
+      const topTenCands = this.props.paccand.slice(0, 10);
+      topTenCands.forEach((cand) => {
+        this.createNode(cand.cid, cand.candname);
+        this.createEdge(params.nodes[0], cand.cid);
+      });
+      console.log("this.graph", this.state.graph);
+      // console.log("this.network", this.state.network);
+      // this.state.network.redraw();
+    } else {
+      // toasify notification
+      notify();
+    }
+  }
+
   //here is where we get the contirbutors for a newly selected legislatior
-  // async handleNodeClick(params) {
-  //   if (this.state.branchingActive) {
-  //     await this.props.setCandContributorsThunk(params.nodes[0]);
-  //     if (this.props.candcontrib) {
-  //       const topTenContribs = this.props.candcontrib.slice(0, 10);
-  //       topTenContribs.forEach((contrib) => {
-  //         this.createNode(contrib.cid, contrib.candname);
-  //         this.createEdge(params.nodes[0], contrib.cid);
-  //       });
-  //     } else {
-  //       // toasify notification
-  //       console.log("no cand id");
-  //     }
+  async handleCandNodeClick(params) {
+    await this.props.setCandContributorsThunk(params.nodes[0]);
+    if (this.props.candcontrib) {
+      const topTenContribs = this.props.candcontrib.slice(0, 10);
+      topTenContribs.forEach((contrib) => {
+        this.createNode(contrib.cid, contrib.candname);
+        this.createEdge(params.nodes[0], contrib.cid);
+      });
+    } else {
+      // toasify notification
+      console.log("no cand id");
+    }
+  }
 
   neighbourhoodHighlight(params, searchData) {
     let allNodes = this.state.graph.nodes;
