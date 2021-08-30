@@ -112,35 +112,35 @@ router.get("/pacidsum/:pacid", async (req, res, next) => {
       attributes: [
         "pacid",
         "cid",
-        "amount"
+        "total_amount"
       ],
       // group: ["pacid", "cid"],
     });
 
-    // const returnArray = await Promise.all(
-    //   candidates.map(async (obj) => {
-    //     const candidateData = await Candidate.findOne({
-    //       where: {
-    //         cid: obj.dataValues.cid,
-    //       },
-    //     });
-    //     obj.dataValues.candname = candidateData
-    //       ? candidateData.firstlastp
-    //       : "No data available";
-    //     return obj;
-    //   })
-    // );
+    const returnArray = await Promise.all(
+      candidates.map(async (obj) => {
+        const candidateData = await Candidate.findOne({
+          where: {
+            cid: obj.dataValues.cid,
+          },
+        });
+        obj.dataValues.candname = candidateData
+          ? candidateData.firstlastp
+          : "No data available";
+        return obj;
+      })
+    );
 
-    // let newArray = returnArray.sort((a, b) => {
-    //   if (a.dataValues.total_amount > b.dataValues.total_amount) {
-    //     return -1;
-    //   } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
-    //     return 1;
-    //   } else {
-    //     return 0;
-    //   }
-    // });
-    res.json(candidates);
+    let newArray = returnArray.sort((a, b) => {
+      if (a.dataValues.total_amount > b.dataValues.total_amount) {
+        return -1;
+      } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    res.json(newArray);
   } catch (err) {
     next(err);
   }
