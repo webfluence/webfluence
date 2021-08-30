@@ -13,11 +13,20 @@ import CloseIcon from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import PanToolIcon from "@material-ui/icons/PanTool";
 import { Grid } from "@material-ui/core";
+import { Tooltip } from "@material-ui/core";
 import Modal from "react-modal";
 import { setCandPacThunk } from "../store/candpac";
 import { setPacCandThunk } from "../store/paccand";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
+toast.configure();
+
+const notify = () => {
+  toast.error("No Pac Id associated with this contributor");
+};
 // modal styles
+
 const customStyles = {
   content: {
     top: "50%",
@@ -195,6 +204,8 @@ export class NetworkGraph extends Component {
     this.openModal = this.openModal.bind(this);
     this.createNode = this.createNode.bind(this);
     this.createEdge = this.createEdge.bind(this);
+    this.handleCandNodeClick = this.handleCandNodeClick.bind(this);
+    this.handleContribNodeClick = this.handleContribNodeClick.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -251,21 +262,50 @@ export class NetworkGraph extends Component {
       this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
   }
 
-  // here is where we get the info from a node onClick
   async handleNodeClick(params) {
-    if (this.state.branchingActive) {
-      await this.props.setPacIDThunk(params.nodes[0]);
-      if (this.props.pacid) {
-        await this.props.setPacCandThunk(this.props.pacid.cmte_id);
-        const topTenCands = this.props.paccand.slice(0, 10);
-        topTenCands.forEach((cand) => {
-          this.createNode(cand.cid, cand.candname);
-          this.createEdge(params.nodes[0], cand.cid);
-        });
+    if (this.state.branchingActive && params.nodes.length) {
+      console.log(params.nodes[0]);
+      if (params.nodes[0][0] === "N" && !isNaN(params.nodes[0][1])) {
+        await this.handleCandNodeClick(params);
+        console.log("handleCand");
       } else {
-        // toasify notification
-        console.log("no pac id");
+        console.log("handeContrib");
+        await this.handleContribNodeClick(params);
       }
+    }
+  }
+
+  // here is where we get the info from a node onClick
+  async handleContribNodeClick(params) {
+    await this.props.setPacIDThunk(params.nodes[0]);
+    if (this.props.pacid) {
+      await this.props.setPacCandThunk(this.props.pacid.cmte_id);
+      const topTenCands = this.props.paccand.slice(0, 10);
+      topTenCands.forEach((cand) => {
+        this.createNode(cand.cid, cand.candname);
+        this.createEdge(params.nodes[0], cand.cid);
+      });
+      console.log("this.graph", this.state.graph);
+      // console.log("this.network", this.state.network);
+      // this.state.network.redraw();
+    } else {
+      // toasify notification
+      notify();
+    }
+  }
+
+  //here is where we get the contirbutors for a newly selected legislatior
+  async handleCandNodeClick(params) {
+    await this.props.setCandContributorsThunk(params.nodes[0]);
+    if (this.props.candcontrib) {
+      const topTenContribs = this.props.candcontrib.slice(0, 10);
+      topTenContribs.forEach((contrib) => {
+        this.createNode(contrib.cid, contrib.candname);
+        this.createEdge(params.nodes[0], contrib.cid);
+      });
+    } else {
+      // toasify notification
+      console.log("no cand id");
     }
   }
 
@@ -445,58 +485,68 @@ export class NetworkGraph extends Component {
           <Grid>
             {this.state.options && (
               <Fragment>
-                <FullscreenExitIcon
-                  fontSize="large"
-                  onClick={this.closeModal}
-                />
-                <CallSplitIcon
-                  fontSize="large"
-                  className={this.state.branchingActive ? "selectedIcon" : ""}
-                  onClick={() =>
-                    this.setState({
-                      branchingActive: !this.state.branchingActive,
-                    })
-                  }
-                />
-                <SearchIcon
-                  fontSize="large"
-                  className={
-                    this.state.options.interaction.zoomView
-                      ? "selectedIcon"
-                      : ""
-                  }
-                  onClick={() =>
-                    this.setState({
-                      options: {
-                        ...this.state.options,
-                        interaction: {
-                          ...this.state.options.interaction,
-                          zoomView: !this.state.options.interaction.zoomView,
+                <Tooltip title="Exit Fullscreen">
+                  <FullscreenExitIcon
+                    fontSize="large"
+                    onClick={this.closeModal}
+                  />
+                </Tooltip>
+                <Tooltip title="Branch Tool">
+                  <CallSplitIcon
+                    fontSize="large"
+                    className={this.state.branchingActive ? "selectedIcon" : ""}
+                    onClick={() =>
+                      this.setState({
+                        branchingActive: !this.state.branchingActive,
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Enable Zoom">
+                  <SearchIcon
+                    fontSize="large"
+                    className={
+                      this.state.options.interaction.zoomView
+                        ? "selectedIcon"
+                        : ""
+                    }
+                    onClick={() =>
+                      this.setState({
+                        options: {
+                          ...this.state.options,
+                          interaction: {
+                            ...this.state.options.interaction,
+                            zoomView: !this.state.options.interaction.zoomView,
+                          },
                         },
-                      },
-                    })
-                  }
-                />
-                <PanToolIcon
-                  fontSize="large"
-                  className={
-                    this.state.options.interaction.dragView
-                      ? "selectedIcon"
-                      : ""
-                  }
-                  onClick={() =>
-                    this.setState({
-                      options: {
-                        ...this.state.options,
-                        interaction: {
-                          ...this.state.options.interaction,
-                          dragView: !this.state.options.interaction.dragView,
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Drag View">
+                  <PanToolIcon
+                    fontSize="large"
+                    className={
+                      this.state.options.interaction.dragView
+                        ? "selectedIcon"
+                        : ""
+                    }
+                    onClick={() =>
+                      this.setState({
+                        options: {
+                          ...this.state.options,
+                          interaction: {
+                            ...this.state.options.interaction,
+                            dragView: !this.state.options.interaction.dragView,
+                          },
                         },
-                      },
-                    })
-                  }
-                />
-                <ReplayIcon fontSize="large" />
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Reset">
+                  <ReplayIcon fontSize="large" />
+                </Tooltip>
               </Fragment>
             )}
           </Grid>
@@ -518,57 +568,67 @@ export class NetworkGraph extends Component {
         <Fragment>
           {/* dashboard graph */}
           <Grid>
-            <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            <Tooltip title="Enter Fullscreen">
+              <FullscreenIcon fontSize="large" onClick={this.openModal} />
+            </Tooltip>
             {this.state.options && (
               <Fragment>
-                <CallSplitIcon
-                  fontSize="large"
-                  className={this.state.branchingActive ? "selectedIcon" : ""}
-                  onClick={() =>
-                    this.setState({
-                      branchingActive: !this.state.branchingActive,
-                    })
-                  }
-                />
-                <SearchIcon
-                  fontSize="large"
-                  className={
-                    this.state.options.interaction.zoomView
-                      ? "selectedIcon"
-                      : ""
-                  }
-                  onClick={() =>
-                    this.setState({
-                      options: {
-                        ...this.state.options,
-                        interaction: {
-                          ...this.state.options.interaction,
-                          zoomView: !this.state.options.interaction.zoomView,
+                <Tooltip title="Branch Tool">
+                  <CallSplitIcon
+                    fontSize="large"
+                    className={this.state.branchingActive ? "selectedIcon" : ""}
+                    onClick={() =>
+                      this.setState({
+                        branchingActive: !this.state.branchingActive,
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Enable Zoom">
+                  <SearchIcon
+                    fontSize="large"
+                    className={
+                      this.state.options.interaction.zoomView
+                        ? "selectedIcon"
+                        : ""
+                    }
+                    onClick={() =>
+                      this.setState({
+                        options: {
+                          ...this.state.options,
+                          interaction: {
+                            ...this.state.options.interaction,
+                            zoomView: !this.state.options.interaction.zoomView,
+                          },
                         },
-                      },
-                    })
-                  }
-                />
-                <PanToolIcon
-                  fontSize="large"
-                  className={
-                    this.state.options.interaction.dragView
-                      ? "selectedIcon"
-                      : ""
-                  }
-                  onClick={() =>
-                    this.setState({
-                      options: {
-                        ...this.state.options,
-                        interaction: {
-                          ...this.state.options.interaction,
-                          dragView: !this.state.options.interaction.dragView,
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Drag View">
+                  <PanToolIcon
+                    fontSize="large"
+                    className={
+                      this.state.options.interaction.dragView
+                        ? "selectedIcon"
+                        : ""
+                    }
+                    onClick={() =>
+                      this.setState({
+                        options: {
+                          ...this.state.options,
+                          interaction: {
+                            ...this.state.options.interaction,
+                            dragView: !this.state.options.interaction.dragView,
+                          },
                         },
-                      },
-                    })
-                  }
-                />
-                <ReplayIcon fontSize="large" />
+                      })
+                    }
+                  />
+                </Tooltip>
+                <Tooltip title="Reset Graph">
+                  <ReplayIcon fontSize="large" />
+                </Tooltip>
               </Fragment>
             )}
           </Grid>

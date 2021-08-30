@@ -8,9 +8,9 @@ import legislator from "./legislator";
 import loading from "./loading";
 import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
-import org from "./orgs"
+import org from "./orgs";
 import candpac from "./candpac";
-import paccand from "./paccand"
+import paccand from "./paccand";
 import pacid from "./paccommittee";
 
 const reducer = combineReducers({
