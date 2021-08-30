@@ -7,7 +7,7 @@ const Candidate = require('./models/Candidate')
 const Committee = require('./models/Committee')
 const PAC = require('./models/PAC')
 const Individuals = require('./models/Individuals')
-
+const PACSum = require('./models/PACSum')
 //associations could go here!
 
 module.exports = {
@@ -17,6 +17,7 @@ module.exports = {
     Candidate,
     Committee,
     PAC,
-    Individuals
+    Individuals,
+    PACSum
   },
 }

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const Sequelize = require("sequelize");
 const {
-  models: { PAC, Committee, Candidate },
+  models: { PAC, Committee, Candidate, PACSum },
 } = require("../db");
 
 router.get("/", async (req, res, next) => {
@@ -88,7 +88,7 @@ router.get("/pacid/:pacid", async (req, res, next) => {
       })
     );
 
-    let newArray = candidates.sort((a, b) => {
+    let newArray = returnArray.sort((a, b) => {
       if (a.dataValues.total_amount > b.dataValues.total_amount) {
         return -1;
       } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
@@ -98,6 +98,49 @@ router.get("/pacid/:pacid", async (req, res, next) => {
       }
     });
     res.json(newArray);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/pacidsum/:pacid", async (req, res, next) => {
+  try {
+    const candidates = await PACSum.findAll({
+      where: {
+        pacid: req.params.pacid,
+      },
+      attributes: [
+        "pacid",
+        "cid",
+        "amount"
+      ],
+      // group: ["pacid", "cid"],
+    });
+
+    // const returnArray = await Promise.all(
+    //   candidates.map(async (obj) => {
+    //     const candidateData = await Candidate.findOne({
+    //       where: {
+    //         cid: obj.dataValues.cid,
+    //       },
+    //     });
+    //     obj.dataValues.candname = candidateData
+    //       ? candidateData.firstlastp
+    //       : "No data available";
+    //     return obj;
+    //   })
+    // );
+
+    // let newArray = returnArray.sort((a, b) => {
+    //   if (a.dataValues.total_amount > b.dataValues.total_amount) {
+    //     return -1;
+    //   } else if (a.dataValues.total_amount < b.dataValues.total_amount) {
+    //     return 1;
+    //   } else {
+    //     return 0;
+    //   }
+    // });
+    res.json(candidates);
   } catch (err) {
     next(err);
   }
