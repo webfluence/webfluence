@@ -15,6 +15,7 @@ import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
 import { Redirect } from "react-router-dom";
+import history from "../history";
 
 function Copyright() {
   return (
@@ -54,6 +55,9 @@ export const SignIn = (props) => {
   const classes = useStyles();
   const { name, handleSubmit, error } = props;
 
+  // if (props.isAuthenticated) {
+  //   return <Redirect to="/home" />;
+  // } else {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -97,6 +101,7 @@ export const SignIn = (props) => {
             label="Remember me"
           />
           <Button
+            onSubmit={handleSubmit}
             type="submit"
             fullWidth
             variant="contained"
@@ -126,6 +131,7 @@ export const SignIn = (props) => {
     </Container>
   );
 };
+// };
 
 const mapLogin = (state) => {
   return {
@@ -145,7 +151,7 @@ const mapDispatch = (dispatch) => {
           username: evt.target.username.value,
           password: evt.target.password.value,
         };
-        dispatch(authenticate(info, formName));
+        dispatch(authenticate(info, formName, history));
       }
     },
   };
