@@ -14,6 +14,7 @@ import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
 import Avatar from "@material-ui/core/Avatar";
 import { useBreakpoints } from "./hooks/useBreakpoints";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 
 import { CandidateInfo } from "./CandidateInfo";
 import ContributorList from "./ContributorList";
@@ -25,23 +26,44 @@ import Graph from "./Graph";
 import { isLoading } from "../store/loading";
 import { ClipLoader } from "react-spinners";
 import { minHeight } from "@material-ui/system";
+import { isFullscreenThunk } from "../store/fullscreen";
 
 export default function Dashboard() {
   const classes = useStyles();
   const candcontrib = useSelector((state) => state.candcontrib);
   const loading = useSelector((state) => state.loading);
-  const dispatch = useDispatch();
 
+  const fullscreen = useSelector((state) => state.fullscreen);
+  
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(isLoading(false))
   }, [candcontrib]);
+  
+  const handle = useFullScreenHandle();
+  
+  useEffect(() => {
+    
+    if (fullscreen) {
+      handle.enter()
+    }
+    if (!fullscreen && handle.active) {
+      handle.exit()
+    }
+    
+    // fullscreen && handle.active ? handle.enter() : handle.exit()
+    // dispatch(isFullscreenThunk(false))
+  }, [fullscreen])
 
   const paperClass = clsx(classes.paper, classes.margins);
 
   const mobileClass = clsx(classes.paper, classes.margins, classes.mobileWidth);
 
   const breakpoint = useBreakpoints();
-
+  
+  // set is full screen state to true or false
+  
+  
   return (
     <Fragment>
       <Grid style={{ backgroundColor: "#e3e3e3" }}>
@@ -84,7 +106,11 @@ export default function Dashboard() {
                   style={{minHeight: "400px"}}
                 >
                   {Object.keys(candcontrib).length > 0 && !loading ? (
-                    <Graph/>
+                
+                  <FullScreen className='fullscreen-enabled' handle={handle}>
+                      <Graph/>
+                  </FullScreen>
+          
                   ) : (
                     <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}

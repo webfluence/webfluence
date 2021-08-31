@@ -13,6 +13,7 @@ import candpac from "./candpac";
 import paccand from "./paccand";
 import pacid from "./paccommittee";
 import additionalcandcontrib from "./additionalcandcontrib";
+import fullscreen from "./fullscreen";
 
 const reducer = combineReducers({
   auth,
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   candcontrib,
   candindustry,
   loading,
+  fullscreen,
   org,
   candpac,
   paccand,

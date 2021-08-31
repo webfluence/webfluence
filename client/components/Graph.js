@@ -22,6 +22,8 @@ import { setPacCandThunk } from "../store/paccand";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
+import { isFullscreenThunk } from "../store/fullscreen";
+
 
 toast.configure();
 
@@ -105,7 +107,7 @@ let options = {
     selectConnectedEdges: true,
     zoomView: false,
     dragView: false,
-    navigationButtons: true,
+    navigationButtons: false,
     keyboard: true,
   },
 };
@@ -185,25 +187,14 @@ export class NetworkGraph extends Component {
       select: function (event) {
         var { nodes, edges } = event;
       },
-      hoverNode: function (event) {
-        this.neighbourhoodHighlight(event, this.props.searchData);
-      },
-      blurNode: function (event) {
-        this.neighbourhoodHighlightHide(event);
-      },
       click: function (event) {
         this.handleNodeClick(event);
       },
     };
     this.state = { graph: {} };
     this.measure = this.measure.bind(this);
-    this.events.hoverNode = this.events.hoverNode.bind(this);
-    this.events.blurNode = this.events.blurNode.bind(this);
     this.events.click = this.events.click.bind(this);
-    this.neighbourhoodHighlight = this.neighbourhoodHighlight.bind(this);
     this.handleNodeClick = this.handleNodeClick.bind(this);
-    this.neighbourhoodHighlightHide =
-      this.neighbourhoodHighlightHide.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.openModal = this.openModal.bind(this);
     this.createContribNode = this.createContribNode.bind(this);
@@ -219,6 +210,7 @@ export class NetworkGraph extends Component {
       this.setState({
         graph: newGraph,
         style: { width: "100%", height: "600px" },
+        fullscreenStyle: { width: "100%", height: "100%" },
         network: null,
       });
     }
@@ -330,151 +322,6 @@ export class NetworkGraph extends Component {
     }
   }
 
-  neighbourhoodHighlight(params, searchData) {
-    let allNodes = this.state.graph.nodes;
-    // let cloneNodes = allNodes.map(a => {return {...a}});
-    let Nodes = new this.vis.DataSet(allNodes);
-    let cloneNodes = Nodes.get({ returnType: "Object" });
-
-    this.state.network.canvas.body.container.style.cursor = "pointer";
-    // this.setState({cursor});
-
-    if (params.node !== undefined) {
-      highlightActive = true;
-      let i, j;
-      let selectedNode = params.node;
-      let degrees = 1;
-
-      for (var nodeId in cloneNodes) {
-        cloneNodes[nodeId].color = "rgba(200,200,200,0.5)";
-        if (cloneNodes[nodeId].hiddenLabel === undefined) {
-          cloneNodes[nodeId].hiddenLabel = cloneNodes[nodeId].label;
-          cloneNodes[nodeId].label = undefined;
-        }
-      }
-
-      let connectedNodes = this.state.network.getConnectedNodes(selectedNode);
-      let allConnectedNodes = [];
-      // get the second degree nodes
-      for (i = 1; i < degrees; i++) {
-        for (j = 0; j < connectedNodes.length; j++) {
-          allConnectedNodes = allConnectedNodes.concat(
-            this.state.network.getConnectedNodes(connectedNodes[j])
-          );
-        }
-      }
-
-      // all second degree nodes get a different color and their label back
-      for (i = 0; i < allConnectedNodes.length; i++) {
-        cloneNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
-        if (cloneNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
-          cloneNodes[allConnectedNodes[i]].label =
-            cloneNodes[allConnectedNodes[i]].hiddenLabel;
-          cloneNodes[allConnectedNodes[i]].hiddenLabel = undefined;
-        }
-      }
-
-      // all first degree nodes get their own color and their label back
-      for (let i = 0; i < connectedNodes.length; i++) {
-        cloneNodes[connectedNodes[i]].color = undefined;
-        if (cloneNodes[connectedNodes[i]]["hiddenLabel"] !== undefined) {
-          cloneNodes[connectedNodes[i]].label =
-            cloneNodes[connectedNodes[i]]["hiddenLabel"];
-          const fontSize = this.state.network.body.nodes;
-          fontSize[connectedNodes[i]].options.font.size = 15;
-          cloneNodes[connectedNodes[i]]["hiddenLabel"] = undefined;
-        }
-      }
-
-      // the main node gets its own color and its label back.
-      cloneNodes[selectedNode].color = undefined;
-      if (cloneNodes[selectedNode]["hiddenLabel"] !== undefined) {
-        cloneNodes[selectedNode].label =
-          cloneNodes[selectedNode]["hiddenLabel"];
-        const fontSize = this.state.network.body.nodes;
-        fontSize[selectedNode].options.font.size = 15;
-        // this.setState({fontSize})
-        cloneNodes[selectedNode]["hiddenLabel"] = undefined;
-      }
-    } else if (highlightActive === true) {
-      // reset all nodes
-      for (let nodeId in cloneNodes) {
-        cloneNodes[nodeId].color = undefined;
-        if (cloneNodes[nodeId]["hiddenLabel"] !== undefined) {
-          cloneNodes[nodeId].label = cloneNodes[nodeId]["hiddenLabel"];
-          const fontSize = this.state.network.body.nodes;
-          fontSize[nodeId].options.font.size = 15;
-          this.setState({ fontSize });
-          cloneNodes[nodeId]["hiddenLabel"] = undefined;
-        }
-      }
-      highlightActive = false;
-    }
-
-    let updateArray = [];
-    for (let nodeId in cloneNodes) {
-      if (cloneNodes.hasOwnProperty(nodeId)) {
-        updateArray.push(cloneNodes[nodeId]);
-      }
-    }
-    if (this.mounted) {
-      this.setState({
-        graph: {
-          nodes: updateArray,
-          edges: this.state.graph.edges,
-        },
-      });
-    }
-  }
-
-  neighbourhoodHighlightHide(params) {
-    let allNodes = this.state.graph.nodes;
-
-    let Nodes = new this.vis.DataSet(allNodes);
-    let allNodess = Nodes.get({ returnType: "Object" });
-    // let allNodess = allNodes.map(a => {return {...a}})
-    this.state.network.canvas.body.container.style.cursor = "default";
-
-    for (var nodeId in allNodess) {
-      allNodess[nodeId].color = "rgba(200,200,200,0.5)";
-      if (allNodess[nodeId].hiddenLabel === undefined) {
-        allNodess[nodeId].hiddenLabel = allNodess[nodeId].label;
-        allNodess[nodeId].label = undefined;
-      }
-    }
-
-    highlightActive = true;
-    if (highlightActive === true) {
-      // reset all nodes
-      for (var nodeIds in allNodess) {
-        allNodess[nodeIds].color = undefined;
-        if (allNodess[nodeIds].hiddenLabel !== undefined) {
-          allNodess[nodeIds].label = allNodess[nodeIds].hiddenLabel;
-          const fontSize = this.state.network.body.nodes;
-          fontSize[nodeIds].options.font.size = 15;
-          this.setState({ fontSize });
-          allNodess[nodeIds].hiddenLabel = undefined;
-        }
-      }
-      highlightActive = false;
-    }
-
-    var updateArray = [];
-    for (var nodeIde in allNodess) {
-      if (allNodess.hasOwnProperty(nodeIde)) {
-        updateArray.push(allNodess[nodeIde]);
-      }
-    }
-    if (this.mounted) {
-      this.setState({
-        graph: {
-          nodes: updateArray,
-          edges: this.state.graph.edges,
-        },
-      });
-    }
-  }
-
   getNetwork = (data) => {
     this.setState({ network: data });
   };
@@ -483,117 +330,129 @@ export class NetworkGraph extends Component {
 
   // modal functions
   openModal() {
-    this.setState({ Modalopen: true });
+    // this.setState({ Modalopen: true });
+    this.props.isFullscreenThunk(true)
   }
+  
+  // openModal = useFullScreenHandle()
 
   closeModal() {
-    this.setState({ Modalopen: false });
+    // this.setState({ Modalopen: false });
+    this.props.isFullscreenThunk(false)
   }
 
   render() {
     return (
-      <div>
-        {/* fullscreen graph modal */}
-        <Modal
-          isOpen={this.state.Modalopen}
-          onRequestClose={this.closeModal}
-          style={customStyles}
-          zIndex="9999"
-          contentLabel="Example Modal"
-          ariaHideApp={false}
-        >
-          {/* fullscreen graph */}
-          <Grid>
-            {this.state.options && (
-              <Fragment>
-                <Tooltip title="Exit Fullscreen">
-                  <FullscreenExitIcon
-                    fontSize="large"
-                    onClick={this.closeModal}
-                  />
-                </Tooltip>
-                <Tooltip title="Branch Tool">
-                  <CallSplitIcon
-                    fontSize="large"
-                    className={this.state.branchingActive ? "selectedIcon" : ""}
-                    onClick={() =>
-                      this.setState({
-                        branchingActive: !this.state.branchingActive,
-                      })
-                    }
-                  />
-                </Tooltip>
-                <Tooltip title="Enable Zoom">
-                  <SearchIcon
-                    fontSize="large"
-                    className={
-                      this.state.options.interaction.zoomView
-                        ? "selectedIcon"
-                        : ""
-                    }
-                    onClick={() =>
-                      this.setState({
-                        options: {
-                          ...this.state.options,
-                          interaction: {
-                            ...this.state.options.interaction,
-                            zoomView: !this.state.options.interaction.zoomView,
-                          },
-                        },
-                      })
-                    }
-                  />
-                </Tooltip>
-                <Tooltip title="Drag View">
-                  <PanToolIcon
-                    fontSize="large"
-                    className={
-                      this.state.options.interaction.dragView
-                        ? "selectedIcon"
-                        : ""
-                    }
-                    onClick={() =>
-                      this.setState({
-                        options: {
-                          ...this.state.options,
-                          interaction: {
-                            ...this.state.options.interaction,
-                            dragView: !this.state.options.interaction.dragView,
-                          },
-                        },
-                      })
-                    }
-                  />
-                </Tooltip>
-                <Tooltip title="Reset">
-                  <ReplayIcon fontSize="large" />
-                </Tooltip>
-                {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
-              </Fragment>
-            )}
-          </Grid>
-          {/* fullscreen graph */}
-          {Object.keys(this.props.candcontrib).length &&
-            Object.keys(this.state.graph).length && (
-              <Graph
-                graph={this.state.graph}
-                style={this.state.fullscreenStyle}
-                options={this.state.options}
-                getNetwork={this.getNetwork}
-                getEdges={this.getEdges}
-                getNodes={this.getNodes}
-                events={this.events}
-                vis={(vis) => (this.vis = vis)}
-              />
-            )}
-        </Modal>
+      // <div>
+      //   {/* fullscreen graph modal */}
+      //   <Modal
+      //     isOpen={this.state.Modalopen}
+      //     onRequestClose={this.closeModal}
+      //     style={customStyles}
+      //     zIndex="9999"
+      //     contentLabel="Example Modal"
+      //     ariaHideApp={false}
+      //   >
+      //     {/* fullscreen graph */}
+      //     <Grid>
+      //       {this.state.options && (
+      //         <Fragment>
+      //           <Tooltip title="Exit Fullscreen">
+      //             <FullscreenExitIcon
+      //               fontSize="large"
+      //               onClick={this.closeModal}
+      //             />
+      //           </Tooltip>
+      //           <Tooltip title="Branch Tool">
+      //             <CallSplitIcon
+      //               fontSize="large"
+      //               className={this.state.branchingActive ? "selectedIcon" : ""}
+      //               onClick={() =>
+      //                 this.setState({
+      //                   branchingActive: !this.state.branchingActive,
+      //                 })
+      //               }
+      //             />
+      //           </Tooltip>
+      //           <Tooltip title="Enable Zoom">
+      //             <SearchIcon
+      //               fontSize="large"
+      //               className={
+      //                 this.state.options.interaction.zoomView
+      //                   ? "selectedIcon"
+      //                   : ""
+      //               }
+      //               onClick={() =>
+      //                 this.setState({
+      //                   options: {
+      //                     ...this.state.options,
+      //                     interaction: {
+      //                       ...this.state.options.interaction,
+      //                       zoomView: !this.state.options.interaction.zoomView,
+      //                     },
+      //                   },
+      //                 })
+      //               }
+      //             />
+      //           </Tooltip>
+      //           <Tooltip title="Drag View">
+      //             <PanToolIcon
+      //               fontSize="large"
+      //               className={
+      //                 this.state.options.interaction.dragView
+      //                   ? "selectedIcon"
+      //                   : ""
+      //               }
+      //               onClick={() =>
+      //                 this.setState({
+      //                   options: {
+      //                     ...this.state.options,
+      //                     interaction: {
+      //                       ...this.state.options.interaction,
+      //                       dragView: !this.state.options.interaction.dragView,
+      //                     },
+      //                   },
+      //                 })
+      //               }
+      //             />
+      //           </Tooltip>
+      //           <Tooltip title="Reset">
+      //             <ReplayIcon fontSize="large" />
+      //           </Tooltip>
+      //           {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
+      //         </Fragment>
+      //       )}
+      //     </Grid>
+      //     {/* fullscreen graph */}
+      //     {Object.keys(this.props.candcontrib).length &&
+      //       Object.keys(this.state.graph).length && (
+      //         <Graph
+      //           graph={this.state.graph}
+      //           style={this.state.fullscreenStyle}
+      //           options={this.state.options}
+      //           getNetwork={this.getNetwork}
+      //           getEdges={this.getEdges}
+      //           getNodes={this.getNodes}
+      //           events={this.events}
+      //           vis={(vis) => (this.vis = vis)}
+      //         />
+      //       )}
+      //   </Modal>
 
         <Fragment>
           {/* dashboard graph */}
-          <Grid style={{position: "relative"}}>
+          <Grid style={{position: "relative", width: "100%"}}>
+            { !this.props.fullscreen ? (
             <Tooltip title="Enter Fullscreen">
               <FullscreenIcon fontSize="large" onClick={this.openModal} />
-            </Tooltip>
+            </Tooltip>) : (
+            <Tooltip title="Exit Fullscreen">
+                <FullscreenExitIcon
+                    fontSize="large"
+                    onClick={this.closeModal}
+                />
+                </Tooltip>)}
+            
             {this.state.options && (
               <Fragment>
                 <Tooltip title="Branch Tool">
@@ -661,9 +520,10 @@ export class NetworkGraph extends Component {
 
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
+              <Grid style={this.props.fullscreen ? this.state.fullscreenStyle : this.state.style}>
               <Graph
                 graph={this.state.graph}
-                style={this.state.style}
+                // style={this.state.style}
                 options={this.state.options}
                 getNetwork={this.getNetwork}
                 getEdges={this.getEdges}
@@ -671,9 +531,10 @@ export class NetworkGraph extends Component {
                 events={this.events}
                 vis={(vis) => (this.vis = vis)}
               />
+              </Grid>
             )}
         </Fragment>
-      </div>
+      // </div>
     );
   }
 }
@@ -685,6 +546,7 @@ const mapStateToProps = (state) => {
     loading: state.loading,
     pacid: state.pacid,
     paccand: state.paccand,
+    fullscreen: state.fullscreen
   };
 };
 
@@ -695,6 +557,7 @@ const mapDispatchToProps = (dispatch) => {
     setPacIDThunk: (name) => dispatch(setPacIDThunk(name)), 
     setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
     setAdditionalCandContributorsThunk: (cid) => dispatch(setAdditionalCandContributorsThunk(cid)),
+    isFullscreenThunk: (bool) => dispatch(isFullscreenThunk(bool))
   };
 };
 
