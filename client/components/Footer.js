@@ -29,7 +29,7 @@ export default function Footer() {
         <Grid style={matchs ? {display: 'flex', justifyContent: 'flex-end', alignItems: "baseline"} : {display: 'flex', justifyContent: 'center'}}>
           <Button href="/about" style={style.button}>About</Button>
           <Button href="/faq" style={style.button}>FAQs</Button>
-          <Button href="/contact" style={style.button}>Contact</Button>
+          <Button href="/contact" style={style.button}>About Us</Button>
         </Grid>
       </Grid>
 
