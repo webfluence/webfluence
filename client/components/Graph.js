@@ -574,7 +574,7 @@ export class NetworkGraph extends Component {
 
         <Fragment>
           {/* dashboard graph */}
-          <Grid>
+          <Grid style={{position: "relative"}}>
             <Tooltip title="Enter Fullscreen">
               <FullscreenIcon fontSize="large" onClick={this.openModal} />
             </Tooltip>
@@ -636,7 +636,9 @@ export class NetworkGraph extends Component {
                 <Tooltip title="Reset Graph">
                   <ReplayIcon fontSize="large" />
                 </Tooltip>
-                {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
+                <Grid style={{position: "absolute", top: 5, right: 5}}>
+                {this.state.branchLoading && <ClipLoader size={40} color="darkgray" loading={this.state.branchLoading}/>}
+                </Grid>
               </Fragment>
             )}
           </Grid>
