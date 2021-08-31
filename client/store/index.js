@@ -12,6 +12,7 @@ import org from "./orgs";
 import candpac from "./candpac";
 import paccand from "./paccand";
 import pacid from "./paccommittee";
+import additionalcandcontrib from "./additionalcandcontrib";
 
 const reducer = combineReducers({
   auth,
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   candpac,
   paccand,
   pacid,
+  additionalcandcontrib
 });
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
