@@ -30,7 +30,8 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <Switch>
-            <Route path="/home" component={Home} />
+            <Route exact path="/" component={Home} />
+            <Route path="/home" exact component={Home} />
             {/* <Redirect to="/home" /> */}
             <Route path="/graph" component={Graph} />
             <Route exact path="/dashboard" component={Dashboard} />

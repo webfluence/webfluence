@@ -6,10 +6,11 @@ import SignIn from "./SignIn";
 import { useHistory } from "react-router-dom";
 
 const Navbar = ({ handleClick, isLoggedIn }) => (
-
   <div className="navbar">
     <Link to="/">
-    <h1 className="logo" style={{color: 'black'}}>webfluence</h1>
+      <h1 className="logo" style={{ color: "black" }}>
+        webfluence
+      </h1>
     </Link>
     <nav>
       {isLoggedIn ? (

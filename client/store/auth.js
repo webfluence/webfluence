@@ -28,11 +28,12 @@ export const me = () => async (dispatch) => {
   }
 };
 
-export const authenticate = (info, method) => async (dispatch) => {
+export const authenticate = (info, method, history) => async (dispatch) => {
   try {
     const res = await axios.post(`/auth/${method}`, info);
     window.localStorage.setItem(TOKEN, res.data.token);
     dispatch(me());
+    history.push("/home");
   } catch (authError) {
     return dispatch(setAuth({ error: authError }));
   }
@@ -40,7 +41,7 @@ export const authenticate = (info, method) => async (dispatch) => {
 
 export const logout = () => {
   window.localStorage.removeItem(TOKEN);
-  history.push("/login");
+  history.push("/");
   return {
     type: SET_AUTH,
     auth: {},
