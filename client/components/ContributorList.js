@@ -16,6 +16,8 @@ import { Typography } from '@material-ui/core';
 import Modal from 'react-modal'
 import  { org }  from '../store/orgs';
 import { getOrgThunk } from '../store/orgs';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 const columns = [
   { id: 'contributor', label: 'Contributor', minWidth: 170 },
@@ -82,6 +84,7 @@ const customStyles = {
     width: "90vw",
     height: "90vh",
     overflow: "hidden",
+    position: "relative"
   },
 };
 
@@ -126,6 +129,7 @@ export default function StickyHeadTable() {
     contentLabel="Example Modal"
     ariaHideApp={false}
   >
+    <CloseIcon fontSize="large" onClick={contribCloseModal} style={{position: "absolute", top: "15px", right: "15px"}}/>
     <ContribModal selectedContrib={selectedContrib} org={org} />
   </Modal>
     <Paper className={classes.root}>

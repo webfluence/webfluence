@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import { ClipLoader } from "react-spinners";
 
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -72,13 +73,15 @@ export default function ContribModal(props) {
   return (
     <Fragment>
         
-      <Grid style={{ display: "flex" }}>
+      <Grid style={{ display: "flex", justifyContent: "space-between" }}>
+        <Grid style={{display: "flex"}}>
         <Avatar
           variant="square"
           style={{ height: "150px", width: "150px", marginRight: "20px", marginBottom: "40px" }}
           src={`//logo.clearbit.com/${imgSrcFormat(props.selectedContrib)}.com`}
         />
         <h1>{props.selectedContrib}</h1>
+        </Grid>
       </Grid>
       {Object.keys(props.org).length > 0 ?
       <TableContainer component={Paper}>
