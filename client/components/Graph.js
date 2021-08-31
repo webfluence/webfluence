@@ -5,6 +5,7 @@ import data from "../dummyData/legislatorDummyData";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
 import { setPacIDThunk } from "../store/paccommittee";
+import { isLoading } from "../store/loading";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
 import ReplayIcon from "@material-ui/icons/Replay";
@@ -19,6 +20,7 @@ import { setCandPacThunk } from "../store/candpac";
 import { setPacCandThunk } from "../store/paccand";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 
 toast.configure();
 
@@ -279,7 +281,11 @@ export class NetworkGraph extends Component {
   async handleContribNodeClick(params) {
     await this.props.setPacIDThunk(params.nodes[0]);
     if (this.props.pacid) {
+      this.setState({branchLoading: true})
+      console.log(`this.state.branchLoading before`, this.state.branchLoading)
       await this.props.setPacCandThunk(this.props.pacid.cmte_id);
+      this.setState({branchLoading: false})
+      console.log(`this.state.branchLoading after`, this.state.branchLoading)
       const topTenCands = this.props.paccand.slice(0, 10);
       topTenCands.forEach((cand) => {
         this.createNode(cand.cid, cand.candname);
@@ -547,6 +553,7 @@ export class NetworkGraph extends Component {
                 <Tooltip title="Reset">
                   <ReplayIcon fontSize="large" />
                 </Tooltip>
+                {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
               </Fragment>
             )}
           </Grid>
@@ -629,6 +636,7 @@ export class NetworkGraph extends Component {
                 <Tooltip title="Reset Graph">
                   <ReplayIcon fontSize="large" />
                 </Tooltip>
+                {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
               </Fragment>
             )}
           </Grid>
@@ -663,6 +671,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    isLoading: (bool) => dispatch(isLoading(bool)), 
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
     setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
     setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
