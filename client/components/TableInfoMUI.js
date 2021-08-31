@@ -63,7 +63,6 @@ export default function TableInfoMUI(props) {
     setOpen(false);
   };
 
-  console.log(props.text);
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
