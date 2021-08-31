@@ -14,7 +14,7 @@ const setPaccand = (cands) => ({
 
 export const setPacCandThunk = (pacid) => async (dispatch) => {
     try {
-      const { data } = await axios.get(`/api/pac/pacid/${pacid}`);
+      const { data } = await axios.get(`/api/pac/pacidsum/${pacid}`);
       dispatch(setPaccand(data));
     } catch (err) {
       console.error(err);
