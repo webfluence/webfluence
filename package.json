@@ -39,7 +39,6 @@
     "react-toastify": "^8.0.2",
     "recharts": "^2.1.0",
     "sequelize": "^6.3.5",
-    "typescript": "^4.3.5",
     "vis-react": "^0.5.1"
   },
   "devDependencies": {
