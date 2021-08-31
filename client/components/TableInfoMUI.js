@@ -128,11 +128,6 @@ export default function TableInfoMUI(props) {
             </Typography>
           </DialogContent>
         )}
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Exit
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
