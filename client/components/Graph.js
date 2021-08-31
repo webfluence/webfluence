@@ -4,6 +4,7 @@ var highlightActive = false;
 import data from "../dummyData/legislatorDummyData";
 import { connect } from "react-redux";
 import { setCandContributorsThunk } from "../store/candcontrib";
+import { setAdditionalCandContributorsThunk } from "../store/additionalcandcontrib";
 import { setPacIDThunk } from "../store/paccommittee";
 import { isLoading } from "../store/loading";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
@@ -110,6 +111,8 @@ let options = {
 };
 
 function createGraph(candcontrib) {
+  
+  console.log("CREATING NEW GRAPH")
   let nodes = [];
   let edges = [];
 
@@ -129,7 +132,6 @@ function createGraph(candcontrib) {
   // ROOT NODE
   if (Object.keys(data).length) {
     let newNode = {};
-    console.log(`data.response`, data.response);
     newNode.color = blueOrRed;
     newNode.label = data.response.contributors.attributes.cand_name;
     newNode.id = data.response.contributors.attributes.cid;
@@ -204,7 +206,8 @@ export class NetworkGraph extends Component {
       this.neighbourhoodHighlightHide.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.openModal = this.openModal.bind(this);
-    this.createNode = this.createNode.bind(this);
+    this.createContribNode = this.createContribNode.bind(this);
+    this.createCandNode = this.createCandNode.bind(this)
     this.createEdge = this.createEdge.bind(this);
     this.handleCandNodeClick = this.handleCandNodeClick.bind(this);
     this.handleContribNodeClick = this.handleContribNodeClick.bind(this);
@@ -223,11 +226,6 @@ export class NetworkGraph extends Component {
 
   componentDidMount() {
     // // loop over contributors array and add the pacId to each contributor's attributes list
-    // this.props.candcontrib.response.contributors.contributor.forEach((contrib) => {
-    //   this.props.setPacIDThunk(contrib.attributes.org_name)
-    //   contrib.attributes.pacid = this.props.pacid
-    // })
-    // console.log(`this.props.candcontrib`, this.props.candcontrib.response.contributors.contributor)
 
     this.mounted = true;
     window.addEventListener("resize", this.measure);
@@ -256,7 +254,7 @@ export class NetworkGraph extends Component {
     this.state.network.body.data.edges.add([{ from: fromId, to: toId }]);
   }
 
-  createNode(id, label) {
+  createCandNode(id, label) {
     const demOrRepub = label[label.length - 2];
     const blueOrRed = demOrRepub === "D" ? "#364aff" : "#ff3636";
     let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
@@ -264,14 +262,29 @@ export class NetworkGraph extends Component {
       this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
   }
 
+  createContribNode(contributor, totalFunds ) {
+    let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
+    if (existingNodes.indexOf(contributor.attributes.org_name) === -1) { 
+      
+      let newNode = {};
+      // newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
+     newNode.color = "#78E983";
+     newNode.id = contributor.attributes.org_name;
+     newNode.label = contributor.attributes.org_name;
+     newNode.size = (contributor.attributes.total / totalFunds) * 100;
+      
+      this.state.network.body.data.nodes.add(newNode)
+    
+    }
+    
+    
+  }
+
   async handleNodeClick(params) {
     if (this.state.branchingActive && params.nodes.length) {
-      console.log(params.nodes[0]);
       if (params.nodes[0][0] === "N" && !isNaN(params.nodes[0][1])) {
         await this.handleCandNodeClick(params);
-        console.log("handleCand");
       } else {
-        console.log("handeContrib");
         await this.handleContribNodeClick(params);
       }
     }
@@ -282,18 +295,13 @@ export class NetworkGraph extends Component {
     await this.props.setPacIDThunk(params.nodes[0]);
     if (this.props.pacid) {
       this.setState({branchLoading: true})
-      console.log(`this.state.branchLoading before`, this.state.branchLoading)
       await this.props.setPacCandThunk(this.props.pacid.cmte_id);
       this.setState({branchLoading: false})
-      console.log(`this.state.branchLoading after`, this.state.branchLoading)
       const topTenCands = this.props.paccand.slice(0, 10);
       topTenCands.forEach((cand) => {
-        this.createNode(cand.cid, cand.candname);
+        this.createCandNode(cand.cid, cand.candname);
         this.createEdge(params.nodes[0], cand.cid);
       });
-      console.log("this.graph", this.state.graph);
-      // console.log("this.network", this.state.network);
-      // this.state.network.redraw();
     } else {
       // toasify notification
       notify();
@@ -302,12 +310,19 @@ export class NetworkGraph extends Component {
 
   //here is where we get the contirbutors for a newly selected legislatior
   async handleCandNodeClick(params) {
-    await this.props.setCandContributorsThunk(params.nodes[0]);
-    if (this.props.candcontrib) {
-      const topTenContribs = this.props.candcontrib.slice(0, 10);
+    this.setState({branchLoading: true})
+    await this.props.setAdditionalCandContributorsThunk(params.nodes[0]);
+    this.setState({branchLoading: false})
+    if (this.props.additionalcandcontrib) {
+      const topTenContribs = this.props.additionalcandcontrib.response.contributors.contributor
+      
+      const totalFunds = this.props.additionalcandcontrib.response.contributors.contributor.reduce(
+        (accum, contributor) => accum + parseInt(contributor.attributes.total),
+        0
+      );
       topTenContribs.forEach((contrib) => {
-        this.createNode(contrib.cid, contrib.candname);
-        this.createEdge(params.nodes[0], contrib.cid);
+        this.createContribNode(contrib, totalFunds);
+        this.createEdge(params.nodes[0], contrib.attributes.org_name);
       });
     } else {
       // toasify notification
@@ -557,6 +572,7 @@ export class NetworkGraph extends Component {
               </Fragment>
             )}
           </Grid>
+          {/* fullscreen graph */}
           {Object.keys(this.props.candcontrib).length &&
             Object.keys(this.state.graph).length && (
               <Graph
@@ -665,6 +681,7 @@ export class NetworkGraph extends Component {
 const mapStateToProps = (state) => {
   return {
     candcontrib: state.candcontrib,
+    additionalcandcontrib: state.additionalcandcontrib,
     loading: state.loading,
     pacid: state.pacid,
     paccand: state.paccand,
@@ -675,8 +692,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     isLoading: (bool) => dispatch(isLoading(bool)), 
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
-    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)), 
     setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
+    setAdditionalCandContributorsThunk: (cid) => dispatch(setAdditionalCandContributorsThunk(cid)),
   };
 };
 
