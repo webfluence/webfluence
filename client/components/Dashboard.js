@@ -37,23 +37,23 @@ export default function Dashboard() {
   const loading = useSelector((state) => state.loading);
 
   const fullscreen = useSelector((state) => state.fullscreen);
-  
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(isLoading(false))
   }, [candcontrib]);
-  
+
   const handle = useFullScreenHandle();
-  
+
   useEffect(() => {
-    
+
     if (fullscreen) {
       handle.enter()
     }
     if (!fullscreen && handle.active) {
       handle.exit()
     }
-    
+
     // fullscreen && handle.active ? handle.enter() : handle.exit()
     // dispatch(isFullscreenThunk(false))
 
@@ -64,7 +64,7 @@ export default function Dashboard() {
   const mobileClass = clsx(classes.paper, classes.margins, classes.mobileWidth);
 
   const breakpoint = useBreakpoints();
-  
+
   // set is full screen state to true or false
 
   const [open, setOpen] = useState(false);
@@ -75,8 +75,8 @@ export default function Dashboard() {
   const handleClose = () => {
     setOpen(false);
   };
-  
-  
+
+
   return (
     <Fragment>
       <Grid style={{ backgroundColor: "#e3e3e3" }}>
@@ -112,7 +112,7 @@ export default function Dashboard() {
                 </Paper>
               </Grid>
               <Grid style={{position: "relative"}}>
-                <Paper 
+                <Paper
                   className={
                     breakpoint.isTabletFloor ? mobileClass : paperClass
                   }
@@ -120,10 +120,10 @@ export default function Dashboard() {
                 >
                   {Object.keys(candcontrib).length > 0 && !loading ? (
                     <FullScreen className='fullscreen-enabled' handle={handle}>
-                      <InfoDialogMUI/>
+                      <InfoDialogMUI style={{zIndex: 9999}}/>
                       <Graph/>
                   </FullScreen>
-          
+
                   ) : (
                     <ClipLoader color={"darkgray"} loading={loading} size={200} />
                   )}

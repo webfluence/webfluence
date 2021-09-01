@@ -74,7 +74,7 @@ export default function InfoDialogMUI() {
       <HelpOutlineIcon fontSize="large" onClick={handleClickOpen} />
       </Button>
       </Grid>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{zIndex: 1000}}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Understanding the Graph
         </DialogTitle>
@@ -82,7 +82,7 @@ export default function InfoDialogMUI() {
           <Typography gutterBottom>
             The network graph shows the relationships between federal legislators/candidates (blue or red) and the organizations who donated to their election campaigns (green). Not all orginizations donated directly to legislators/candidates, but their employees did. Some organizations are political action committees (PACs) and some are businesses/organizations which have their own PAC associated with them by the FEC.
           </Typography>
-          
+
           <table>
             <thead>
             <tr>

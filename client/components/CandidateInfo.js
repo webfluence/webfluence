@@ -7,6 +7,8 @@ import { useBreakpoints } from "./hooks/useBreakpoints";
 
 export const CandidateInfo = () => {
   const legislator = useSelector((state) => state.legislator);
+  const candcontrib = useSelector((state) => state.candcontrib);
+
   const name = legislator.name.official_full;
   const party = legislator.terms[legislator.terms.length - 1].party[0];
   const repOrSen =
@@ -105,6 +107,18 @@ export const CandidateInfo = () => {
             {"Website:  "}
             <a target="_blank" href={url}>
               {url}
+            </a>
+          </Typography>
+          <Typography
+            style={
+              breakpoint.isTabletFloor
+                ? { fontSize: "16px" }
+                : { fontSize: "20px" }
+            }
+          >
+            {"Source:  "}
+            <a target="_blank" href={candcontrib.response.contributors.attributes.source}>
+              opensecrets.org
             </a>
           </Typography>
         </Grid>
