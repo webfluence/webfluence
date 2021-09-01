@@ -13,15 +13,18 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
 import Avatar from "@material-ui/core/Avatar";
+import Tooltip from "@material-ui/core/Tooltip";
 import { useBreakpoints } from "./hooks/useBreakpoints";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import { CandidateInfo } from "./CandidateInfo";
 import ContributorList from "./ContributorList";
 import Footer from "./Footer";
-
+//
 import SearchBar from "./SearchBar";
 import Graph from "./Graph";
+import InfoDialogMUI from "./InfoDialogMUI";
 
 import { isLoading } from "../store/loading";
 import { ClipLoader } from "react-spinners";
@@ -53,6 +56,7 @@ export default function Dashboard() {
     
     // fullscreen && handle.active ? handle.enter() : handle.exit()
     // dispatch(isFullscreenThunk(false))
+
   }, [fullscreen])
 
   const paperClass = clsx(classes.paper, classes.margins);
@@ -62,6 +66,15 @@ export default function Dashboard() {
   const breakpoint = useBreakpoints();
   
   // set is full screen state to true or false
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   
   return (
@@ -98,16 +111,16 @@ export default function Dashboard() {
                   )}
                 </Paper>
               </Grid>
-              <Grid>
-                <Paper
+              <Grid style={{position: "relative"}}>
+                <Paper 
                   className={
                     breakpoint.isTabletFloor ? mobileClass : paperClass
                   }
                   style={{minHeight: "400px"}}
                 >
                   {Object.keys(candcontrib).length > 0 && !loading ? (
-                
-                  <FullScreen className='fullscreen-enabled' handle={handle}>
+                    <FullScreen className='fullscreen-enabled' handle={handle}>
+                      <InfoDialogMUI/>
                       <Graph/>
                   </FullScreen>
           
