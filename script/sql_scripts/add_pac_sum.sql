@@ -1,0 +1,1 @@
+INSERT INTO pacs_sums (pacid, cid, amount) SELECT pacid, cid, SUM(amount) FROM pacs GROUP BY pacid, cid
