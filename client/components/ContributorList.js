@@ -10,14 +10,14 @@ import TableHead from "@material-ui/core/TableHead";
 import Avatar from "@material-ui/core/Avatar";
 import Grid from "@material-ui/core/Grid";
 // import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import ContribModal from './ContribModal';
-import { Typography } from '@material-ui/core';
-import Modal from 'react-modal'
-import  { org }  from '../store/orgs';
-import { getOrgThunk } from '../store/orgs';
-import CloseIcon from '@material-ui/icons/Close';
-
+import TableRow from "@material-ui/core/TableRow";
+import ContribModal from "./ContribModal";
+import { Typography } from "@material-ui/core";
+import Modal from "react-modal";
+import { org } from "../store/orgs";
+import { getOrgThunk } from "../store/orgs";
+import CloseIcon from "@material-ui/icons/Close";
+import TableInfoMUI from "./TableInfoMUI";
 
 const columns = [
   { id: "contributor", label: "Contributor", minWidth: 170 },
@@ -84,7 +84,7 @@ const customStyles = {
     width: "90vw",
     height: "90vh",
     overflow: "hidden",
-    position: "relative"
+    position: "relative",
   },
 };
 
@@ -128,54 +128,68 @@ export default function StickyHeadTable() {
 
   return (
     <Fragment>
-    {/* contrib modal */}
-    <Modal
-    isOpen={isModalOpen}
-    onRequestClose={contribCloseModal}
-    style={customStyles}
-    zIndex="9999"
-    contentLabel="Example Modal"
-    ariaHideApp={false}
-  >
-    <CloseIcon fontSize="large" onClick={contribCloseModal} style={{position: "absolute", top: "15px", right: "15px"}}/>
-    <ContribModal selectedContrib={selectedContrib} org={org} />
-  </Modal>
-    <Paper className={classes.root}>
-      {/* <Typography>These tables list the top donors to candidates in the 2021 - 2022 election cycle. The organizations themselves did not donate, rather the money came from the organizations' PACs, their individual members or employees or owners, and those individuals' immediate families. Organization totals include subsidiaries and affiliates.</Typography> */}
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table" >
-          <TableHead>
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth, fontSize: "18px", zIndex: "0" }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.contributor} onClick={() => handleSelect(row.contributor)}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+      {/* contrib modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={contribCloseModal}
+        style={customStyles}
+        zIndex="9999"
+        contentLabel="Example Modal"
+        ariaHideApp={false}
+      >
+        <CloseIcon
+          fontSize="large"
+          onClick={contribCloseModal}
+          style={{ position: "absolute", top: "15px", right: "15px" }}
+        />
+        <ContribModal selectedContrib={selectedContrib} org={org} />
+      </Modal>
+      <Paper className={classes.root}>
+        {/* <Typography>These tables list the top donors to candidates in the 2021 - 2022 election cycle. The organizations themselves did not donate, rather the money came from the organizations' PACs, their individual members or employees or owners, and those individuals' immediate families. Organization totals include subsidiaries and affiliates.</Typography> */}
+        <TableContainer className={classes.container}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{
+                      minWidth: column.minWidth,
+                      fontSize: "18px",
+                      zIndex: "0",
+                    }}
+                  >
+                    <TableInfoMUI text={column.label} />
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => {
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.contributor}
+                    onClick={() => handleSelect(row.contributor)}
+                  >
+                    {columns.map((column) => {
+                      const value = row[column.id];
+                      return (
+                        <TableCell key={column.id} align={column.align}>
+                          {value}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </Fragment>
   );
 }
