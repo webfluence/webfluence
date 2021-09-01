@@ -22,6 +22,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { isFullscreenThunk } from "../store/fullscreen";
+import Typography from "@material-ui/core/Typography";
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+
 
 
 toast.configure();
@@ -112,7 +115,7 @@ let options = {
 };
 
 function createGraph(candcontrib) {
-  
+
   console.log("CREATING NEW GRAPH")
   let nodes = [];
   let edges = [];
@@ -255,20 +258,20 @@ export class NetworkGraph extends Component {
 
   createContribNode(contributor, totalFunds ) {
     let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
-    if (existingNodes.indexOf(contributor.attributes.org_name) === -1) { 
-      
+    if (existingNodes.indexOf(contributor.attributes.org_name) === -1) {
+
       let newNode = {};
       // newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
      newNode.color = "#78E983";
      newNode.id = contributor.attributes.org_name;
      newNode.label = contributor.attributes.org_name;
      newNode.size = (contributor.attributes.total / totalFunds) * 100;
-      
+
       this.state.network.body.data.nodes.add(newNode)
-    
+
     }
-    
-    
+
+
   }
 
   async handleNodeClick(params) {
@@ -308,7 +311,7 @@ export class NetworkGraph extends Component {
     this.setState({branchLoading: false})
     if (this.props.additionalcandcontrib) {
       const topTenContribs = this.props.additionalcandcontrib.response.contributors.contributor
-      
+
       const totalFunds = this.props.additionalcandcontrib.response.contributors.contributor.reduce(
         (accum, contributor) => accum + parseInt(contributor.attributes.total),
         0
@@ -334,7 +337,7 @@ export class NetworkGraph extends Component {
     // this.setState({ Modalopen: true });
     this.props.isFullscreenThunk(true)
   }
-  
+
   // openModal = useFullScreenHandle()
 
   closeModal() {
@@ -442,6 +445,9 @@ export class NetworkGraph extends Component {
 
         <Fragment>
           {/* dashboard graph */}
+          {/* <Grid stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: "100%"}}>
+          <Typography stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', display: 'flex'}}>Use the tools to explore and expand the network graph. View the key and more information with the <HelpOutlineIcon fontSize="small"/> button</Typography>
+          </Grid> */}
           <Grid style={{position: "relative", width: "100%"}}>
             { !this.props.fullscreen ? (
             <Tooltip title="Enter Fullscreen">
@@ -453,7 +459,7 @@ export class NetworkGraph extends Component {
                     onClick={this.closeModal}
                 />
                 </Tooltip>)}
-            
+
             {this.state.options && (
               <Fragment>
                 <Tooltip title="Branch Tool">
@@ -531,6 +537,7 @@ export class NetworkGraph extends Component {
               />
               </Grid>
             )}
+            <Typography style={{color: "gray"}}>Data provided by <a target="_blank" href="https://www.opensecrets.org"  style={{color: "gray"}}>opensecrets.org</a></Typography>
         </Fragment>
       // </div>
     );
@@ -550,9 +557,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    isLoading: (bool) => dispatch(isLoading(bool)), 
+    isLoading: (bool) => dispatch(isLoading(bool)),
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
-    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)), 
+    setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
     setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
     setAdditionalCandContributorsThunk: (cid) => dispatch(setAdditionalCandContributorsThunk(cid)),
     isFullscreenThunk: (bool) => dispatch(isFullscreenThunk(bool))

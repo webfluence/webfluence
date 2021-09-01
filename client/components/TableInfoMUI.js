@@ -91,9 +91,7 @@ export default function TableInfoMUI(props) {
         {props.text === "Individuals" && (
           <DialogContent dividers>
             <Typography gutterBottom>
-              Individuals are required to put their place of work when making a
-              contribution to a certain campain. This column displays the total
-              donations by individuals in each company.
+            This column displays the total donations by individuals in each organization. Individuals are required to put their place of work when making a contribution to a polical campaign.
             </Typography>
           </DialogContent>
         )}
@@ -101,10 +99,10 @@ export default function TableInfoMUI(props) {
           <DialogContent dividers>
             <Typography variant="h6">What is a PAC?</Typography>
             <Typography gutterBottom>
-              A popular term for a political committee organized for the purpose
+              A political action committee (PAC) is an organization for the purpose
               of raising and spending money to elect and defeat candidates. Most
-              PACs represent business, labor or ideological interests. PACs can
-              give $5,000 to a candidate committee per election (primary,
+              PACs represent business, labor or ideological interests. <br /> <br />
+              PACs can give $5,000 to a candidate committee per election (primary,
               general or special). They can also give up to $15,000 annually to
               any national party committee, and $5,000 annually to any other
               PAC. PACs may receive up to $5,000 from any one individual, PAC or
@@ -114,16 +112,12 @@ export default function TableInfoMUI(props) {
               Affiliated PACs are treated as one donor for the purpose of
               contribution limits.
             </Typography>
-            <Typography gutterBottom>
-              This column displays the total contributions made to the
-              politician by the actual company
-            </Typography>
           </DialogContent>
         )}
         {props.text === "Total" && (
           <DialogContent dividers>
             <Typography gutterBottom>
-              Total amount of money given from individuals and Pacs
+              The sum total amount of money given from individuals and political action committees (PACs).
             </Typography>
           </DialogContent>
         )}

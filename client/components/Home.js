@@ -56,7 +56,7 @@ export const Home = (props) => {
               width={breakpoint.isTabletFloor ? "300px" : "600px"}
             >
               <Typography style={{ fontSize: "16px", fontFamily: "Oswald" }}>
-                {"EVER WONDERED WHERE LEGISLATORS GET THEIR MONEY FROM?"}
+                {"EVER WONDER WHERE LEGISLATORS GET THEIR MONEY?"}
               </Typography>
               <hr style={{ color: "black", width: "70%" }} />
               {/* <Typography style={{fontSize: `${breakpoint.isTabletFloor ? '16px': '17px'}`, marginTop: '10px', textAlign: 'center', color: 'gray'}}>In 1972, Richard Nixon paid five men to break into the Watergate complex using some of the $2 million that the dairy lobby had given him in secret cash in exchange for a promise to increase milk subsidies. Thus began Congress's decades-long series of laws meant to put an end to those kinds of arrangements and bring campaign financing into the daylight. And while explicit quid pro quos like that are now illegal, it remains true that politicians tend to align with their donors ideologically. So even as the Supreme Court has routinely limited Congress's ability to regulate money in politics, the public disclosure of campaign donations is an irreplaceable resource. <br /> <br /> Who are the major donors tied to your lawmakers?</Typography> */}
@@ -69,8 +69,7 @@ export const Home = (props) => {
                 }}
               >
                 <br />
-                Search for a legislator below to show you a network of
-                connections based on contributions!
+                Enter the name of any current federal legislator to see a network of campaign contributions!
               </Typography>
             </Paper>
           </Grid>
