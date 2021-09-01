@@ -9,13 +9,12 @@ import { setPacIDThunk } from "../store/paccommittee";
 import { isLoading } from "../store/loading";
 import FullscreenIcon from "@material-ui/icons/Fullscreen";
 import CallSplitIcon from "@material-ui/icons/CallSplit";
-import ReplayIcon from "@material-ui/icons/Replay";
+// import ReplayIcon from "@material-ui/icons/Replay";
 import FullscreenExitIcon from "@material-ui/icons/FullscreenExit";
 import CloseIcon from "@material-ui/icons/Close";
 import SearchIcon from "@material-ui/icons/Search";
 import PanToolIcon from "@material-ui/icons/PanTool";
-import { Grid } from "@material-ui/core";
-import { Tooltip } from "@material-ui/core";
+import { Grid, Tooltip } from "@material-ui/core";
 import Modal from "react-modal";
 import { setCandPacThunk } from "../store/candpac";
 import { setPacCandThunk } from "../store/paccand";
@@ -276,6 +275,7 @@ export class NetworkGraph extends Component {
     if (this.state.branchingActive && params.nodes.length) {
       if (params.nodes[0][0] === "N" && !isNaN(params.nodes[0][1])) {
         await this.handleCandNodeClick(params);
+        console.log('is this running', params.nodes[0][1]);
       } else {
         await this.handleContribNodeClick(params);
       }
@@ -284,6 +284,7 @@ export class NetworkGraph extends Component {
 
   // here is where we get the info from a node onClick
   async handleContribNodeClick(params) {
+    console.log('is this running',params);
     await this.props.setPacIDThunk(params.nodes[0]);
     if (this.props.pacid) {
       this.setState({branchLoading: true})
@@ -508,10 +509,7 @@ export class NetworkGraph extends Component {
                     }
                   />
                 </Tooltip>
-                <Tooltip title="Reset Graph">
-                  <ReplayIcon fontSize="large" />
-                </Tooltip>
-                <Grid style={{position: "absolute", top: 5, right: 5}}>
+                <Grid style={{position: "absolute", top: 3, right: 60}}>
                 {this.state.branchLoading && <ClipLoader size={40} color="darkgray" loading={this.state.branchLoading}/>}
                 </Grid>
               </Fragment>

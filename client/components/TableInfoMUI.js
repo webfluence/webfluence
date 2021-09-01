@@ -65,7 +65,7 @@ export default function TableInfoMUI(props) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button  onClick={handleClickOpen}>
         {props.text}
       </Button>
       <Dialog

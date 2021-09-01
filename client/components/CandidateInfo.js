@@ -7,7 +7,6 @@ import { useBreakpoints } from "./hooks/useBreakpoints";
 
 export const CandidateInfo = () => {
   const legislator = useSelector((state) => state.legislator);
-  console.log(legislator);
   const name = legislator.name.official_full;
   const party = legislator.terms[legislator.terms.length - 1].party[0];
   const repOrSen =
@@ -103,7 +102,7 @@ export const CandidateInfo = () => {
                 : { fontSize: "20px" }
             }
           >
-            {"Candidate Url:"}
+            {"Website:  "}
             <a target="_blank" href={url}>
               {url}
             </a>
