@@ -69,12 +69,12 @@ export default function InfoDialogMUI() {
 
   return (
     <div>
-      <Grid style={{position: "absolute", top: "15px", right: "15px", zIndex: "999"}}>
+      <Grid style={{position: "absolute", top: "15px", right: "15px", zIndex: "1"}}>
       <Button onClick={handleClickOpen} >
       <HelpOutlineIcon fontSize="large" onClick={handleClickOpen} />
       </Button>
       </Grid>
-      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{zIndex: 1000}}>
+      <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open} style={{zIndex: 100}}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           Understanding the Graph
         </DialogTitle>

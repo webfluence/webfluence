@@ -89,6 +89,9 @@ const customStyles = {
     overflow: "hidden",
     position: "relative",
   },
+  overlay: {
+    zIndex: "2"
+  }
 };
 
 export default function StickyHeadTable() {
@@ -137,7 +140,6 @@ export default function StickyHeadTable() {
         overflow: hidden;
         onRequestClose={contribCloseModal}
         style={customStyles}
-        zIndex="9999"
         contentLabel="Example Modal"
         ariaHideApp={false}
       >

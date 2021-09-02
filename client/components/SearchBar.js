@@ -28,7 +28,6 @@ export default function SearchBar(props) {
 
   const handleSelect = (legislator) => {
     // Pass the legislator into the selected legislator thunk
-    console.log('legislator', legislator)
     if (legislator) {
       dispatch(isLoading(true))
       dispatch(setLegislatorThunk(legislator));
