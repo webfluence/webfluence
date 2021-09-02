@@ -25,11 +25,21 @@ import { isFullscreenThunk } from "../store/fullscreen";
 import Typography from "@material-ui/core/Typography";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
+//Toast notifications
 toast.configure();
 
-const notify = () => {
-  toast.error("No Pac Id associated with this contributor");
+const noPacIdNotif = () => {
+  toast.error(
+    "No PAC ID is associated with this contributor (contributions may have just come from individuals)."
+  );
 };
+
+const noCandIdNotif = () => {
+  toast.error(
+    "PAC data is not available about this individual politician or candidate."
+  );
+};
+
 // modal styles
 
 const customStyles = {
@@ -293,7 +303,7 @@ export class NetworkGraph extends Component {
       });
     } else {
       // toasify notification
-      notify();
+      noPacIdNotif();
     }
   }
 
@@ -318,7 +328,7 @@ export class NetworkGraph extends Component {
       });
     } else {
       // toasify notification
-      console.log("no cand id");
+      noCandIdNotif();
     }
   }
 

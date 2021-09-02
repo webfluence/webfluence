@@ -1,9 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Dosis&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap");
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin: 0;
 }
 
@@ -41,9 +41,13 @@ form div {
 }
 
 .selectedIcon {
-  color: #FF5A5A
+  color: #ff5a5a;
 }
 
 .fullscreen-enabled {
   background: #fff;
+}
+
+.Toastify__toast-container {
+  z-index: 200000;
 }
