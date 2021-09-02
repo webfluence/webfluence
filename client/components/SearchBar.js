@@ -10,10 +10,10 @@ import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
 import { isLoading } from "../store/loading";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from  'clsx';
+import clsx from "clsx";
 
 export default function SearchBar(props) {
-  const history = useHistory()
+  const history = useHistory();
 
   const classes = useStyles();
   const [selectedLegislator, setSelectedLegislator] = useState({});
@@ -29,7 +29,7 @@ export default function SearchBar(props) {
   const handleSelect = (legislator) => {
     // Pass the legislator into the selected legislator thunk
     if (legislator) {
-      dispatch(isLoading(true))
+      dispatch(isLoading(true));
       dispatch(setLegislatorThunk(legislator));
       if (legislator) {
         const crp_id = legislator.id.opensecrets;
@@ -37,8 +37,8 @@ export default function SearchBar(props) {
         dispatch(setCandContributorsThunk(crp_id));
         // dispatch(setCandIndustriesThunk(crp_id));
       }
-  
-      history.push('/dashboard')
+
+      history.push("/dashboard");
     }
   };
 
@@ -68,7 +68,12 @@ export default function SearchBar(props) {
         }}
         style={{ width: props.width }}
         renderInput={(params) => (
-          <TextField {...params} label="Search Active Members of Congress" variant="outlined" style={{zIndex: 0}} />
+          <TextField
+            {...params}
+            label="Search Members of Congress"
+            variant="outlined"
+            style={{ zIndex: 0 }}
+          />
         )}
       />
     </div>
