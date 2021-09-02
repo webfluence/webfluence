@@ -73,7 +73,7 @@ export default function ContribModal(props) {
   return (
     <Fragment>
         
-      <Grid style={{ display: "flex", justifyContent: "space-between", zIndex: "2" }}>
+      <Grid style={{ display: "flex", justifyContent: "space-between", zIndex: "2", overflow: hidden;}}>
         <Grid style={{display: "flex"}}>
         <Avatar
           variant="square"
