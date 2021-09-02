@@ -51,3 +51,13 @@ form div {
 /* .Toastify__toast-container {
   z-index: 200000;
 } */
+
+body {
+    &.modal-open {
+        bottom: 0;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+    }
+}
