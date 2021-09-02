@@ -137,7 +137,6 @@ export default function StickyHeadTable() {
       {/* contrib modal */}
       <Modal
         isOpen={isModalOpen}
-        overflow: hidden;
         onRequestClose={contribCloseModal}
         style={customStyles}
         contentLabel="Example Modal"
