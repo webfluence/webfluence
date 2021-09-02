@@ -18,6 +18,9 @@ import { org } from "../store/orgs";
 import { getOrgThunk } from "../store/orgs";
 import CloseIcon from "@material-ui/icons/Close";
 import TableInfoMUI from "./TableInfoMUI";
+import clsx from  'clsx';
+
+
 
 const columns = [
   { id: "contributor", label: "Contributor", minWidth: 170 },
@@ -149,7 +152,7 @@ export default function StickyHeadTable() {
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
-              <TableRow>
+              <TableRow className="tableColumnHeader">
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
@@ -169,6 +172,7 @@ export default function StickyHeadTable() {
               {rows.map((row) => {
                 return (
                   <TableRow
+                    className="tableRow"
                     hover
                     role="checkbox"
                     tabIndex={-1}

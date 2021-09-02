@@ -80,7 +80,9 @@ export default function InfoDialogMUI() {
         </DialogTitle>
         <DialogContent dividers>
           <Typography gutterBottom>
-            The network graph shows the relationships between federal legislators/candidates (blue or red) and the organizations who donated to their election campaigns (green). Not all orginizations donated directly to legislators/candidates, but their employees did. Some organizations are political action committees (PACs) and some are businesses/organizations which have their own PAC associated with them by the FEC.
+            The network graph shows the relationships between federal legislators/candidates (blue or red) and the organizations who donated to their election campaigns (green).
+            <br />
+            Notice: The organizations themselves did not donate, rather the money came from the organization's PAC, its individual members or employees or owners, and those individuals' immediate families.
           </Typography>
 
           <table>
