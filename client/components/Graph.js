@@ -24,6 +24,7 @@ import { ClipLoader } from "react-spinners";
 import { isFullscreenThunk } from "../store/fullscreen";
 import Typography from "@material-ui/core/Typography";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+// import { useKeyPress } from "./hooks/useKeyPress";
 
 //Toast notifications
 toast.configure();
@@ -36,10 +37,9 @@ const noPacIdNotif = () => {
 
 const noCandIdNotif = () => {
   <div style={{ zIndex: 200000 }}>
-  toast.error(
-    "PAC data is not available about this individual politician or candidate."
-  );
-  </div>
+    toast.error( "PAC data is not available about this individual politician or
+    candidate." );
+  </div>;
 };
 
 // modal styles
@@ -213,6 +213,8 @@ export class NetworkGraph extends Component {
     this.createEdge = this.createEdge.bind(this);
     this.handleCandNodeClick = this.handleCandNodeClick.bind(this);
     this.handleContribNodeClick = this.handleContribNodeClick.bind(this);
+    // this.onKeyPressed = this.onKeyPressed.bind(this)
+    // this.onKeyRelease = this.onKeyRelease.bind(this)
   }
 
   componentDidUpdate(prevProps) {
@@ -232,6 +234,9 @@ export class NetworkGraph extends Component {
 
     this.mounted = true;
     window.addEventListener("resize", this.measure);
+    // document.removeEventListener("keydown", this.onKeyPressed.bind(this));
+    // document.removeEventListener("keyup", this.onKeyPressed.bind(this));
+
     const newGraph = createGraph(this.props.candcontrib);
     this.setState({
       graph: newGraph,
@@ -245,6 +250,9 @@ export class NetworkGraph extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
+    // document.removeEventListener("keydown", this.onKeyPressed.bind(this));
+    // document.removeEventListener("keyup", this.onKeyPressed.bind(this));
+
     window.removeEventListener("resize", this.measure);
   }
 
@@ -355,110 +363,60 @@ export class NetworkGraph extends Component {
     this.props.isFullscreenThunk(false);
   }
 
+  // onKeyPressed(e) {
+  //   this.setState({
+  //     branchingActive: !this.state.branchingActive,
+  //   })
+  //   this.setState({
+  //     options: {
+  //       ...this.state.options,
+  //       interaction: {
+  //         ...this.state.options.interaction,
+  //         zoomView: !this.state.options.interaction.zoomView,
+  //       },
+  //     },
+  //   })
+  //   this.setState({
+  //     options: {
+  //       ...this.state.options,
+  //       interaction: {
+  //         ...this.state.options.interaction,
+  //         dragView: !this.state.options.interaction.dragView,
+  //       },
+  //     },
+  //   })
+  //   console.log(e.key);
+  // }
+  // onKeyRelease(e) {
+  //   this.setState({
+  //     branchingActive: !this.state.branchingActive,
+  //   })
+  //   this.setState({
+  //     options: {
+  //       ...this.state.options,
+  //       interaction: {
+  //         ...this.state.options.interaction,
+  //         zoomView: !this.state.options.interaction.zoomView,
+  //       },
+  //     },
+  //   })
+  //   this.setState({
+  //     options: {
+  //       ...this.state.options,
+  //       interaction: {
+  //         ...this.state.options.interaction,
+  //         dragView: !this.state.options.interaction.dragView,
+  //       },
+  //     },
+  //   })
+  //   console.log(e.key);
+  // }
+
   render() {
     return (
-      // <div>
-      //   {/* fullscreen graph modal */}
-      //   <Modal
-      //     isOpen={this.state.Modalopen}
-      //     onRequestClose={this.closeModal}
-      //     style={customStyles}
-      //     zIndex="9999"
-      //     contentLabel="Example Modal"
-      //     ariaHideApp={false}
-      //   >
-      //     {/* fullscreen graph */}
-      //     <Grid>
-      //       {this.state.options && (
-      //         <Fragment>
-      //           <Tooltip title="Exit Fullscreen">
-      //             <FullscreenExitIcon
-      //               fontSize="large"
-      //               onClick={this.closeModal}
-      //             />
-      //           </Tooltip>
-      //           <Tooltip title="Branch Tool">
-      //             <CallSplitIcon
-      //               fontSize="large"
-      //               className={this.state.branchingActive ? "selectedIcon" : ""}
-      //               onClick={() =>
-      //                 this.setState({
-      //                   branchingActive: !this.state.branchingActive,
-      //                 })
-      //               }
-      //             />
-      //           </Tooltip>
-      //           <Tooltip title="Enable Zoom">
-      //             <SearchIcon
-      //               fontSize="large"
-      //               className={
-      //                 this.state.options.interaction.zoomView
-      //                   ? "selectedIcon"
-      //                   : ""
-      //               }
-      //               onClick={() =>
-      //                 this.setState({
-      //                   options: {
-      //                     ...this.state.options,
-      //                     interaction: {
-      //                       ...this.state.options.interaction,
-      //                       zoomView: !this.state.options.interaction.zoomView,
-      //                     },
-      //                   },
-      //                 })
-      //               }
-      //             />
-      //           </Tooltip>
-      //           <Tooltip title="Drag View">
-      //             <PanToolIcon
-      //               fontSize="large"
-      //               className={
-      //                 this.state.options.interaction.dragView
-      //                   ? "selectedIcon"
-      //                   : ""
-      //               }
-      //               onClick={() =>
-      //                 this.setState({
-      //                   options: {
-      //                     ...this.state.options,
-      //                     interaction: {
-      //                       ...this.state.options.interaction,
-      //                       dragView: !this.state.options.interaction.dragView,
-      //                     },
-      //                   },
-      //                 })
-      //               }
-      //             />
-      //           </Tooltip>
-      //           <Tooltip title="Reset">
-      //             <ReplayIcon fontSize="large" />
-      //           </Tooltip>
-      //           {this.state.branchLoading && <ClipLoader size={30} color="darkgray" loading={this.state.branchLoading}/>}
-      //         </Fragment>
-      //       )}
-      //     </Grid>
-      //     {/* fullscreen graph */}
-      //     {Object.keys(this.props.candcontrib).length &&
-      //       Object.keys(this.state.graph).length && (
-      //         <Graph
-      //           graph={this.state.graph}
-      //           style={this.state.fullscreenStyle}
-      //           options={this.state.options}
-      //           getNetwork={this.getNetwork}
-      //           getEdges={this.getEdges}
-      //           getNodes={this.getNodes}
-      //           events={this.events}
-      //           vis={(vis) => (this.vis = vis)}
-      //         />
-      //       )}
-      //   </Modal>
-
       <Fragment>
         {/* dashboard graph */}
-        {/* <Grid stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: "100%"}}>
-          <Typography stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', display: 'flex'}}>Use the tools to explore and expand the network graph. View the key and more information with the <HelpOutlineIcon fontSize="small"/> button</Typography>
-          </Grid> */}
-        <div className="tools">
+        <div className="tools" /* onKeyDown={this.onKeyPressed} onKeyUp={this.onKeyRelease}  tabIndex="0"*/>
           <Grid style={{ position: "relative", width: "100%" }}>
             {!this.props.fullscreen ? (
               <Tooltip title="Enter Fullscreen">

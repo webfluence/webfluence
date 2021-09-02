@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    paddingBottom: "50vh",
+    paddingBottom: "40vh",
   },
   footer: {
     position: "center",
@@ -24,17 +24,14 @@ export default function Sources(props) {
       <div>
         <div className={classes.container}>
           <h1>Sources</h1>
-          <p>The following sources were used to create this website.</p>
-          <ul>
-            <li>
-              <a href="https://www.opensecrets.org/">Open Secrets</a>
-            </li>
-            <li>
-              <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode">
-                Open Secrets Creative Commons License
-              </a>
-            </li>
-          </ul>
+          <p style={{textAlign: 'center', padding: 40}}>
+            All data on our website has been made available through{" "}
+            <a href="https://www.opensecrets.org/">Open Secrets</a>' public API
+            and bulk data, made available under the{" "}
+            <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode">
+              Open Secrets Creative Commons License
+            </a>.
+          </p>
         </div>
       </div>
       <Footer className={classes.footer} />

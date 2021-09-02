@@ -26,6 +26,7 @@ import {
   Fab
 } from "@material-ui/core";
 import { useBreakpoints } from "./hooks/useBreakpoints";
+import { useKeyPress } from "./hooks/useKeyPress";
 
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
@@ -151,7 +152,7 @@ export default function Dashboard() {
         </p>
       ),
       locale: { skip: <strong aria-label="skip">Skip</strong> },
-      placement: "auto",
+      placement: "top",
       target: ".contributorInfo",
     },
     {
@@ -161,7 +162,7 @@ export default function Dashboard() {
         </p>
       ),
       locale: { skip: <strong aria-label="skip">Skip</strong> },
-      placement: "auto",
+      placement: "top",
       target: ".tableColumnHeader",
     },
     {
@@ -169,7 +170,7 @@ export default function Dashboard() {
         <p>Click into a table row to learn more about the organization.</p>
       ),
       locale: { skip: <strong aria-label="skip">Skip</strong> },
-      placement: "auto",
+      placement: "top",
       target: ".tableRow",
     },
   ]);
@@ -202,6 +203,7 @@ export default function Dashboard() {
     console.log(data); //eslint-disable-line no-console
     console.groupEnd();
   };
+
 
   return (
     <Fragment>
