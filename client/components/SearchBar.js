@@ -28,16 +28,19 @@ export default function SearchBar(props) {
 
   const handleSelect = (legislator) => {
     // Pass the legislator into the selected legislator thunk
-    dispatch(isLoading(true))
-    dispatch(setLegislatorThunk(legislator));
+    console.log('legislator', legislator)
     if (legislator) {
-      const crp_id = legislator.id.opensecrets;
-      // find contributors via congressional crp_id
-      dispatch(setCandContributorsThunk(crp_id));
-      // dispatch(setCandIndustriesThunk(crp_id));
+      dispatch(isLoading(true))
+      dispatch(setLegislatorThunk(legislator));
+      if (legislator) {
+        const crp_id = legislator.id.opensecrets;
+        // find contributors via congressional crp_id
+        dispatch(setCandContributorsThunk(crp_id));
+        // dispatch(setCandIndustriesThunk(crp_id));
+      }
+  
+      history.push('/dashboard')
     }
-
-    history.push('/dashboard')
   };
 
   return (
