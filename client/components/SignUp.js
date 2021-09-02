@@ -15,13 +15,14 @@ import Container from "@material-ui/core/Container";
 import { connect } from "react-redux";
 import { authenticate } from "../store";
 import Footer from "./Footer";
+import history from "../history";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://bro-bois.herokuapp.com/">
-        {"https://bro-bois.herokuapp.com/"}
+      <Link color="inherit" href="https://webfluence.herokuapp.com/">
+        {"https://webfluence.herokuapp.com/"}
       </Link>
       {new Date().getFullYear()}
       {"."}
@@ -57,9 +58,13 @@ export const SignUp = (props) => {
   const classes = useStyles();
   const { name, handleSubmit, error } = props;
   return (
-    <Grid style={{backgroundColor: "#F2F2F2"}}>
+    <Grid style={{ backgroundColor: "#F2F2F2" }}>
       <Container
-        style={{ backgroundColor: "#F2F2F2", paddingTop: 20, paddingBottom: 40 }}
+        style={{
+          backgroundColor: "#F2F2F2",
+          paddingTop: 20,
+          paddingBottom: 40,
+        }}
         component="main"
         maxWidth="xs"
       >
@@ -78,7 +83,7 @@ export const SignUp = (props) => {
             id={name}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} >
+              <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="fname"
                   name="firstName"
@@ -164,9 +169,6 @@ export const SignUp = (props) => {
             </Grid>
           </form>
         </div>
-
-
-
       </Container>
       <Footer />
     </Grid>
@@ -193,7 +195,7 @@ const mapDispatch = (dispatch) => {
           lastName: evt.target.lastName.value,
           email: evt.target.email.value,
         };
-        dispatch(authenticate(info, formName));
+        dispatch(authenticate(info, formName, history));
       }
     },
   };
