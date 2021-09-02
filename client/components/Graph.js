@@ -35,9 +35,11 @@ const noPacIdNotif = () => {
 };
 
 const noCandIdNotif = () => {
+  <div style={{ zIndex: 200000 }}>
   toast.error(
     "PAC data is not available about this individual politician or candidate."
   );
+  </div>
 };
 
 // modal styles
@@ -309,24 +311,26 @@ export class NetworkGraph extends Component {
 
   //here is where we get the contirbutors for a newly selected legislatior
   async handleCandNodeClick(params) {
-    this.setState({ branchLoading: true });
-    await this.props.setAdditionalCandContributorsThunk(params.nodes[0]);
-    this.setState({ branchLoading: false });
-    if (this.props.additionalcandcontrib) {
-      const topTenContribs =
-        this.props.additionalcandcontrib.response.contributors.contributor;
+    try {
+      this.setState({ branchLoading: true });
+      await this.props.setAdditionalCandContributorsThunk(params.nodes[0]);
+      this.setState({ branchLoading: false });
+      if (this.props.additionalcandcontrib) {
+        const topTenContribs =
+          this.props.additionalcandcontrib.response.contributors.contributor;
 
-      const totalFunds =
-        this.props.additionalcandcontrib.response.contributors.contributor.reduce(
-          (accum, contributor) =>
-            accum + parseInt(contributor.attributes.total),
-          0
-        );
-      topTenContribs.forEach((contrib) => {
-        this.createContribNode(contrib, totalFunds);
-        this.createEdge(params.nodes[0], contrib.attributes.org_name);
-      });
-    } else {
+        const totalFunds =
+          this.props.additionalcandcontrib.response.contributors.contributor.reduce(
+            (accum, contributor) =>
+              accum + parseInt(contributor.attributes.total),
+            0
+          );
+        topTenContribs.forEach((contrib) => {
+          this.createContribNode(contrib, totalFunds);
+          this.createEdge(params.nodes[0], contrib.attributes.org_name);
+        });
+      }
+    } catch (error) {
       // toasify notification
       noCandIdNotif();
     }
