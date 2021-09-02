@@ -23,9 +23,7 @@ import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { isFullscreenThunk } from "../store/fullscreen";
 import Typography from "@material-ui/core/Typography";
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
-
-
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 
 toast.configure();
 
@@ -115,8 +113,7 @@ let options = {
 };
 
 function createGraph(candcontrib) {
-
-  console.log("CREATING NEW GRAPH")
+  console.log("CREATING NEW GRAPH");
   let nodes = [];
   let edges = [];
 
@@ -200,7 +197,7 @@ export class NetworkGraph extends Component {
     this.closeModal = this.closeModal.bind(this);
     this.openModal = this.openModal.bind(this);
     this.createContribNode = this.createContribNode.bind(this);
-    this.createCandNode = this.createCandNode.bind(this)
+    this.createCandNode = this.createCandNode.bind(this);
     this.createEdge = this.createEdge.bind(this);
     this.handleCandNodeClick = this.handleCandNodeClick.bind(this);
     this.handleContribNodeClick = this.handleContribNodeClick.bind(this);
@@ -256,29 +253,25 @@ export class NetworkGraph extends Component {
       this.state.network.body.data.nodes.add({ id, label, color: blueOrRed });
   }
 
-  createContribNode(contributor, totalFunds ) {
+  createContribNode(contributor, totalFunds) {
     let existingNodes = Object.keys(this.state.network.body.data.nodes._data);
     if (existingNodes.indexOf(contributor.attributes.org_name) === -1) {
-
       let newNode = {};
       // newNode.color = contributor.attributes.pacs > 0 ? "#FF5A5A" : "#CBBAED";
-     newNode.color = "#78E983";
-     newNode.id = contributor.attributes.org_name;
-     newNode.label = contributor.attributes.org_name;
-     newNode.size = (contributor.attributes.total / totalFunds) * 100;
+      newNode.color = "#78E983";
+      newNode.id = contributor.attributes.org_name;
+      newNode.label = contributor.attributes.org_name;
+      newNode.size = (contributor.attributes.total / totalFunds) * 100;
 
-      this.state.network.body.data.nodes.add(newNode)
-
+      this.state.network.body.data.nodes.add(newNode);
     }
-
-
   }
 
   async handleNodeClick(params) {
     if (this.state.branchingActive && params.nodes.length) {
       if (params.nodes[0][0] === "N" && !isNaN(params.nodes[0][1])) {
         await this.handleCandNodeClick(params);
-        console.log('is this running', params.nodes[0][1]);
+        console.log("is this running", params.nodes[0][1]);
       } else {
         await this.handleContribNodeClick(params);
       }
@@ -287,12 +280,12 @@ export class NetworkGraph extends Component {
 
   // here is where we get the info from a node onClick
   async handleContribNodeClick(params) {
-    console.log('is this running',params);
+    console.log("is this running", params);
     await this.props.setPacIDThunk(params.nodes[0]);
     if (this.props.pacid) {
-      this.setState({branchLoading: true})
+      this.setState({ branchLoading: true });
       await this.props.setPacCandThunk(this.props.pacid.cmte_id);
-      this.setState({branchLoading: false})
+      this.setState({ branchLoading: false });
       const topTenCands = this.props.paccand.slice(0, 10);
       topTenCands.forEach((cand) => {
         this.createCandNode(cand.cid, cand.candname);
@@ -306,16 +299,19 @@ export class NetworkGraph extends Component {
 
   //here is where we get the contirbutors for a newly selected legislatior
   async handleCandNodeClick(params) {
-    this.setState({branchLoading: true})
+    this.setState({ branchLoading: true });
     await this.props.setAdditionalCandContributorsThunk(params.nodes[0]);
-    this.setState({branchLoading: false})
+    this.setState({ branchLoading: false });
     if (this.props.additionalcandcontrib) {
-      const topTenContribs = this.props.additionalcandcontrib.response.contributors.contributor
+      const topTenContribs =
+        this.props.additionalcandcontrib.response.contributors.contributor;
 
-      const totalFunds = this.props.additionalcandcontrib.response.contributors.contributor.reduce(
-        (accum, contributor) => accum + parseInt(contributor.attributes.total),
-        0
-      );
+      const totalFunds =
+        this.props.additionalcandcontrib.response.contributors.contributor.reduce(
+          (accum, contributor) =>
+            accum + parseInt(contributor.attributes.total),
+          0
+        );
       topTenContribs.forEach((contrib) => {
         this.createContribNode(contrib, totalFunds);
         this.createEdge(params.nodes[0], contrib.attributes.org_name);
@@ -335,14 +331,14 @@ export class NetworkGraph extends Component {
   // modal functions
   openModal() {
     // this.setState({ Modalopen: true });
-    this.props.isFullscreenThunk(true)
+    this.props.isFullscreenThunk(true);
   }
 
   // openModal = useFullScreenHandle()
 
   closeModal() {
     // this.setState({ Modalopen: false });
-    this.props.isFullscreenThunk(false)
+    this.props.isFullscreenThunk(false);
   }
 
   render() {
@@ -443,22 +439,25 @@ export class NetworkGraph extends Component {
       //       )}
       //   </Modal>
 
-        <Fragment>
-          {/* dashboard graph */}
-          {/* <Grid stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: "100%"}}>
+      <Fragment>
+        {/* dashboard graph */}
+        {/* <Grid stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', alignItems: 'center', display: 'flex', width: "100%"}}>
           <Typography stlye={{opacity: 1, textAlign: 'center', justifyContent: 'center', display: 'flex'}}>Use the tools to explore and expand the network graph. View the key and more information with the <HelpOutlineIcon fontSize="small"/> button</Typography>
           </Grid> */}
-          <Grid style={{position: "relative", width: "100%"}}>
-            { !this.props.fullscreen ? (
-            <Tooltip title="Enter Fullscreen">
-              <FullscreenIcon fontSize="large" onClick={this.openModal} />
-            </Tooltip>) : (
-            <Tooltip title="Exit Fullscreen">
+        <div className="tools">
+          <Grid style={{ position: "relative", width: "100%" }}>
+            {!this.props.fullscreen ? (
+              <Tooltip title="Enter Fullscreen">
+                <FullscreenIcon fontSize="large" onClick={this.openModal} />
+              </Tooltip>
+            ) : (
+              <Tooltip title="Exit Fullscreen">
                 <FullscreenExitIcon
-                    fontSize="large"
-                    onClick={this.closeModal}
+                  fontSize="large"
+                  onClick={this.closeModal}
                 />
-                </Tooltip>)}
+              </Tooltip>
+            )}
 
             {this.state.options && (
               <Fragment>
@@ -515,16 +514,28 @@ export class NetworkGraph extends Component {
                     }
                   />
                 </Tooltip>
-                <Grid style={{position: "absolute", top: 3, right: 60}}>
-                {this.state.branchLoading && <ClipLoader size={40} color="darkgray" loading={this.state.branchLoading}/>}
+                <Grid style={{ position: "absolute", top: 3, right: 60 }}>
+                  {this.state.branchLoading && (
+                    <ClipLoader
+                      size={40}
+                      color="darkgray"
+                      loading={this.state.branchLoading}
+                    />
+                  )}
                 </Grid>
               </Fragment>
             )}
           </Grid>
-
-          {Object.keys(this.props.candcontrib).length &&
-            Object.keys(this.state.graph).length && (
-              <Grid style={this.props.fullscreen ? this.state.fullscreenStyle : this.state.style}>
+        </div>
+        {Object.keys(this.props.candcontrib).length &&
+          Object.keys(this.state.graph).length && (
+            <Grid
+              style={
+                this.props.fullscreen
+                  ? this.state.fullscreenStyle
+                  : this.state.style
+              }
+            >
               <Graph
                 graph={this.state.graph}
                 // style={this.state.style}
@@ -535,10 +546,19 @@ export class NetworkGraph extends Component {
                 events={this.events}
                 vis={(vis) => (this.vis = vis)}
               />
-              </Grid>
-            )}
-            <Typography style={{color: "gray"}}>Data provided by <a target="_blank" href="https://www.opensecrets.org"  style={{color: "gray"}}>opensecrets.org</a></Typography>
-        </Fragment>
+            </Grid>
+          )}
+        <Typography style={{ color: "gray" }}>
+          Data provided by{" "}
+          <a
+            target="_blank"
+            href="https://www.opensecrets.org"
+            style={{ color: "gray" }}
+          >
+            opensecrets.org
+          </a>
+        </Typography>
+      </Fragment>
       // </div>
     );
   }
@@ -551,7 +571,7 @@ const mapStateToProps = (state) => {
     loading: state.loading,
     pacid: state.pacid,
     paccand: state.paccand,
-    fullscreen: state.fullscreen
+    fullscreen: state.fullscreen,
   };
 };
 
@@ -561,8 +581,9 @@ const mapDispatchToProps = (dispatch) => {
     setCandContributorsThunk: (cid) => dispatch(setCandContributorsThunk(cid)),
     setPacIDThunk: (name) => dispatch(setPacIDThunk(name)),
     setPacCandThunk: (id) => dispatch(setPacCandThunk(id)),
-    setAdditionalCandContributorsThunk: (cid) => dispatch(setAdditionalCandContributorsThunk(cid)),
-    isFullscreenThunk: (bool) => dispatch(isFullscreenThunk(bool))
+    setAdditionalCandContributorsThunk: (cid) =>
+      dispatch(setAdditionalCandContributorsThunk(cid)),
+    isFullscreenThunk: (bool) => dispatch(isFullscreenThunk(bool)),
   };
 };
 

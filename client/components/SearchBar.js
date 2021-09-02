@@ -10,6 +10,7 @@ import { setCandContributorsThunk } from "../store/candcontrib";
 import { setCandIndustriesThunk } from "../store/candindustry";
 import { isLoading } from "../store/loading";
 import { makeStyles } from "@material-ui/core/styles";
+import clsx from  'clsx';
 
 export default function SearchBar(props) {
   const history = useHistory()
@@ -43,7 +44,8 @@ export default function SearchBar(props) {
     <div>
       <Autocomplete
         id="search-box"
-        className={classes.searchBar}
+        className={clsx(classes.searchBar, "search")}
+        // className="search"
         options={legislators}
         onChange={(event, value) => handleSelect(value)}
         // here we create the label that is rendered as the search bar options
