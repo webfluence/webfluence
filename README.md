@@ -16,6 +16,7 @@ Sam can also explore information about the originally selected legislator in the
 Now that Sam has explored her representative’s previous campaign finance record, she now feels more equipt to make an assessment about her rep’s values and supporters. Sam can now make a more informed decision when she votes!
 
 ##Technologies Used:
+
 Our webapp was built using React, Redux, Node.js, Express, and Material.UI
 To render the network graph, we used Vis.js and Vis-React
 For our data, we used our own multi-million row PostgreSQL database in combination with API calls to OpenSecrets.org
