@@ -36,10 +36,9 @@ const noPacIdNotif = () => {
 };
 
 const noCandIdNotif = () => {
-  <div style={{ zIndex: 200000 }}>
-    toast.error( "PAC data is not available about this individual politician or
-    candidate." );
-  </div>;
+  toast.error(
+    "PAC data is not available about this individual politician or candidate"
+  );
 };
 
 // modal styles
@@ -416,7 +415,9 @@ export class NetworkGraph extends Component {
     return (
       <Fragment>
         {/* dashboard graph */}
-        <div className="tools" /* onKeyDown={this.onKeyPressed} onKeyUp={this.onKeyRelease}  tabIndex="0"*/>
+        <div
+          className="tools" /* onKeyDown={this.onKeyPressed} onKeyUp={this.onKeyRelease}  tabIndex="0"*/
+        >
           <Grid style={{ position: "relative", width: "100%" }}>
             {!this.props.fullscreen ? (
               <Tooltip title="Enter Fullscreen">
