@@ -16,6 +16,7 @@ import { Typography } from "@material-ui/core";
 import Modal from "react-modal";
 import { org } from "../store/orgs";
 import { getOrgThunk } from "../store/orgs";
+import { getOrgInfoThunk } from "../store/orginfo";
 import CloseIcon from "@material-ui/icons/Close";
 import TableInfoMUI from "./TableInfoMUI";
 import clsx from  'clsx';
@@ -86,11 +87,10 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
     width: "90vw",
     height: "90vh",
-    overflow: "hidden",
     position: "relative",
   },
   overlay: {
-    zIndex: "2"
+    zIndex: "2",
   }
 };
 
@@ -106,6 +106,8 @@ export default function StickyHeadTable() {
   const candcontrib = useSelector((state = []) => state.candcontrib);
 
   const org = useSelector((state = []) => state.org);
+
+  const orgInfo = useSelector((state = {}) => state.orginfo);
 
   const rows = candcontrib.response.contributors.contributor.map(
     (contributor) =>
@@ -126,8 +128,9 @@ export default function StickyHeadTable() {
   };
 
   const handleSelect = (contrib) => {
-    const searchName = contrib.replace(" ", "+");
-    dispatch(getOrgThunk(searchName));
+    // const searchName = contrib.replace(" ", "+");
+    dispatch(getOrgThunk(contrib));
+    dispatch(getOrgInfoThunk(contrib))
     setSelectedContrib(contrib);
     contribOpenModal();
   };
@@ -147,7 +150,7 @@ export default function StickyHeadTable() {
           onClick={contribCloseModal}
           style={{ position: "absolute", top: "15px", right: "15px" }}
         />
-        <ContribModal selectedContrib={selectedContrib} org={org} />
+        <ContribModal selectedContrib={selectedContrib} org={org} orgInfo={orgInfo}/>
       </Modal>
       <Paper className={classes.root}>
         {/* <Typography>These tables list the top donors to candidates in the 2021 - 2022 election cycle. The organizations themselves did not donate, rather the money came from the organizations' PACs, their individual members or employees or owners, and those individuals' immediate families. Organization totals include subsidiaries and affiliates.</Typography> */}

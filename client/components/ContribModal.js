@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import { ClipLoader } from "react-spinners";
+import { Typography, Link } from "@material-ui/core";
 
 
 const useStyles = makeStyles({
@@ -20,15 +21,16 @@ const useStyles = makeStyles({
 });
 
 export default function ContribModal(props) {
-  const imgSrcFormat = (contribName) => {
-    const companyAbbrevs = ["Co", "Inc", "LLC", "Corp"];
-    return contribName
-      .replace("&", "and")
-      .split(" ")
-      .filter((word) => !companyAbbrevs.includes(word))
-      .join("")
-      .toLowerCase();
-  };
+
+  // const imgSrcFormat = (contribName) => {
+  //   const companyAbbrevs = ["Co", "Inc", "LLC", "Corp"];
+  //   return contribName
+  //     .replace("&", "and")
+  //     .split(" ")
+  //     .filter((word) => !companyAbbrevs.includes(word))
+  //     .join("")
+  //     .toLowerCase();
+  // };
 
   function createData(title, amount) {
     return { title, amount };
@@ -78,9 +80,15 @@ export default function ContribModal(props) {
         <Avatar
           variant="square"
           style={{ height: "150px", width: "150px", marginRight: "20px", marginBottom: "40px" }}
-          src={`//logo.clearbit.com/${imgSrcFormat(props.selectedContrib)}.com`}
+          // src={`//logo.clearbit.com/${imgSrcFormat(props.selectedContrib)}.com`}
+          src={Object.keys(props.orgInfo).length > 0 ? props.orgInfo.logo : null}
         />
+        <Grid style={{display: "flex", flexDirection:"column"}}>
         <h1>{props.selectedContrib}</h1>
+        {/* <Typography>{props.orgInfo.category.industry}</Typography> */}
+        <Typography>{props.orgInfo.description}</Typography>
+        <a style={{marginTop: "10px"}} href={"http://www." + props.orgInfo.domain}>{props.orgInfo.domain}</a>
+        </Grid>
         </Grid>
       </Grid>
       {Object.keys(props.org).length > 0 ?
