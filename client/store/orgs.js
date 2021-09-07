@@ -3,7 +3,6 @@ import history from "../history";
 
 //action type
 const GET_ORG = "GET_ORG";
-// const GET_ORG_INFO = 'GET_ORG_INFO'
 
 //action creator
 const getOrg = (orgData) => ({
@@ -11,15 +10,11 @@ const getOrg = (orgData) => ({
   orgData,
 });
 
-// const orgInfo = (orgInfo) => ({
-//     type: GET_ORG_INFO,
-//     orgInfo
-// })
 
 //thunk
 export const getOrgThunk = (orgName) => async (dispatch) => {
   try {
-    
+    orgName = encodeURIComponent(orgName)
     // Get the org id from the name
     const { data } = await axios.get(`/api/orgs/${orgName}`);
       
@@ -44,14 +39,6 @@ export const getOrgThunk = (orgName) => async (dispatch) => {
   }
 };
 
-// export const getOrgInfo = (orgName, orgId) => async (dispatch) => {
-//     try {
-//         const {data} = await axios.get(`/api/orgs/${orgName}/${orgId}`)
-//         dispatch(orgInfo(data))
-//     } catch (error) {
-//         Error(error)
-//     }
-// }
 
 //reducer
 export default function org (state = {}, action) {

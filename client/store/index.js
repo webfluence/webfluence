@@ -9,6 +9,7 @@ import loading from "./loading";
 import candcontrib from "./candcontrib";
 import candindustry from "./candindustry";
 import org from "./orgs";
+import orginfo from "./orginfo";
 import candpac from "./candpac";
 import paccand from "./paccand";
 import pacid from "./paccommittee";
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   loading,
   fullscreen,
   org,
+  orginfo,
   candpac,
   paccand,
   pacid,
