@@ -27,6 +27,8 @@ For our data, we used our own multi-million row PostgreSQL database in combinati
 ## _An Interactive Network Graph to Explore Political Donor Connections_
 
 <a href="https://webfluence.herokuapp.com" target="_blank">Visit Webfluence</a>
+<a href="https://drive.google.com/file/d/1FXTZNYUlonZUYC0ZRj6Uil8v8gCOTZYn/view?usp=sharing
+" target="_blank">Watch the Demo Video</a>
 
 <!-- <img src="public/popin-banner.jpg" width="850"> -->
 
