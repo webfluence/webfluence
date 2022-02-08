@@ -114,7 +114,7 @@ export const SignIn = (props) => {
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+        {/* <Copyright /> */}
       </Box>
     </Container>
   );
