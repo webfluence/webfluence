@@ -16,19 +16,7 @@ import { connect } from "react-redux";
 import { authenticate } from "../store";
 import { Redirect } from "react-router-dom";
 import history from "../history";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        {"https://bro-bois.herokuapp.com/"}
-      </Link>
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Copyright from "./Global/Copyright";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
