@@ -16,7 +16,20 @@ import { connect } from "react-redux";
 import { authenticate } from "../store";
 import { Redirect } from "react-router-dom";
 import history from "../history";
-import Copyright from "./Global/Copyright";
+// import Copyright from "./Global/Copyright";
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {"Copyright © "}
+      <Link color="inherit" href="https://material-ui.com/">
+        {"https://bro-bois.herokuapp.com/"}
+      </Link>
+      {new Date().getFullYear()}
+      {"."}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -114,7 +127,7 @@ export const SignIn = (props) => {
         </form>
       </div>
       <Box mt={8}>
-        {/* <Copyright /> */}
+        <Copyright />
       </Box>
     </Container>
   );
